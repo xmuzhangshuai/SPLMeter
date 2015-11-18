@@ -5,12 +5,14 @@
     <string name="current_value">Current Value</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
-    
+    <string name="dBCaption">dB</string>
+    <string name="standard">自动评价标准</string>
+     <string name="fs_analysis">频谱分析</string>
     
     <string name="SPLCaption">SPL</string>
     <string name="SPL">0.0</string>
     <string name="weightedCaption">A</string>
-    <string name="dBCaption">dB</string>
+    
     <string name="maxCaption">Max SPL</string>
     <string name="longitudeCaption">Longitude:</string>
     <string name="latitudeCaption">latitude:</string>

@@ -11,6 +11,11 @@
     <color name="system_gray">#CCCCCC</color> <!-- 系统灰色 -->
     <color name="dark_gray">#666666</color>
     <color name="alert_dialog_blue">#0476F0</color>
-    <color name="green">#00ff00</color>
+    <color name="green">#00aa00</color>
+    <color name="level0">#00af50</color>
+    <color name="level1">#92d14f</color>
+    <color name="level2">#ffff00</color>
+    <color name="level3">#f18226</color>
+    <color name="level4">#fe0000</color>
 
 </resources>
