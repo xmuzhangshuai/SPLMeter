@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">噪声计</string>
+    <string name="current_value">实时值</string>
+    <string name="indoor">室内</string>
+    <string name="outdoor">室外</string>
+    
+    
+    <string name="SPLCaption">SPL</string>
+    <string name="SPL">0.0</string>
+    <string name="weightedCaption">A</string>
+    <string name="dBCaption">dB</string>
+    <string name="maxCaption">最大声压：</string>
+    <string name="longitudeCaption">经度：</string>
+    <string name="latitudeCaption">纬度：</string>
+    <string name="altitudeCaption">海拔：</string>
+    <string name="accuracyCaption">精度： </string>
+    <string name="modeCaption">模式： </string>
+    <string name="timeCaption">时间：</string>
+    <string name="startCaptionBtn">开始</string>
+    <string name="shareCaptionBtn">分享</string>
+    <string name="chooseMode">选择地点</string>
+    <string name="openGPS">请开启GPS！</string>
+    <string name="on">开始</string>
+    <string name="off">结束</string>
+    <string name="option">设置</string>
+    <string name="about">关于</string>
+    <string name="aboutTitle">关于噪声计</string>
+    <string name="help">帮助</string>
+    <string name="calibrateHint">输入校正值</string>
+    <string name="levelCaption">噪声限值：</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="aboutMsg">版本 1.0\nlcmgood@163.com</string>
+    <string name="infoTitle">提示！</string>
+    <string name="infoMsg">你确定要退出吗？</string>
+    <string name="share">分享</string>
+    <string name="chooseFeeling">你觉得：</string>
+    <string name="palceHint">点击输入！</string>
+    <string name="placeCaption">地点：</string>
+    <string name="shareDialogTitle">请选择分享对象</string>
+    <string name="reportSuccess">分享成功，感谢您的参与！</string>
+    <string name="reportFailure">分享失败，请稍候再试！</string>
+
+    <array name="shareDialogItem">
+        <item>科学家</item>
+        <item>好友</item>
+    </array>
+
+</resources>

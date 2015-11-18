@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Noise Meter</string>
+    <string name="current_value">Current Value</string>
+    <string name="indoor">Indoor</string>
+    <string name="outdoor">Outdoor</string>
+    
+    
+    <string name="SPLCaption">SPL</string>
+    <string name="SPL">0.0</string>
+    <string name="weightedCaption">A</string>
+    <string name="dBCaption">dB</string>
+    <string name="maxCaption">Max SPL</string>
+    <string name="longitudeCaption">Longitude:</string>
+    <string name="latitudeCaption">latitude:</string>
+    <string name="altitudeCaption">altitude:</string>
+    <string name="accuracyCaption">accuracy: </string>
+    <string name="modeCaption">Mode:</string>
+    <string name="timeCaption">Time:</string>
+    <string name="startCaptionBtn">Measure</string>
+    <string name="shareCaptionBtn">Share</string>
+    <string name="chooseMode">Choose place</string>
+    <string name="openGPS">Please open GPS！</string>
+    <string name="on">Open</string>
+    <string name="off">Stop</string>
+    <string name="option">Setting</string>
+    <string name="about">About</string>
+    <string name="aboutTitle">About Noise Meter</string>
+    <string name="help">Help</string>
+    <string name="calibrateHint">Input calibrated value</string>
+    <string name="levelCaption">Noise level</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">OK</string>
+    <string name="aboutMsg">Version 1.0\nlcmgood@163.com</string>
+    <string name="infoTitle">Information!</string>
+    <string name="infoMsg">are you sure to quit?</string>
+    <string name="share">Share</string>
+    <string name="chooseFeeling">How do you feel?</string>
+    <string name="palceHint">Input!</string>
+    <string name="placeCaption">Place:</string>
+    <string name="shareDialogTitle">Choose to share</string>
+    <string name="reportSuccess">Success! Thank you!</string>
+    <string name="reportFailure">Failed! Please tye again</string>
+
+    <array name="shareDialogItem">
+        <item>Scientist</item>
+        <item>Friends</item>
+    </array>
+
+</resources>
