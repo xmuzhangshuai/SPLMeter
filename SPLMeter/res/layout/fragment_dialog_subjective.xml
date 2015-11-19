@@ -15,7 +15,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:text="@string/sound"
+        android:text="@string/assessment"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -29,52 +29,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/mul_choice"
+            android:text="@string/drag_to_ass"
             android:textSize="14sp" />
 
         <LinearLayout
-            android:id="@+id/datalist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal" >
+            android:layout_marginTop="15dp"
+            android:orientation="vertical" >
 
-            <ListView
-                android:id="@+id/listView1"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                android:gravity="center_horizontal"
+                android:text="声音的大小：小"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <ListView
-                android:id="@+id/listView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+            <SeekBar
+                android:id="@+id/seekBar_soundsize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <ListView
-                android:id="@+id/listView3"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="声音的舒适度：非常舒适"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <SeekBar
+                android:id="@+id/seekBar_comfortlevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="声音与环境的协调度：不协调"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <SeekBar
+                android:id="@+id/seekBar_harmony"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>
 

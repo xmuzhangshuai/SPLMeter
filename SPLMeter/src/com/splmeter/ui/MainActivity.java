@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.FlagToString;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * @description:主页面
@@ -21,6 +23,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Button settingBtn;
 	private Button startBtn;
 	private Button shareBtn;
+	private int flag = 0;
+	private TextView currentValue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		settingBtn = (Button) findViewById(R.id.setting_btn);
 		startBtn = (Button) findViewById(R.id.start_btn);
 		shareBtn = (Button) findViewById(R.id.share_btn);
+		currentValue = (TextView) findViewById(R.id.current_value);
 	}
 
 	@Override
@@ -66,6 +71,64 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		newFragment.show(ft, "sound_source_dialog");
 	}
 
+	/**
+	 * 显示主观评价对话框
+	 */
+	void showSubjectiveDialog() {
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("subjective_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		SubjectiveDialogFragment newFragment = new SubjectiveDialogFragment();
+		newFragment.show(ft, "subjective_dialog");
+	}
+
+	/**
+	* 显示个人信息对话框
+	*/
+	void showPersonalInfoDialog() {
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("personal_info_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		PersonalInfoDialogFragment newFragment = new PersonalInfoDialogFragment();
+		newFragment.show(ft, "personal_info_dialog");
+	}
+
+	/**
+	 * 下一步或上一步
+	 */
+	public void next_last(int flag) {
+		switch (flag) {
+		case 1:
+			showSoundSourceDialog();
+			break;
+		case 2:
+			showSubjectiveDialog();
+			break;
+		case 3:
+			showPersonalInfoDialog();
+			break;
+
+		default:
+			break;
+		}
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -76,9 +139,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.start_btn:
-			startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
-			startBtn.setText(R.string.evaluate);
-			showSoundSourceDialog();
+			flag++;
+			if (flag % 2 == 0) {//评价
+				startBtn.setBackgroundResource(R.drawable.sel_btn);
+				startBtn.setText(R.string.on);
+				next_last(1);
+			} else {//开始
+				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
+				startBtn.setText(R.string.evaluate);
+			}
+
 			break;
 		case R.id.share_btn:
 

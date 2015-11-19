@@ -33,48 +33,75 @@
             android:textSize="14sp" />
 
         <LinearLayout
-            android:id="@+id/datalist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/label"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
-            <ListView
-                android:id="@+id/listView1"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                android:gravity="center"
+                android:orientation="horizontal" >
 
-            <ListView
-                android:id="@+id/listView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/gender"
+                    android:textSize="14sp" />
 
-            <ListView
-                android:id="@+id/listView3"
-                android:layout_width="0dp"
+                <RadioGroup
+                    android:id="@+id/gender_radiogroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/radio_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/male" />
+
+                    <RadioButton
+                        android:id="@+id/radio_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="@string/female" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/gender"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/langSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="2"
+                    android:drawSelectorOnTop="true"
+                    android:padding="3dp"
+                    android:prompt="@string/chinese" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

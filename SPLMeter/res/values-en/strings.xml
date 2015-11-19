@@ -24,7 +24,26 @@
     <string name="evaluate">Evaluate</string>
     <string name="last">Last</string>
     <string name="next">Next</string>
+    <string name="sound">您目前听到了哪些声音？</string>
+    <string name="mul_choice">(Multiple Choice)</string>
+    <string name="assessment">请对听到的声音进行评价</string>
+    <string name="drag_to_ass">（拖动滑块评价）</string>
+    <string name="person_info">简单地描述一下自己</string>
+    <string name="age">Age：</string>
+    <string name="done">Done</string>
+    <string name="gender">Gender：</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
+    <array name="ageGroup">
+        <item>小于12岁</item>
+        <item>12岁-18岁</item>
+        <item>19岁-30岁</item>
+        <item>31岁-40岁</item>
+        <item>41岁-50岁</item>
+        <item>51岁-60岁</item>
+        <item>大于60岁</item>
+    </array>
     <array name="langGroup">
         <item>Chinese</item>
         <item>English</item>
