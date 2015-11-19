@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.SeekBar;
+import u.aly.v;
 
 /**
  * @description:主观评价对话框
@@ -26,6 +28,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private MainActivity mainActivity;
 	private Button lastBtn;
 	private Button nextBtn;
+	private SeekBar seekBarSoundsize;
+	private SeekBar seekBarComfortlevel;
+	private SeekBar seekBarHarmony;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -56,6 +61,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private void findViewById() {
 		lastBtn = (Button) rootView.findViewById(R.id.last_btn);
 		nextBtn = (Button) rootView.findViewById(R.id.next_btn);
+		seekBarSoundsize = (SeekBar) rootView.findViewById(R.id.seekBar_soundsize);
+		seekBarComfortlevel = (SeekBar) rootView.findViewById(R.id.seekBar_comfortlevel);
+		seekBarHarmony = (SeekBar) rootView.findViewById(R.id.seekBar_harmony);
 	}
 
 	private void initView() {
