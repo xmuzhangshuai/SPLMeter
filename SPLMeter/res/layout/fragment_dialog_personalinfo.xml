@@ -24,91 +24,79 @@
         android:layout_height="wrap_content"
         android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/label"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/mul_choice"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/label"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/gender_label"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/gender"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:id="@+id/gender_radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="40dp"
+                android:layout_toRightOf="@+id/gender_label"
                 android:orientation="horizontal" >
 
-                <TextView
+                <RadioButton
+                    android:id="@+id/radio_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="@string/gender"
-                    android:textSize="14sp" />
+                    android:checked="true"
+                    android:text="@string/male" />
 
-                <RadioGroup
-                    android:id="@+id/gender_radiogroup"
+                <RadioButton
+                    android:id="@+id/radio_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="2"
-                    android:orientation="horizontal" >
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/female" />
+            </RadioGroup>
 
-                    <RadioButton
-                        android:id="@+id/radio_male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/male" />
-
-                    <RadioButton
-                        android:id="@+id/radio_female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:text="@string/female" />
-                </RadioGroup>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/age_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/gender_label"
+                android:layout_below="@+id/gender_label"
+                android:layout_marginTop="30dp"
+                android:text="@string/age"
+                android:textSize="16sp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="@string/gender"
-                    android:textSize="14sp" />
+                android:layout_alignBottom="@+id/age_label"
+                android:layout_alignLeft="@+id/gender_radiogroup" >
 
                 <Spinner
-                    android:id="@+id/langSpinner"
+                    android:id="@+id/ageSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="2"
                     android:drawSelectorOnTop="true"
-                    android:padding="3dp"
-                    android:prompt="@string/chinese" />
+                    android:padding="3dp" />
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/btn_container"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:paddingBottom="20dp"
         android:paddingLeft="10dp"

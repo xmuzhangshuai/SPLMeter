@@ -30,8 +30,7 @@
             android:layout_marginTop="5dp"
             android:background="@color/white"
             android:drawSelectorOnTop="true"
-            android:padding="3dp"
-            android:prompt="@string/indoor" />
+            android:padding="3dp"/>
 
         <TextView
             android:id="@+id/clbCaption"
@@ -70,8 +69,7 @@
             android:layout_marginTop="5dp"
             android:background="@color/white"
             android:drawSelectorOnTop="true"
-            android:padding="3dp"
-            android:prompt="@string/chinese" />
+            android:padding="3dp"/>
 
         <View
             android:layout_width="match_parent"

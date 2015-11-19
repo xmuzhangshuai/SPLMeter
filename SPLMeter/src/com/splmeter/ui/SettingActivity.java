@@ -58,10 +58,12 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		ArrayAdapter<CharSequence> modeAadapter = ArrayAdapter.createFromResource(this, R.array.modeGroup, android.R.layout.simple_spinner_item);
 		modeAadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		modeSpinner.setAdapter(modeAadapter);
+		modeSpinner.setSelection(0, true);
 
 		ArrayAdapter<CharSequence> langAadapter = ArrayAdapter.createFromResource(this, R.array.langGroup, android.R.layout.simple_spinner_item);
 		langAadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		langSpinner.setAdapter(langAadapter);
+		langSpinner.setSelection(0, true);
 	}
 
 	@Override
