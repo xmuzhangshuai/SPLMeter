@@ -4,7 +4,7 @@
 package com.splmeter.analysis;
 
 /**
- * 数值BO对象
+ * SPL数值BO对象
  * @author lzjing
  *
  */

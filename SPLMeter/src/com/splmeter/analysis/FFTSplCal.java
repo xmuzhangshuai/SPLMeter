@@ -29,8 +29,7 @@ public class FFTSplCal {
 	 * 从声麦中读取数据到缓冲区中，再对缓冲区中内容做正向转换，主要用于初始化transformer
 	 * @param bufferReadResult 通过audioRecord.read的返回值
 	 */
-	protected void transBuffer(int bufferReadResult) {
-		buffer = new short[blockSize];
+	public void transBuffer(int bufferReadResult,short[] buffer) {
 		float[] toTransform = new float[blockSize];
 		for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
 			toTransform[i] = (float) (buffer[i]);
@@ -43,9 +42,10 @@ public class FFTSplCal {
 	 * 获取SPL等数值
 	 * @return SPLBo
 	 */
-	protected SPLBo getSPL() {
+	public SPLBo getSPL() {
 		//SPL的BO对象
 		SPLBo splBo = new SPLBo();
+		double spl = 0;
 
 		int ALenght = transformer.specSize();
 
@@ -54,8 +54,8 @@ public class FFTSplCal {
 		double f_WA[] = new double[ALenght];
 		double f_LpA[] = new double[ALenght];
 
-		// 根据变换所产生的频谱的大小（为采样缓存的大小n/2+1）进行for循环处理得到最后的SPL
-		for (int i = 1; i < transformer.specSize(); i++) {
+		// 根据变换所产生的频谱的大小进行for循环处理得到最后的SPL
+		for (int i = 1; i <= (transformer.specSize()-1)*2; i++) {
 
 			double f = transformer.indexToFreq(i);
 			double f_s = Math.pow(f, 2);
@@ -72,13 +72,14 @@ public class FFTSplCal {
 			//计算Lpa的数值
 			f_LpA[i] = f_Lp[i] + f_WA[i];
 			//最后进行叠加，得到总的声压级
-			splBo.SPL += Math.pow(10, f_LpA[i] / 10);
+			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级
 			if (f_LpA[i] >= splBo.maxSPL) {
-				splBo.maxSPL = f_LpA[i];
-				splBo.maxFrequency = f;
+				splBo.setMaxSPL(f_LpA[i]);
+				splBo.setMaxFrequency(f);
 			}
 		}
+		splBo.setSPL(spl);
 		return splBo;
 	}
 	
@@ -88,7 +89,7 @@ public class FFTSplCal {
 	 * @param calibrateValue 配置中的基准值
 	 * @return
 	 */
-	protected String getCalibrateSPL(double SPL , double calibrateValue) {
+	public String getCalibrateSPL(double SPL , double calibrateValue) {
 		return nf.format(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
 	}
 	
@@ -97,7 +98,7 @@ public class FFTSplCal {
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL
 	 * @return
 	 */
-	protected String getMaxSudBA(double maxSPL) {
+	public String getMaxSudBA(double maxSPL) {
 		return nf.format(maxSPL * 1.26067 - 82.00148);
 	}
 	
@@ -106,7 +107,7 @@ public class FFTSplCal {
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
 	 * @return
 	 */
-	protected String getMaxSudHz(double maxFrequency) {
+	public String getMaxSudHz(double maxFrequency) {
 		return nf.format(maxFrequency);
 	}
 
