@@ -8,7 +8,30 @@
     <string name="dBCaption">分贝</string>
     <string name="standard">自动评价标准</string>
     <string name="fs_analysis">频谱分析</string>
-    
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="on">开始</string>
+    <string name="option">设置</string>
+    <string name="share">分享</string>
+    <string name="modeCaption">模式： </string>
+    <string name="calibrate">校准：</string>
+    <string name="share_label1">资源将结果分享给科学家</string>
+    <string name="share_label2">成为公众科学家，为科学家研究贡献自己的力量</string>
+    <string name="help">帮助说明</string>
+    <string name="check_update">检查更新</string>
+    <string name="about">关于</string>
+    <string name="language">语言:</string>
+    <string name="chinese">中文</string>
+
+    <array name="langGroup">
+        <item>中文</item>
+        <item>英文</item>
+    </array>
+    <array name="modeGroup">
+        <item>室外</item>
+        <item>室内</item>
+    </array>
+
     <string name="SPLCaption">SPL</string>
     <string name="SPL">0.0</string>
     <string name="weightedCaption">A</string>
@@ -17,26 +40,17 @@
     <string name="latitudeCaption">纬度：</string>
     <string name="altitudeCaption">海拔：</string>
     <string name="accuracyCaption">精度： </string>
-    <string name="modeCaption">模式： </string>
     <string name="timeCaption">时间：</string>
     <string name="startCaptionBtn">开始</string>
     <string name="shareCaptionBtn">分享</string>
     <string name="chooseMode">选择地点</string>
     <string name="openGPS">请开启GPS！</string>
-    <string name="on">开始</string>
     <string name="off">结束</string>
-    <string name="option">设置</string>
-    <string name="about">关于</string>
     <string name="aboutTitle">关于噪声计</string>
-    <string name="help">帮助</string>
-    <string name="calibrateHint">输入校正值</string>
     <string name="levelCaption">噪声限值：</string>
-    <string name="cancel">取消</string>
-    <string name="confirm">确定</string>
     <string name="aboutMsg">版本 1.0\nlcmgood@163.com</string>
     <string name="infoTitle">提示！</string>
     <string name="infoMsg">你确定要退出吗？</string>
-    <string name="share">分享</string>
     <string name="chooseFeeling">你觉得：</string>
     <string name="palceHint">点击输入！</string>
     <string name="placeCaption">地点：</string>

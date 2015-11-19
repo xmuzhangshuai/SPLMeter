@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
-    android:padding="5dp"
+    android:padding="7dp"
     tools:context="com.splmeter.ui.MainActivity" >
 
     <TextView
@@ -223,7 +223,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/sel_btn"
-            android:text="设置"
+            android:text="@string/option"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -234,7 +234,7 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:background="@drawable/sel_btn"
-            android:text="开始"
+            android:text="@string/on"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -245,7 +245,7 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:background="@drawable/sel_btn"
-            android:text="分享"
+            android:text="@string/share"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

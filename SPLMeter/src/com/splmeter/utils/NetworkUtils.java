@@ -12,7 +12,7 @@ import android.telephony.TelephonyManager;
 
 /**   
 *    
-* 项目名称：篮圈   
+* 项目名称：SPLmeter
 * 类名称：NetworkUtils   
 * 类描述：   网络方面的工具类
 * 创建人：张帅  

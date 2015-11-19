@@ -7,37 +7,49 @@
     <string name="outdoor">Outdoor</string>
     <string name="dBCaption">dB</string>
     <string name="standard">自动评价标准</string>
-     <string name="fs_analysis">频谱分析</string>
-    
+    <string name="fs_analysis">频谱分析</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">OK</string>
+    <string name="on">Open</string>
+    <string name="option">Setting</string>
+    <string name="share">Share</string>
+    <string name="modeCaption">Mode:</string>
+    <string name="calibrate">calibrated value:</string>
+    <string name="share_label1">资源将结果分享给科学家</string>
+    <string name="share_label2">成为公众科学家，为科学家研究贡献自己的力量</string>
+    <string name="help">Help</string>
+    <string name="check_update">Check for update</string>
+    <string name="about">About</string>
+    <string name="language">Language:</string>
+
+    <array name="langGroup">
+        <item>Chinese</item>
+        <item>English</item>
+    </array>
+    <array name="modeGroup">
+        <item>Out door</item>
+        <item>In door</item>
+    </array>
+
     <string name="SPLCaption">SPL</string>
     <string name="SPL">0.0</string>
     <string name="weightedCaption">A</string>
-    
     <string name="maxCaption">Max SPL</string>
     <string name="longitudeCaption">Longitude:</string>
     <string name="latitudeCaption">latitude:</string>
     <string name="altitudeCaption">altitude:</string>
     <string name="accuracyCaption">accuracy: </string>
-    <string name="modeCaption">Mode:</string>
     <string name="timeCaption">Time:</string>
     <string name="startCaptionBtn">Measure</string>
     <string name="shareCaptionBtn">Share</string>
     <string name="chooseMode">Choose place</string>
     <string name="openGPS">Please open GPS！</string>
-    <string name="on">Open</string>
     <string name="off">Stop</string>
-    <string name="option">Setting</string>
-    <string name="about">About</string>
     <string name="aboutTitle">About Noise Meter</string>
-    <string name="help">Help</string>
-    <string name="calibrateHint">Input calibrated value</string>
     <string name="levelCaption">Noise level</string>
-    <string name="cancel">Cancel</string>
-    <string name="confirm">OK</string>
     <string name="aboutMsg">Version 1.0\nlcmgood@163.com</string>
     <string name="infoTitle">Information!</string>
     <string name="infoMsg">are you sure to quit?</string>
-    <string name="share">Share</string>
     <string name="chooseFeeling">How do you feel?</string>
     <string name="palceHint">Input!</string>
     <string name="placeCaption">Place:</string>
