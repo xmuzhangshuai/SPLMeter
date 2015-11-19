@@ -22,6 +22,9 @@
     <string name="about">关于</string>
     <string name="language">语言:</string>
     <string name="chinese">中文</string>
+    <string name="evaluate">评价</string>
+    <string name="last">上一步</string>
+    <string name="next">下一步</string>
 
     <array name="langGroup">
         <item>中文</item>

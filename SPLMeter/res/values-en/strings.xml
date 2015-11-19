@@ -21,6 +21,9 @@
     <string name="check_update">Check for update</string>
     <string name="about">About</string>
     <string name="language">Language:</string>
+    <string name="evaluate">Evaluate</string>
+    <string name="last">Last</string>
+    <string name="next">Next</string>
 
     <array name="langGroup">
         <item>Chinese</item>
