@@ -81,4 +81,14 @@ public class SharePreferenceUtil {
 		editor.putBoolean("autoshare", isAutoShare);
 		editor.commit();
 	}
+
+	// 主页参与人数提示
+	public String getMainLabelText() {
+		return sp.getString("mainLabelText", "");
+	}
+
+	public void setMainLabelText(String mainLabelText) {
+		editor.putString("mainLabelText", mainLabelText);
+		editor.commit();
+	}
 }
