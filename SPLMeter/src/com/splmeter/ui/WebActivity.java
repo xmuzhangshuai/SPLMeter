@@ -3,6 +3,7 @@ package com.splmeter.ui;
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,7 @@ public class WebActivity extends BaseActivity {
 
 	private WebView webView;
 	private Button backBtn;
+	private ActionBar actionBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class WebActivity extends BaseActivity {
 
 		findViewById();
 		initView();
+
 	}
 
 	@Override
@@ -39,6 +42,9 @@ public class WebActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
+		actionBar = getActionBar();
+		actionBar.setTitle("小犀牛");
+
 		webView.loadUrl("http://www.smallrhino.net");
 		backBtn.setOnClickListener(new OnClickListener() {
 
