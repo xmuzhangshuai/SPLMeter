@@ -1,5 +1,7 @@
 package com.splmeter.config;
 
+import android.media.AudioFormat;
+
 public class Constants {
 
 	// 包名
@@ -63,6 +65,15 @@ public class Constants {
 	public static class Extra {
 		public static final String IMAGES = "com.nostra13.example.universalimageloader.IMAGES";
 		public static final String IMAGE_POSITION = "com.nostra13.example.universalimageloader.IMAGE_POSITION";
+	}
+	
+	public static class RecordValue{
+		public static final int CHANNELCONFIGURATION = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+		public static final int AUDIOENCODING = AudioFormat.ENCODING_PCM_16BIT;
+		public static final int FREQUENCY = 8000; 
+		public static final int BLOCKSIZE = 2048;
+		//该值应该从配置文件中取
+		public static final int CALIBRATEVALUE = 0;
 	}
 
 }
