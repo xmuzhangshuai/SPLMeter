@@ -1,9 +1,9 @@
 package com.splmeter.ui;
 
 import com.smallrhino.splmeter.R;
-import com.smallrhino.splmeter.R.id;
 import com.splmeter.base.BaseActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -75,6 +75,11 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.confirm_btn:
 			finish();
+			break;
+		case R.id.about:
+			Intent intent = new Intent(SettingActivity.this, WebActivity.class);
+			startActivity(intent);
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 
 		default:

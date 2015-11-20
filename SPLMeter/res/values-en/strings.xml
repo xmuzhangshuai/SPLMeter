@@ -41,6 +41,7 @@
     <string name="share_wechat">WeChat</string>
     <string name="share_twitter">Twitter</string>
     <string name="share_facebook">Facebook</string>
+    <string name="go_back">Go back</string>
 
     <array name="ageGroup">
         <item>小于12岁</item>

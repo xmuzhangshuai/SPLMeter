@@ -53,6 +53,12 @@
             android:name="com.splmeter.ui.SettingActivity"
             android:screenOrientation="portrait" >
         </activity>
+        
+        <!-- Web页面 -->
+        <activity
+            android:name="com.splmeter.ui.WebActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <meta-data
             android:name="UMENG_APPKEY"
