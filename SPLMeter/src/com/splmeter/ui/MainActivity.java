@@ -110,6 +110,25 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	* 显示分享对话框
+	*/
+	void showShareDialog() {
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("share_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		ShareDialogFragment newFragment = new ShareDialogFragment();
+		newFragment.show(ft, "share_dialog");
+	}
+
+	/**
 	 * 下一步或上一步
 	 */
 	public void next_last(int flag) {
@@ -151,7 +170,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			break;
 		case R.id.share_btn:
-
+			showShareDialog();
 			break;
 
 		default:

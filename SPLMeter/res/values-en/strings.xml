@@ -34,6 +34,13 @@
     <string name="gender">Gender：</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="share_title">请选择分享对象</string>
+    <string name="share_scientist">Scientist</string>
+    <string name="share_sina">Sina</string>
+    <string name="share_tx_weibo">腾讯微博</string>
+    <string name="share_wechat">WeChat</string>
+    <string name="share_twitter">Twitter</string>
+    <string name="share_facebook">Facebook</string>
 
     <array name="ageGroup">
         <item>小于12岁</item>

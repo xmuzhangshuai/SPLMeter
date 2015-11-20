@@ -5,5 +5,6 @@
     <dimen name="new_msg">11dp</dimen>
     <dimen name="day_recommend_padding">40dp</dimen>
     <dimen name="personal_timecapsule_padding">15dp</dimen>
+    <dimen name="share_padding">35dp</dimen>
 
 </resources>
