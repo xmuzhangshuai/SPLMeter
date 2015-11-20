@@ -14,6 +14,7 @@ public class FFTSplCal {
 	int blockSize = 2048;
 	int frequency = 8000;
 	short[] buffer;
+	public float[] toTransform;
 	DecimalFormat nf = new DecimalFormat("0.0");
 	FFT transformer;
 	
@@ -30,7 +31,7 @@ public class FFTSplCal {
 	 * @param bufferReadResult 通过audioRecord.read的返回值
 	 */
 	public void transBuffer(int bufferReadResult,short[] buffer) {
-		float[] toTransform = new float[blockSize];
+		toTransform = new float[blockSize];
 		for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
 			toTransform[i] = (float) (buffer[i]);
 		}
@@ -47,7 +48,7 @@ public class FFTSplCal {
 		SPLBo splBo = new SPLBo();
 		double spl = 0;
 
-		int ALenght = transformer.specSize();
+		int ALenght = transformer.specSize()*2;
 
 		double f_p[] = new double[ALenght];
 		double f_Lp[] = new double[ALenght];
@@ -79,7 +80,7 @@ public class FFTSplCal {
 				splBo.setMaxFrequency(f);
 			}
 		}
-		splBo.setSPL(spl);
+		splBo.setSPLValue(spl);
 		return splBo;
 	}
 	

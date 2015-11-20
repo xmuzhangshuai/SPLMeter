@@ -12,7 +12,7 @@ public class SPLBo {
 
 	double maxSPL = 0;
 	double maxFrequency = 0;
-	double SPL = 0;
+	double SPLValue = 0;
 	/**
 	 * @return the maxSPL
 	 */
@@ -38,18 +38,18 @@ public class SPLBo {
 		this.maxFrequency = maxFrequency;
 	}
 	/**
-	 * @return the sPL
+	 * @return the sPLValue
 	 */
-	public double getSPL() {
-		return SPL;
+	public double getSPLValue() {
+		return SPLValue;
 	}
 	/**
-	 * @param sPL the sPL to set
+	 * @param sPLValue the sPLValue to set
 	 */
-	public void setSPL(double sPL) {
-		SPL = sPL;
+	public void setSPLValue(double sPLValue) {
+		SPLValue = sPLValue;
 	}
-	
+
 	
 
 }

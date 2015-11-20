@@ -1,17 +1,24 @@
 package com.splmeter.ui;
 
-import com.smallrhino.splmeter.R;
-import com.splmeter.base.BaseActivity;
+import java.text.DecimalFormat;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug.FlagToString;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.FFTSplCal;
+import com.splmeter.base.BaseActivity;
+import com.splmeter.config.Constants.RecordValue;
 
 /**
  * @description:主页面
@@ -25,6 +32,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Button shareBtn;
 	private int flag = 0;
 	private TextView currentValue;
+	private FFTSplCal fftCal;
+	private RecordAudio recordTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +156,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			} else {//开始
 				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
 				startBtn.setText(R.string.evaluate);
+				recordTask = new RecordAudio();
+				recordTask.execute();
 			}
 
 			break;
@@ -157,6 +168,48 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		default:
 			break;
 		}
+	}
+	
+	/**
+	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
+	 * @author lzjing
+	 *
+	 */
+	private class RecordAudio extends AsyncTask<Void, float[], Void> {
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				float[] transform;
+				int bufferSize = AudioRecord.getMinBufferSize(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
+				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
+				//启动声音
+				audioRecord.startRecording();
+				//新建一个数组用于缓存声音
+				short[] buffer = new short[RecordValue.BLOCKSIZE];
+//				float[] toTransform = new float[RecordValue.BLOCKSIZE];
+				fftCal = new FFTSplCal();
+				while ((flag % 2) != 0) {
+					//将声音信息读取到缓存中
+					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
+					fftCal.transBuffer(bufferReadResult, buffer);
+					transform = fftCal.toTransform;
+					publishProgress(transform);
+				}
+				fftCal.getSPL();
+				//停止并且释放声音设备
+				audioRecord.stop();
+				audioRecord.release();
+			} catch (Throwable t) {
+				Log.e("AudioRecord", "Recording Failed");
+			}
+			return null;
+		}
+
+		protected void onProgressUpdate(float[]... transform) {
+			double splValue = fftCal.getSPL().getSPLValue();
+			currentValue.setText(fftCal.getCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE));
+		}
+
 	}
 
 }
