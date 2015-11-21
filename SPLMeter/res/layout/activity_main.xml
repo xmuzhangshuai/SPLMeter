@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="42.5"
+                android:text="0.0"
                 android:textColor="@color/green"
                 android:textSize="56sp"
                 android:textStyle="bold" />
