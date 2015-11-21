@@ -1,6 +1,9 @@
 package com.splmeter.ui;
 
-import java.text.DecimalFormat;
+import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.FFTSplCal;
+import com.splmeter.base.BaseActivity;
+import com.splmeter.config.Constants.RecordValue;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -12,13 +15,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.smallrhino.splmeter.R;
-import com.splmeter.analysis.FFTSplCal;
-import com.splmeter.base.BaseActivity;
-import com.splmeter.config.Constants.RecordValue;
 
 /**
  * @description:主页面
@@ -34,6 +35,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView currentValue;
 	private FFTSplCal fftCal;
 	private RecordAudio recordTask;
+	private ImageView seekBarLevelDrawable;
+	private ImageView seekBarLevelThumb;
+	private TextView levelTextView;
+	private float seekBarLevelDrawableWidth;
+	private float seekBarLevelMinValue = 45;//噪音范围最小值
+	private float seekBarLevelMaxValue = 70;//噪音范围最大值
+	private float seekBarLevelBlock = 25;
+	private float seekBarLevelThumbIntial;
+	private int currentLevel = 0;
+	private String[] levels;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startBtn = (Button) findViewById(R.id.start_btn);
 		shareBtn = (Button) findViewById(R.id.share_btn);
 		currentValue = (TextView) findViewById(R.id.current_value);
+		seekBarLevelDrawable = (ImageView) findViewById(R.id.seekbar_level_drawable);
+		seekBarLevelThumb = (ImageView) findViewById(R.id.seekbar_level_thumb);
+		levelTextView = (TextView) findViewById(R.id.status);
 	}
 
 	@Override
@@ -59,6 +73,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		settingBtn.setOnClickListener(this);
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
+		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+
+			@Override
+			public void onGlobalLayout() {
+				// TODO Auto-generated method stub
+				seekBarLevelDrawable.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				seekBarLevelDrawableWidth = seekBarLevelDrawable.getWidth();
+				seekBarLevelThumbIntial = seekBarLevelThumb.getX() - seekBarLevelThumb.getWidth() / 2;
+			}
+		});
+		levels = getResources().getStringArray(R.array.levelGroup);
 	}
 
 	/**
@@ -188,7 +214,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		}
 	}
-	
+
 	/**
 	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
 	 * @author lzjing
@@ -200,12 +226,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			try {
 				float[] transform;
 				int bufferSize = AudioRecord.getMinBufferSize(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
-				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
+				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
+						bufferSize);
 				//启动声音
 				audioRecord.startRecording();
 				//新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
-//				float[] toTransform = new float[RecordValue.BLOCKSIZE];
+				//				float[] toTransform = new float[RecordValue.BLOCKSIZE];
 				fftCal = new FFTSplCal();
 				while ((flag % 2) != 0) {
 					//将声音信息读取到缓存中
@@ -227,6 +254,26 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		protected void onProgressUpdate(float[]... transform) {
 			double splValue = fftCal.getSPL().getSPLValue();
 			currentValue.setText(fftCal.getCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE));
+
+			float current = Float.parseFloat(currentValue.getText().toString());
+			currentLevel = (int) ((current - seekBarLevelMinValue) / 5);//当前层级
+			if (currentLevel > 4) {
+				currentLevel = 4;
+			} else if (currentLevel < 0) {
+				currentLevel = 0;
+			}
+			levelTextView.setText(levels[currentLevel]);
+
+			float ratio = (current - seekBarLevelMinValue) / seekBarLevelBlock;
+			if (ratio < 0) {
+				ratio = 0;
+			} else if (ratio > 1) {
+				ratio = 1;
+			}
+
+			//初始化  
+			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
+
 		}
 
 	}

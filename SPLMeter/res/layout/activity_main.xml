@@ -105,64 +105,29 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/label_container"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:paddingLeft="10dp" >
 
-            <TextView
-                android:id="@+id/level0"
+            <ImageView
+                android:id="@+id/seekbar_level_drawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/level0"
-                android:gravity="right"
-                android:text="50"
-                android:textColor="@color/black" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/seekbar_level_drawable" />
 
-            <TextView
-                android:id="@+id/level1"
+            <ImageView
+                android:id="@+id/seekbar_level_thumb"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/level1"
-                android:gravity="right"
-                android:text="55"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/level2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/level2"
-                android:gravity="right"
-                android:text="60"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/level3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/level3"
-                android:gravity="right"
-                android:text="65"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/level4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/level4"
-                android:gravity="right"
-                android:text="70"
-                android:textColor="@color/black" />
-        </LinearLayout>
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/seekbar_level_thumb" />
+        </FrameLayout>
     </RelativeLayout>
 
     <RelativeLayout

@@ -25,8 +25,9 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="60dp"
-        android:paddingRight="60dp" >
+        android:paddingBottom="20dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp" >
 
         <TextView
             android:id="@+id/share_scientist"
@@ -37,7 +38,7 @@
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_scientist"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -45,12 +46,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/share_scientist"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/icon_sina"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_sina"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -58,12 +59,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/share_sina"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/icon_tx_weibo"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_tx_weibo"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -71,12 +72,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/share_tx_weibo"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/icon_wechat"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_wechat"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -84,12 +85,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/share_wechat"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/icon_twitter"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_twitter"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -97,12 +98,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/share_twitter"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/icon_facebook"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="@string/share_facebook"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
     </RelativeLayout>
 

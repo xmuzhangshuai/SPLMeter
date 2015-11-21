@@ -43,6 +43,13 @@
     <string name="share_facebook">Facebook</string>
     <string name="go_back">Go back</string>
 
+    <array name="levelGroup">
+        <item>非常安静</item>
+        <item>安静</item>
+        <item>适中</item>
+        <item>吵闹	</item>
+        <item>非常吵闹</item>
+    </array>
     <array name="ageGroup">
         <item>小于12岁</item>
         <item>12岁-18岁</item>
