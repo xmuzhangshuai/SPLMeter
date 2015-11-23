@@ -1,11 +1,5 @@
 package com.splmeter.ui;
 
-import com.smallrhino.splmeter.R;
-import com.splmeter.analysis.FFTSplCal;
-import com.splmeter.base.BaseActivity;
-import com.splmeter.config.Constants.RecordValue;
-import com.splmeter.customewidget.VisualizerView;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -28,6 +22,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.FFTSplCal;
+import com.splmeter.analysis.SPLBo;
+import com.splmeter.base.BaseActivity;
+import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.customewidget.VisualizerView;
+
 /**
  * @description:主页面
  * @company: smallrhino
@@ -45,6 +46,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private ImageView seekBarLevelDrawable;
 	private ImageView seekBarLevelThumb;
 	private TextView levelTextView;
+	private TextView fsLabel;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;//噪音范围最小值
 	private float seekBarLevelBlock = 25;
@@ -77,6 +79,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		seekBarLevelDrawable = (ImageView) findViewById(R.id.seekbar_level_drawable);
 		seekBarLevelThumb = (ImageView) findViewById(R.id.seekbar_level_thumb);
 		levelTextView = (TextView) findViewById(R.id.status);
+		fsLabel = (TextView) findViewById(R.id.fs_label);
 		visualizerViewLayout = (LinearLayout) findViewById(R.id.visualizeView_container);
 	}
 
@@ -290,7 +293,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					transform = fftCal.toTransform;
 					publishProgress(transform);
 				}
-				fftCal.getSPL();
 				//停止并且释放声音设备
 				audioRecord.stop();
 				audioRecord.release();
@@ -301,9 +303,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 
 		protected void onProgressUpdate(float[]... transform) {
-			double splValue = fftCal.getSPL().getSPLValue();
+			SPLBo splBo = new SPLBo();
+			splBo = fftCal.getSPL();
+			double splValue = splBo.getSPLValue();
 			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE);
 			currentValue.setText("" + calibrateSPLValue);
+			
+			double maxSPL = splBo.getMaxSPL();
+			double maxFrequency = splBo.getMaxFrequency();
+			//有待做中英文环境处理
+			fsLabel.setText("主频："+fftCal.getMaxSudBA(maxSPL)+"分贝（"+fftCal.getMaxSudHz(maxFrequency)+"赫兹）");
 
 			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
 			if (currentLevel > 4) {
