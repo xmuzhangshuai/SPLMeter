@@ -9,8 +9,10 @@ package com.splmeter.analysis;
  *
  */
 public class SPLBo {
-
+	
+	//最大SPL值
 	double maxSPL = 0;
+	//对应的最大频率
 	double maxFrequency = 0;
 	double SPLValue = 0;
 	/**
@@ -49,7 +51,5 @@ public class SPLBo {
 	public void setSPLValue(double sPLValue) {
 		SPLValue = sPLValue;
 	}
-
-	
 
 }

@@ -2,6 +2,8 @@ package com.splmeter.analysis;
 
 import java.text.DecimalFormat;
 
+import com.splmeter.config.Constants.RecordValue;
+
 /**
  * 
  * @author lzjing
@@ -11,8 +13,8 @@ import java.text.DecimalFormat;
  */
 public class FFTSplCal {
 
-	int blockSize = 2048;
-	int frequency = 8000;
+	int blockSize = RecordValue.BLOCKSIZE;
+	int frequency = RecordValue.FREQUENCY;
 	short[] buffer;
 	public float[] toTransform;
 	DecimalFormat nf = new DecimalFormat("0.0");
@@ -55,7 +57,7 @@ public class FFTSplCal {
 		double f_WA[] = new double[ALenght];
 		double f_LpA[] = new double[ALenght];
 
-		// 根据变换所产生的频谱的大小进行for循环处理得到最后的SPL
+		// 根据变换所产生的频谱的大小进行for循环（n次循环transformer.specSize()-1)*2）处理得到最后的SPL
 		for (int i = 1; i <= (transformer.specSize()-1)*2; i++) {
 
 			double f = transformer.indexToFreq(i);
@@ -95,7 +97,7 @@ public class FFTSplCal {
 	}
 	
 	/**
-	 * 获取最大声压的dBA，即最大声压单位为dBA
+	 * 获取最大声压（声音的强度）的dBA，即单位为dBA
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL
 	 * @return
 	 */
@@ -104,12 +106,40 @@ public class FFTSplCal {
 	}
 	
 	/**
-	 * 获取最大声压的Hz，即最大声压单位为Hz
+	 * 获取最大声压（声音的频率）的Hz，即单位为Hz
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
 	 * @return
 	 */
 	public String getMaxSudHz(double maxFrequency) {
 		return nf.format(maxFrequency);
+	}
+	
+	/**
+	 * 获得校准之后的SPL值
+	 * @param SPL 通过
+	 * @param calibrateValue 配置中的基准值
+	 * @return
+	 */
+	public float getDoubleCalibrateSPL(double SPL , double calibrateValue) {
+		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
+	}
+	
+	/**
+	 * 获取最大声压（声音的强度）dBA，即单位为dBA
+	 * @param maxSPL 通过getSPL初始化后得到maxSPL
+	 * @return
+	 */
+	public float getDoubleMaxSudBA(double maxSPL) {
+		return (float)(maxSPL * 1.26067 - 82.00148);
+	}
+	
+	/**
+	 * 获取最大声压（声音的频率）Hz，即单位为Hz
+	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
+	 * @return
+	 */
+	public float getDoubleMaxSudHz(double maxFrequency) {
+		return (float)(maxFrequency);
 	}
 
 }
