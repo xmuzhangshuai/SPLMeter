@@ -4,21 +4,28 @@ import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.customewidget.VisualizerView;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.media.AudioTrack;
 import android.media.MediaRecorder;
+import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -40,11 +47,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView levelTextView;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;//噪音范围最小值
-	private float seekBarLevelMaxValue = 70;//噪音范围最大值
 	private float seekBarLevelBlock = 25;
 	private float seekBarLevelThumbIntial;
 	private int currentLevel = 0;
 	private String[] levels;
+
+	private LinearLayout visualizerViewLayout;//代码布局
+	VisualizerView mBaseVisualizerView;//频谱图
+	private static final float VISUALIZER_HEIGHT_DIP = 150f;//频谱View高度
+	private Visualizer mVisualizer;//频谱器
+	MyAudioTrack myAudioTrack;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		seekBarLevelDrawable = (ImageView) findViewById(R.id.seekbar_level_drawable);
 		seekBarLevelThumb = (ImageView) findViewById(R.id.seekbar_level_thumb);
 		levelTextView = (TextView) findViewById(R.id.status);
+		visualizerViewLayout = (LinearLayout) findViewById(R.id.visualizeView_container);
 	}
 
 	@Override
@@ -84,7 +97,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				seekBarLevelThumbIntial = seekBarLevelThumb.getX() - seekBarLevelThumb.getWidth() / 2;
 			}
 		});
+
+		/************控制系统音量大小，防止出现噪音*************/
+		AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 2, 0);
+
 		levels = getResources().getStringArray(R.array.levelGroup);
+		mBaseVisualizerView = new VisualizerView(this);
+
+		mBaseVisualizerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, //宽度
+				(int) (VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density)//高度
+		));
+		//将频谱View添加到布局
+		visualizerViewLayout.addView(mBaseVisualizerView);
 	}
 
 	/**
@@ -216,6 +241,20 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 生成一个VisualizerView对象，使音频频谱的波段能够反映到 VisualizerView上
+	 */
+	private void setupVisualizerFx(int sessionId) {
+
+		//实例化Visualizer，参数SessionId可以通过MediaPlayer的对象获得
+		mVisualizer = new Visualizer(sessionId);
+		//采样 - 参数内必须是2的位数 - 如64,128,256,512,1024
+		mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+		//设置允许波形表示，并且捕获它
+		mBaseVisualizerView.setVisualizer(mVisualizer);
+		mVisualizer.setEnabled(true);//false 则不显示
+	}
+
+	/**
 	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
 	 * @author lzjing
 	 *
@@ -230,6 +269,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 						bufferSize);
 				//启动声音
 				audioRecord.startRecording();
+
+				myAudioTrack = new MyAudioTrack(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
+				myAudioTrack.init();
+
+				setupVisualizerFx(myAudioTrack.getAudioSessionId());//添加频谱到界面
+
 				//新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
 				//				float[] toTransform = new float[RecordValue.BLOCKSIZE];
@@ -237,6 +282,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				while ((flag % 2) != 0) {
 					//将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
+
+					/**********播放音频************/
+					myAudioTrack.playAudioTrack(buffer, 0, RecordValue.BLOCKSIZE);
+
 					fftCal.transBuffer(bufferReadResult, buffer);
 					transform = fftCal.toTransform;
 					publishProgress(transform);
@@ -246,17 +295,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				audioRecord.stop();
 				audioRecord.release();
 			} catch (Throwable t) {
-				Log.e("AudioRecord", "Recording Failed");
+				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
 			return null;
 		}
 
 		protected void onProgressUpdate(float[]... transform) {
 			double splValue = fftCal.getSPL().getSPLValue();
-			currentValue.setText(fftCal.getCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE));
+			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE);
+			currentValue.setText("" + calibrateSPLValue);
 
-			float current = Float.parseFloat(currentValue.getText().toString());
-			currentLevel = (int) ((current - seekBarLevelMinValue) / 5);//当前层级
+			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
 			if (currentLevel > 4) {
 				currentLevel = 4;
 			} else if (currentLevel < 0) {
@@ -264,7 +313,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 			levelTextView.setText(levels[currentLevel]);
 
-			float ratio = (current - seekBarLevelMinValue) / seekBarLevelBlock;
+			float ratio = (calibrateSPLValue - seekBarLevelMinValue) / seekBarLevelBlock;
 			if (ratio < 0) {
 				ratio = 0;
 			} else if (ratio > 1) {
@@ -278,4 +327,61 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	}
 
+	/**
+	 * @description:播放音频
+	 * @company: smallrhino
+	 * @author：张帅
+	 * @date 2015年11月23日 下午11:23:11
+	 */
+	public class MyAudioTrack {
+		int mFrequency; // 采样率
+		int mChannel; // 声道
+		int mSampBit; // 采样精度
+		AudioTrack mAudioTrack;
+
+		public MyAudioTrack(int frequency, int channel, int sampbit) {
+			mFrequency = frequency;
+			mChannel = channel;
+			mSampBit = sampbit;
+		}
+
+		public void init() {
+			if (mAudioTrack != null) {
+				release();
+			}
+			// 获得构建对象的最小缓冲区大小
+			int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
+			mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, mFrequency, mChannel, mSampBit, minBufSize, AudioTrack.MODE_STREAM);
+			mAudioTrack.play();
+		}
+
+		public void release() {
+			if (mAudioTrack != null) {
+				mAudioTrack.stop();
+				mAudioTrack.release();
+			}
+
+		}
+
+		public int getAudioSessionId() {
+			return mAudioTrack.getAudioSessionId();
+		}
+
+		public void playAudioTrack(short[] data, int offset, int length) {
+			if (data == null || data.length == 0) {
+				return;
+			}
+			try {
+				mAudioTrack.write(data, offset, length);
+			} catch (Exception e) {
+				// TODO: handle exception
+				Log.i("MyAudioTrack", "catch exception...");
+			}
+		}
+
+		public int getPrimePlaySize() {
+			int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
+			return minBufSize * 2;
+		}
+	}
 }

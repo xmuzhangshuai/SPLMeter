@@ -121,7 +121,8 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public float getDoubleCalibrateSPL(double SPL , double calibrateValue) {
-		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
+		return (float)Math.round((10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue)*10)/10;
+//		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
 	}
 	
 	/**

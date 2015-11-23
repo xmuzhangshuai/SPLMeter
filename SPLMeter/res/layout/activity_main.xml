@@ -166,13 +166,14 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView1"
+        <LinearLayout
+            android:id="@+id/visualizeView_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/fs_container"
-            android:scaleType="fitXY"
-            android:src="@drawable/test1" />
+            android:orientation="horizontal"
+            android:padding="10dp" >
+        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
