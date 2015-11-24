@@ -326,6 +326,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			try {
 				float[] transform;
 				int bufferSize = AudioRecord.getMinBufferSize(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
+				/* 关于采样的注释：
+				 * audioSource音频源，此参数的值为MIC
+				 * sampleRateInHz采样率，此处根据需求改为44100
+				 * channelConfig声道设置
+				 * audioFormat 编码制式和采样大小
+				 * bufferSizeInBytes 采集数据需要的缓冲区的大小
+				 */
 				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
 						bufferSize);
 				//启动声音

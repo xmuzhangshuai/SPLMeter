@@ -57,8 +57,8 @@ public class FFTSplCal {
 		double f_WA[] = new double[ALenght];
 		double f_LpA[] = new double[ALenght];
 
-		// 根据变换所产生的频谱的大小进行for循环（n次循环transformer.specSize()-1)*2）处理得到最后的SPL
-		for (int i = 1; i <= (transformer.specSize()-1)*2; i++) {
+		// 根据变换所产生的频谱的大小进行for循环（n次循环即为blockSize）处理得到最后的SPL
+		for (int i = 1; i <= blockSize; i++) {
 
 			double f = transformer.indexToFreq(i);
 			double f_s = Math.pow(f, 2);
@@ -72,8 +72,8 @@ public class FFTSplCal {
 			f_p[i] = Math.pow(transformer.getBand(i), 2);
 			//计算Lp的数值
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
-			//计算Lpa的数值
-			f_LpA[i] = f_Lp[i] + f_WA[i];
+			//计算Lpa的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
+			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]) + Math.pow(10,f_WA[i]));
 			//最后进行叠加，得到总的声压级
 			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级
