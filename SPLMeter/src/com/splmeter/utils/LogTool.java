@@ -1,9 +1,8 @@
 package com.splmeter.utils;
 
-import com.splmeter.config.Constants.Config;
+import com.splmeter.config.Constants;
 
 import android.util.Log;
-
 
 /**
  * Log统一管理类
@@ -12,7 +11,7 @@ import android.util.Log;
  * 
  */
 public class LogTool {
-	public static boolean isDebug = Config.DEVELOPER_MODE;// 是否需要打印bug，可以在application的onCreate函数里面初始化
+	public static boolean isDebug = Constants.DEVELOPER_MODE;// 是否需要打印bug，可以在application的onCreate函数里面初始化
 	private static final String TAG = "噪声计";
 
 	// 下面四个是默认tag的函数
@@ -21,7 +20,7 @@ public class LogTool {
 			Log.i(TAG, msg);
 	}
 
-	public static void d(String msg) {	
+	public static void d(String msg) {
 		if (isDebug)
 			Log.d(TAG, msg);
 	}

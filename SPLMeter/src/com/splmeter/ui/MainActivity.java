@@ -1,5 +1,13 @@
 package com.splmeter.ui;
 
+import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.FFTSplCal;
+import com.splmeter.analysis.SPLBo;
+import com.splmeter.base.BaseActivity;
+import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.customewidget.VisualizerView;
+import com.splmeter.utils.MyAudioTrack;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -7,7 +15,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
-import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
@@ -23,13 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
-import com.smallrhino.splmeter.R;
-import com.splmeter.analysis.FFTSplCal;
-import com.splmeter.analysis.SPLBo;
-import com.splmeter.base.BaseActivity;
-import com.splmeter.config.Constants.RecordValue;
-import com.splmeter.customewidget.VisualizerView;
 
 /**
  * @description:主页面
@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		initData();
 		findViewById();
 		initView();
 	}
@@ -277,6 +277,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 从网络获取数据并更新
+	 */
+	private void initData() {
+	}
+
+	/**
 	 * 生成一个VisualizerView对象，使音频频谱的波段能够反映到 VisualizerView上
 	 */
 	private void setupVisualizerFx(int sessionId) {
@@ -367,63 +373,5 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		}
 
-	}
-
-	/**
-	 * @description:播放音频
-	 * @company: smallrhino
-	 * @author：张帅
-	 * @date 2015年11月23日 下午11:23:11
-	 */
-	public class MyAudioTrack {
-		int mFrequency; // 采样率
-		int mChannel; // 声道
-		int mSampBit; // 采样精度
-		AudioTrack mAudioTrack;
-
-		public MyAudioTrack(int frequency, int channel, int sampbit) {
-			mFrequency = frequency;
-			mChannel = channel;
-			mSampBit = sampbit;
-		}
-
-		public void init() {
-			if (mAudioTrack != null) {
-				release();
-			}
-			// 获得构建对象的最小缓冲区大小
-			int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
-			mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, mFrequency, mChannel, mSampBit, minBufSize, AudioTrack.MODE_STREAM);
-			mAudioTrack.play();
-		}
-
-		public void release() {
-			if (mAudioTrack != null) {
-				mAudioTrack.stop();
-				mAudioTrack.release();
-			}
-
-		}
-
-		public int getAudioSessionId() {
-			return mAudioTrack.getAudioSessionId();
-		}
-
-		public void playAudioTrack(short[] data, int offset, int length) {
-			if (data == null || data.length == 0) {
-				return;
-			}
-			try {
-				mAudioTrack.write(data, offset, length);
-			} catch (Exception e) {
-				// TODO: handle exception
-				Log.i("MyAudioTrack", "catch exception...");
-			}
-		}
-
-		public int getPrimePlaySize() {
-			int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
-			return minBufSize * 2;
-		}
 	}
 }

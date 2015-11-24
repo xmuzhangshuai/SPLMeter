@@ -1,4 +1,4 @@
-package com.splmeter.db;
+package com.splmeter.dbservice;
 
 import java.io.File;
 import java.io.FileNotFoundException;
