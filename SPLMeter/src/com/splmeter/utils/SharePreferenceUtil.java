@@ -14,11 +14,10 @@ import android.content.SharedPreferences;
 public class SharePreferenceUtil {
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
-	public static final String USE_COUNT = "count";// 记录软件使用次数
-	public static final String CONFIG = "config";//评价信息
+	public static final String CONFIG = "config";//设置
 
-	public SharePreferenceUtil(Context context, String file) {
-		sp = context.getSharedPreferences(file, Context.MODE_PRIVATE);
+	public SharePreferenceUtil(Context context) {
+		sp = context.getSharedPreferences(CONFIG, Context.MODE_PRIVATE);
 		editor = sp.edit();
 	}
 
@@ -52,13 +51,23 @@ public class SharePreferenceUtil {
 		editor.commit();
 	}
 
-	// 室内，室外
-	public String getInOutDoor() {
-		return sp.getString("in_out_door", "");
+	// 室内，室外，室内1，室外0
+	public int getInOutDoor() {
+		return sp.getInt("in_out_door", 0);
 	}
 
-	public void setInOutDoor(String in_out_door) {
-		editor.putString("in_out_door", in_out_door);
+	public void setInOutDoor(int in_out_door) {
+		editor.putInt("in_out_door", in_out_door);
+		editor.commit();
+	}
+
+	// 语言
+	public String getLanguage() {
+		return sp.getString("Language", "zh");
+	}
+
+	public void setLanguage(String Language) {
+		editor.putString("Language", Language);
 		editor.commit();
 	}
 

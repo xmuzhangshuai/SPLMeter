@@ -4,9 +4,11 @@ import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
 import com.splmeter.base.BaseActivity;
+import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.MyAudioTrack;
+import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -49,12 +51,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private ImageView seekBarLevelThumb;
 	private TextView levelTextView;
 	private TextView fsLabel;
+	private TextView doorLabel;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;//噪音范围最小值
 	private float seekBarLevelBlock = 25;
 	private float seekBarLevelThumbIntial;
 	private int currentLevel = 0;
 	private String[] levels;
+	private SharePreferenceUtil sharePreferenceUtil;
 
 	private LinearLayout visualizerViewLayout;//代码布局
 	VisualizerView mBaseVisualizerView;//频谱图
@@ -70,9 +74,22 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		initData();
 		findViewById();
 		initView();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//室内室外
+		if (sharePreferenceUtil.getInOutDoor() == 0) {
+			doorLabel.setText(getResources().getString(R.string.outdoor));
+		} else {
+			doorLabel.setText(getResources().getString(R.string.indoor));
+		}
 	}
 
 	@Override
@@ -89,6 +106,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		visualizerViewLayout = (LinearLayout) findViewById(R.id.visualizeView_container);
 		abscissaLayout = (LinearLayout) findViewById(R.id.abscissa);
 		ordinateLayout = (LinearLayout) findViewById(R.id.ordinate);
+		doorLabel = (TextView) findViewById(R.id.in_out_door);
 	}
 
 	@Override
@@ -124,6 +142,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		//横坐标和纵坐标
 		initCoordinate();
+
 	}
 
 	/**

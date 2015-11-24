@@ -3,6 +3,7 @@ package com.splmeter.base;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.splmeter.utils.SharePreferenceUtil;
 import com.splmeter.utils.UserPreference;
 
 import android.app.Application;
@@ -25,9 +26,8 @@ public class BaseApplication extends Application {
 	private static BaseApplication myApplication;
 	// private static DaoMaster daoMaster;
 	// private static DaoSession daoSession;
-	private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
 	private UserPreference userPreference;
-	private MediaPlayer messagePlayer;
+	private SharePreferenceUtil sharePreferenceUtil;
 
 	public synchronized static BaseApplication getInstance() {
 		return myApplication;
@@ -41,26 +41,19 @@ public class BaseApplication extends Application {
 		if (myApplication == null)
 			myApplication = this;
 
-//		initImageLoader(getApplicationContext());
-
 		initData();
-
 	}
 
 	private void initData() {
 		userPreference = new UserPreference(this);
-		//		messagePlayer = MediaPlayer.create(this, R.raw.office);
+		sharePreferenceUtil = new SharePreferenceUtil(this);
 	}
 
-	/**
-	 * 返回消息提示声音
-	 * @return
-	 */
-	//	public synchronized MediaPlayer getMessagePlayer() {
-	//		if (messagePlayer == null)
-	//			messagePlayer = MediaPlayer.create(this, R.raw.office);
-	//		return messagePlayer;
-	//	}
+	public synchronized SharePreferenceUtil getsharePreferenceUtil() {
+		if (sharePreferenceUtil == null)
+			sharePreferenceUtil = new SharePreferenceUtil(this);
+		return sharePreferenceUtil;
+	}
 
 	public synchronized UserPreference getUserPreference() {
 		if (userPreference == null)
@@ -110,11 +103,5 @@ public class BaseApplication extends Application {
 	//		// Initialize ImageLoader with configuration.
 	//		ImageLoader.getInstance().init(config);
 	//	}
-
-	public Map<String, Integer> getFaceMap() {
-		if (!mFaceMap.isEmpty())
-			return mFaceMap;
-		return null;
-	}
 
 }
