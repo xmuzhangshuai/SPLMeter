@@ -92,11 +92,20 @@ public class SharePreferenceUtil {
 	}
 
 	// 主页参与人数提示
-	public String getMainLabelText() {
+	public String getMainLabelTextCN() {
 		return sp.getString("mainLabelText", "");
 	}
 
-	public void setMainLabelText(String mainLabelText) {
+	public void setMainLabelTextCN(String mainLabelText) {
+		editor.putString("mainLabelText", mainLabelText);
+		editor.commit();
+	}
+
+	public String getMainLabelTextEN() {
+		return sp.getString("mainLabelText", "");
+	}
+
+	public void setMainLabelTextEN(String mainLabelText) {
 		editor.putString("mainLabelText", mainLabelText);
 		editor.commit();
 	}
