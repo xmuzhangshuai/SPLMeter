@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
@@ -20,6 +21,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.smallrhino.splmeter.R;
@@ -56,9 +58,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private LinearLayout visualizerViewLayout;//代码布局
 	VisualizerView mBaseVisualizerView;//频谱图
-	private static final float VISUALIZER_HEIGHT_DIP = 150f;//频谱View高度
+	private static final float VISUALIZER_HEIGHT_DIP = 120f;//频谱View高度
 	private Visualizer mVisualizer;//频谱器
 	MyAudioTrack myAudioTrack;
+	private LinearLayout abscissaLayout;//横坐标
+	private LinearLayout ordinateLayout;//纵坐标
+	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
+	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		levelTextView = (TextView) findViewById(R.id.status);
 		fsLabel = (TextView) findViewById(R.id.fs_label);
 		visualizerViewLayout = (LinearLayout) findViewById(R.id.visualizeView_container);
+		abscissaLayout = (LinearLayout) findViewById(R.id.abscissa);
+		ordinateLayout = (LinearLayout) findViewById(R.id.ordinate);
 	}
 
 	@Override
@@ -113,6 +121,31 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		));
 		//将频谱View添加到布局
 		visualizerViewLayout.addView(mBaseVisualizerView);
+
+		//横坐标和纵坐标
+		initCoordinate();
+	}
+
+	/**
+	 * 横坐标和纵坐标
+	 */
+	private void initCoordinate() {
+		for (String abs : abscissaArray) {
+			TextView textView = new TextView(this);
+			textView.setTextColor(Color.argb(255, 7, 251, 251));
+			textView.setTextSize(10);
+			textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
+			textView.setText(abs);
+			abscissaLayout.addView(textView);
+		}
+		for (String odr : ordinateArray) {
+			TextView textView = new TextView(this);
+			textView.setText(odr);
+			textView.setTextColor(Color.argb(255, 7, 251, 251));
+			textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
+			textView.setTextSize(10);
+			ordinateLayout.addView(textView);
+		}
 	}
 
 	/**
@@ -308,11 +341,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			double splValue = splBo.getSPLValue();
 			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE);
 			currentValue.setText("" + calibrateSPLValue);
-			
+
 			double maxSPL = splBo.getMaxSPL();
 			double maxFrequency = splBo.getMaxFrequency();
 			//有待做中英文环境处理
-			fsLabel.setText("主频："+fftCal.getMaxSudBA(maxSPL)+"分贝（"+fftCal.getMaxSudHz(maxFrequency)+"赫兹）");
+			fsLabel.setText("主频：" + fftCal.getMaxSudBA(maxSPL) + "分贝（" + fftCal.getMaxSudHz(maxFrequency) + "赫兹）");
 
 			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
 			if (currentLevel > 4) {

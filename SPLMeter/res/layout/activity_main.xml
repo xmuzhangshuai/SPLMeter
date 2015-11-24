@@ -133,17 +133,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_button"
         android:layout_below="@+id/relativeLayout1"
+        android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/shape_main_block"
-        android:padding="10dp" >
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
 
         <LinearLayout
             android:id="@+id/fs_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:padding="10dp" >
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -161,7 +167,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="主频：30.2分贝（500.3赫兹）"
+                android:text="主频：0.0分贝（0.0赫兹）"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -172,11 +178,47 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/fs_container"
             android:orientation="horizontal"
-            android:padding="10dp" >
+            android:paddingLeft="13dp"
+            android:paddingRight="10dp" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ordinate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/abscissa"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/fs_container"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ordinate_view"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/abscissa"
+            android:layout_below="@+id/fs_container"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/ordinate"
+            android:background="@color/system_blue"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/abscissa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ordinate_view"
+            android:layout_below="@+id/visualizeView_container"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal" >
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
