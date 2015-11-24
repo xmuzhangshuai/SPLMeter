@@ -59,10 +59,6 @@
         <item>51岁-60岁</item>
         <item>大于60岁</item>
     </array>
-    <array name="langGroup">
-        <item>Chinese</item>
-        <item>English</item>
-    </array>
     <array name="modeGroup">
         <item>Out door</item>
         <item>In door</item>

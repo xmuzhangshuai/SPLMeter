@@ -60,10 +60,6 @@
         <item>51岁-60岁</item>
         <item>大于60岁</item>
     </array>
-    <array name="langGroup">
-        <item>中文</item>
-        <item>英文</item>
-    </array>
     <array name="modeGroup">
         <item>室外</item>
         <item>室内</item>

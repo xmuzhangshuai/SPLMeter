@@ -30,13 +30,11 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private Button cancelBtn;
 	private Button confirmBtn;
 	private Spinner modeSpinner;
-	private Spinner langSpinner;
 	private View helpView;
 	private View checkUpdateView;
 	private View aboutView;
 	private SharePreferenceUtil sharePreferenceUtil;
 	private int in_out_door;
-	private String language;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		cancelBtn = (Button) findViewById(R.id.cancel_btn);
 		confirmBtn = (Button) findViewById(R.id.confirm_btn);
 		modeSpinner = (Spinner) findViewById(R.id.modeSpinner);
-		langSpinner = (Spinner) findViewById(R.id.langSpinner);
 		helpView = findViewById(R.id.help);
 		checkUpdateView = findViewById(R.id.check_update);
 		aboutView = findViewById(R.id.about);
@@ -68,7 +65,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		checkUpdateView.setOnClickListener(this);
 		aboutView.setOnClickListener(this);
 		in_out_door = sharePreferenceUtil.getInOutDoor();
-		language = sharePreferenceUtil.getLanguage();
 
 		/************设置户内户外**********/
 		ArrayAdapter<CharSequence> modeAadapter = ArrayAdapter.createFromResource(this, R.array.modeGroup, android.R.layout.simple_spinner_item);
@@ -90,34 +86,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 
-		/********设置语言**********/
-		ArrayAdapter<CharSequence> langAadapter = ArrayAdapter.createFromResource(this, R.array.langGroup, android.R.layout.simple_spinner_item);
-		langAadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		langSpinner.setAdapter(langAadapter);
-		String sta = getResources().getConfiguration().locale.getCountry();
-		if (sta.equals("zh")) {
-			langSpinner.setSelection(0, true);
-		} else {
-			langSpinner.setSelection(1, true);
-		}
-
-	}
-
-	/** 
-	 * 刷新语言 
-	 */
-	public void updateActivity(String sta) {
-
-		// 本地语言设置  
-		Locale myLocale = new Locale(sta);
-		Resources res = getResources();
-		DisplayMetrics dm = res.getDisplayMetrics();
-		Configuration conf = res.getConfiguration();
-		conf.locale = myLocale;
-		res.updateConfiguration(conf, dm);
-		this.recreate();
-		//		startActivity((new Intent(this, TabActivity.class)));
-		//		this.finish();
 	}
 
 	private void validateSetting() {
