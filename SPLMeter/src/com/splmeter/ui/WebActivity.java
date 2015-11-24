@@ -5,6 +5,7 @@ import com.splmeter.base.BaseActivity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -21,11 +22,20 @@ public class WebActivity extends BaseActivity {
 	private WebView webView;
 	private Button backBtn;
 	private ActionBar actionBar;
+	private String url;
+	private String title;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web);
+
+		url = getIntent().getStringExtra("url");
+		title = getIntent().getStringExtra("title");
+		if (TextUtils.isEmpty(url)) {
+			finish();
+			return;
+		}
 
 		findViewById();
 		initView();
@@ -43,9 +53,9 @@ public class WebActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		actionBar = getActionBar();
-		actionBar.setTitle("小犀牛");
+		actionBar.setTitle(title);
 
-		webView.loadUrl("http://www.smallrhino.net");
+		webView.loadUrl(url);
 		backBtn.setOnClickListener(new OnClickListener() {
 
 			@Override

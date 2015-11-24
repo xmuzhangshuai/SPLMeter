@@ -43,6 +43,11 @@
     <string name="share_twitter">Twitter</string>
     <string name="share_facebook">Facebook</string>
     <string name="go_back">返回主界面</string>
+    <string name="version_name">当前版本：v-</string>
+    <string name="can_not_find_version_name">获取版本号失败</string>
+    <string name="newest">当前是最新版本</string>
+    <string name="no_wifi">没有wifi连接， 只在wifi下更新</string>
+    <string name="timeout">超时</string>
 
     <array name="levelGroup">
         <item>非常安静</item>

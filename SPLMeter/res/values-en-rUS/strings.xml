@@ -42,6 +42,11 @@
     <string name="share_twitter">Twitter</string>
     <string name="share_facebook">Facebook</string>
     <string name="go_back">Go back</string>
+    <string name="version_name">Version：v-</string>
+    <string name="can_not_find_version_name">v</string>
+    <string name="newest">The current version is the latest</string>
+    <string name="no_wifi">No wifi connection, wifi is required</string>
+    <string name="timeout">Time out</string>
 
     <array name="levelGroup">
         <item>非常安静</item>

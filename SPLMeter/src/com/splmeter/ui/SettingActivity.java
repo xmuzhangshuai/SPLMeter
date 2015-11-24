@@ -1,17 +1,19 @@
 package com.splmeter.ui;
 
-import java.util.Locale;
-
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.utils.SharePreferenceUtil;
+import com.splmeter.utils.ToastTool;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * @description:设置页面
@@ -33,6 +36,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private View helpView;
 	private View checkUpdateView;
 	private View aboutView;
+	private TextView versionTextView;
 	private SharePreferenceUtil sharePreferenceUtil;
 	private int in_out_door;
 
@@ -54,6 +58,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		helpView = findViewById(R.id.help);
 		checkUpdateView = findViewById(R.id.check_update);
 		aboutView = findViewById(R.id.about);
+		versionTextView = (TextView) findViewById(R.id.version);
 	}
 
 	@Override
@@ -64,6 +69,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		helpView.setOnClickListener(this);
 		checkUpdateView.setOnClickListener(this);
 		aboutView.setOnClickListener(this);
+		versionTextView.setText(getVersion());
 		in_out_door = sharePreferenceUtil.getInOutDoor();
 
 		/************设置户内户外**********/
@@ -92,6 +98,22 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		sharePreferenceUtil.setInOutDoor(in_out_door);
 	}
 
+	/**
+	 * 获取版本号
+	 * @return 当前应用的版本号
+	 */
+	public String getVersion() {
+		try {
+			PackageManager manager = getPackageManager();
+			PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+			String version = info.versionName;
+			return this.getString(R.string.version_name) + version;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.getString(R.string.can_not_find_version_name);
+		}
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -104,11 +126,36 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.about:
-			Intent intent = new Intent(SettingActivity.this, WebActivity.class);
-			startActivity(intent);
+			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://smallrhino.net").putExtra("title", "小犀牛"));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
-
+		case R.id.help:
+			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://smallrhino.net").putExtra("title", "小犀牛"));
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			break;
+		case R.id.check_update:
+			/**********友盟自动更新组件**************/
+			UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+				@Override
+				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+					switch (updateStatus) {
+					case UpdateStatus.Yes: // has update
+						UmengUpdateAgent.showUpdateDialog(SettingActivity.this, updateInfo);
+						break;
+					case UpdateStatus.No: // has no update
+						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.newest));
+						break;
+					case UpdateStatus.NoneWifi: // none wifi
+						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.no_wifi));
+						break;
+					case UpdateStatus.Timeout: // time out
+						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.timeout));
+						break;
+					}
+				}
+			});
+			UmengUpdateAgent.forceUpdate(SettingActivity.this);
+			break;
 		default:
 			break;
 		}

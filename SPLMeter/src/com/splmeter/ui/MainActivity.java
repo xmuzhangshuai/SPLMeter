@@ -9,6 +9,7 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.SharePreferenceUtil;
+import com.umeng.update.UmengUpdateAgent;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -74,6 +75,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		//友盟更新
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.update(this);
+
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		initData();
 		findViewById();
@@ -326,12 +332,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			try {
 				float[] transform;
 				int bufferSize = AudioRecord.getMinBufferSize(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
-				/* 关于采样的注释：
-				 * audioSource音频源，此参数的值为MIC
-				 * sampleRateInHz采样率，此处根据需求改为44100
-				 * channelConfig声道设置
-				 * audioFormat 编码制式和采样大小
-				 * bufferSizeInBytes 采集数据需要的缓冲区的大小
+				/*
+				 * 关于采样的注释： audioSource音频源，此参数的值为MIC
+				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
+				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
 				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
 						bufferSize);
