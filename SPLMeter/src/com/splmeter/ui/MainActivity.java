@@ -87,7 +87,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
 	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
 
-	private List<Map<String, Float>> basicFrequencyList;
+	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

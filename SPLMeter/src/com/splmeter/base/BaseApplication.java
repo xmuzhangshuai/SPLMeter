@@ -1,13 +1,8 @@
 package com.splmeter.base;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.splmeter.utils.SharePreferenceUtil;
-import com.splmeter.utils.UserPreference;
 
 import android.app.Application;
-import android.media.MediaPlayer;
 
 /**   
  *    
@@ -26,7 +21,6 @@ public class BaseApplication extends Application {
 	private static BaseApplication myApplication;
 	// private static DaoMaster daoMaster;
 	// private static DaoSession daoSession;
-	private UserPreference userPreference;
 	private SharePreferenceUtil sharePreferenceUtil;
 
 	public synchronized static BaseApplication getInstance() {
@@ -45,7 +39,6 @@ public class BaseApplication extends Application {
 	}
 
 	private void initData() {
-		userPreference = new UserPreference(this);
 		sharePreferenceUtil = new SharePreferenceUtil(this);
 	}
 
@@ -53,12 +46,6 @@ public class BaseApplication extends Application {
 		if (sharePreferenceUtil == null)
 			sharePreferenceUtil = new SharePreferenceUtil(this);
 		return sharePreferenceUtil;
-	}
-
-	public synchronized UserPreference getUserPreference() {
-		if (userPreference == null)
-			userPreference = new UserPreference(this);
-		return userPreference;
 	}
 
 	/** 
