@@ -48,6 +48,8 @@
     <string name="newest">当前是最新版本</string>
     <string name="no_wifi">没有wifi连接， 只在wifi下更新</string>
     <string name="timeout">超时</string>
+    <string name="basic_frequency">主频</string>
+    <string name="hz">赫兹</string>
 
     <array name="levelGroup">
         <item>非常安静</item>
@@ -95,10 +97,5 @@
     <string name="shareDialogTitle">请选择分享对象</string>
     <string name="reportSuccess">分享成功，感谢您的参与！</string>
     <string name="reportFailure">分享失败，请稍候再试！</string>
-
-    <array name="shareDialogItem">
-        <item>科学家</item>
-        <item>好友</item>
-    </array>
 
 </resources>

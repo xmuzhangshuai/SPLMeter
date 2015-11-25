@@ -47,6 +47,8 @@
     <string name="newest">The current version is the latest</string>
     <string name="no_wifi">No wifi connection, wifi is required</string>
     <string name="timeout">Time out</string>
+    <string name="basic_frequency">Basic Frequency</string>
+    <string name="hz">HZ</string>
 
     <array name="levelGroup">
         <item>非常安静</item>
@@ -94,10 +96,5 @@
     <string name="shareDialogTitle">Choose to share</string>
     <string name="reportSuccess">Success! Thank you!</string>
     <string name="reportFailure">Failed! Please tye again</string>
-
-    <array name="shareDialogItem">
-        <item>Scientist</item>
-        <item>Friends</item>
-    </array>
 
 </resources>

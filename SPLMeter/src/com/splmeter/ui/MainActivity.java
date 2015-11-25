@@ -1,5 +1,11 @@
 package com.splmeter.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +20,7 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.AsyncHttpClientTool;
+import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.SharePreferenceUtil;
@@ -61,6 +68,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView levelTextView;
 	private TextView fsLabel;
 	private TextView doorLabel;
+	private TextView tips;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;//噪音范围最小值
 	private float seekBarLevelBlock = 25;
@@ -79,6 +87,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
 	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
 
+	private List<Map<String, Float>> basicFrequencyList;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,6 +99,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		UmengUpdateAgent.update(this);
 
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
+		basicFrequencyList = new ArrayList<>();
 		initData();
 		findViewById();
 		initView();
@@ -121,6 +132,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		abscissaLayout = (LinearLayout) findViewById(R.id.abscissa);
 		ordinateLayout = (LinearLayout) findViewById(R.id.ordinate);
 		doorLabel = (TextView) findViewById(R.id.in_out_door);
+		tips = (TextView) findViewById(R.id.participants);
 	}
 
 	@Override
@@ -157,6 +169,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		//横坐标和纵坐标
 		initCoordinate();
 
+		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
 	}
 
 	/**
@@ -292,7 +305,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				startBtn.setBackgroundResource(R.drawable.sel_btn);
 				startBtn.setText(R.string.on);
 				next_last(1);
+				for (int i = 0; i < basicFrequencyList.size(); i++) {
+					LogTool.i("frequency---->"+basicFrequencyList.get(i).get("basic_frequency"));
+					LogTool.e("frequency---->"+basicFrequencyList.get(i).get("hz"));
+				}
 			} else {//开始
+				basicFrequencyList.clear();
 				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
 				startBtn.setText(R.string.evaluate);
 				recordTask = new RecordAudio();
@@ -324,7 +342,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				try {
 					JSONObject j1 = new JSONObject(response);
 					String data = j1.getString("data");
-					JSONObject j2 =new JSONObject(data);
+					JSONObject j2 = new JSONObject(data);
 					String t_tiptxt_en = j2.getString("t_tiptxt_en");
 					String t_tiptxt_cn = j2.getString("t_tiptxt_cn");
 					sharePreferenceUtil.setMainLabelTextCN(t_tiptxt_cn);
@@ -364,6 +382,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 *
 	 */
 	private class RecordAudio extends AsyncTask<Void, float[], Void> {
+		Map<String, Float> map;
+
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
@@ -417,8 +437,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			double maxSPL = splBo.getMaxSPL();
 			double maxFrequency = splBo.getMaxFrequency();
-			//有待做中英文环境处理
-			fsLabel.setText("主频：" + fftCal.getMaxSudBA(maxSPL) + "分贝（" + fftCal.getMaxSudHz(maxFrequency) + "赫兹）");
+			//主频以及对应的HZ
+			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + "：" + fftCal.getMaxSudBA(maxSPL)
+					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "（" + fftCal.getMaxSudHz(maxFrequency)
+					+ MainActivity.this.getResources().getString(R.string.hz) + "）");
+			//记录主频
+			map = new HashMap<>();
+			map.put("hz", fftCal.getDoubleMaxSudBA(maxSPL));
+			map.put("basic_frequency", fftCal.getDoubleMaxSudHz(maxFrequency));
+			basicFrequencyList.add(map);
 
 			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
 			if (currentLevel > 4) {
@@ -437,8 +464,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			//初始化  
 			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
-
 		}
-
 	}
 }

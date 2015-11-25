@@ -19,20 +19,20 @@ public class FFTSplCal {
 	public float[] toTransform;
 	DecimalFormat nf = new DecimalFormat("0.0");
 	FFT transformer;
-	
+
 	//初始化变量的值，以下值均为计算公式中固定的数值
 	double f1 = 1.562339, f2 = Math.pow(107.65265, 2), f3 = Math.pow(737.86223, 2);
 	double f4 = 2.242881E16, f5 = Math.pow(20.598997, 2), f6 = Math.pow(12194.22, 2);
-	
-	public FFTSplCal(){
+
+	public FFTSplCal() {
 		transformer = new FFT(blockSize, frequency);
 	}
-	
+
 	/**
 	 * 从声麦中读取数据到缓冲区中，再对缓冲区中内容做正向转换，主要用于初始化transformer
 	 * @param bufferReadResult 通过audioRecord.read的返回值
 	 */
-	public void transBuffer(int bufferReadResult,short[] buffer) {
+	public void transBuffer(int bufferReadResult, short[] buffer) {
 		toTransform = new float[blockSize];
 		for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
 			toTransform[i] = (float) (buffer[i]);
@@ -40,7 +40,7 @@ public class FFTSplCal {
 
 		transformer.forward(toTransform);
 	}
-	
+
 	/**
 	 * 获取SPL等数值
 	 * @return SPLBo
@@ -50,7 +50,7 @@ public class FFTSplCal {
 		SPLBo splBo = new SPLBo();
 		double spl = 0;
 
-		int ALenght = transformer.specSize()*2;
+		int ALenght = transformer.specSize() * 2;
 
 		double f_p[] = new double[ALenght];
 		double f_Lp[] = new double[ALenght];
@@ -73,7 +73,7 @@ public class FFTSplCal {
 			//计算Lp的数值
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
-			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]) + Math.pow(10,f_WA[i]));
+			f_LpA[i] = 10 * Math.log10(Math.pow(10, f_Lp[i]) + Math.pow(10, f_WA[i]));
 			//最后进行叠加，得到总的声压级
 			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级
@@ -85,17 +85,17 @@ public class FFTSplCal {
 		splBo.setSPLValue(spl);
 		return splBo;
 	}
-	
+
 	/**
 	 * 获得校准之后的SPL值
 	 * @param SPL 通过
 	 * @param calibrateValue 配置中的基准值
 	 * @return
 	 */
-	public String getCalibrateSPL(double SPL , double calibrateValue) {
+	public String getCalibrateSPL(double SPL, double calibrateValue) {
 		return nf.format(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
 	}
-	
+
 	/**
 	 * 获取最大声压（声音的强度）的dBA，即单位为dBA
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL
@@ -104,7 +104,7 @@ public class FFTSplCal {
 	public String getMaxSudBA(double maxSPL) {
 		return nf.format(maxSPL * 1.26067 - 82.00148);
 	}
-	
+
 	/**
 	 * 获取最大声压（声音的频率）的Hz，即单位为Hz
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
@@ -113,34 +113,34 @@ public class FFTSplCal {
 	public String getMaxSudHz(double maxFrequency) {
 		return nf.format(maxFrequency);
 	}
-	
-	/**
-	 * 获得校准之后的SPL值
-	 * @param SPL 通过
-	 * @param calibrateValue 配置中的基准值
-	 * @return
-	 */
-	public float getDoubleCalibrateSPL(double SPL , double calibrateValue) {
-		return (float)Math.round((10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue)*10)/10;
-//		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
-	}
-	
+
 	/**
 	 * 获取最大声压（声音的强度）dBA，即单位为dBA
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL
 	 * @return
 	 */
 	public float getDoubleMaxSudBA(double maxSPL) {
-		return (float)(maxSPL * 1.26067 - 82.00148);
+		return (float) (maxSPL * 1.26067 - 82.00148);
 	}
-	
+
+	/**
+	 * 获得校准之后的SPL值
+	 * @param SPL 通过
+	 * @param calibrateValue 配置中的基准值
+	 * @return
+	 */
+	public float getDoubleCalibrateSPL(double SPL, double calibrateValue) {
+		return (float) Math.round((10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue) * 10) / 10;
+		//		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
+	}
+
 	/**
 	 * 获取最大声压（声音的频率）Hz，即单位为Hz
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
 	 * @return
 	 */
 	public float getDoubleMaxSudHz(double maxFrequency) {
-		return (float)(maxFrequency);
+		return (float) (maxFrequency);
 	}
 
 }

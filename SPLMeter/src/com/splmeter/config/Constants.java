@@ -7,9 +7,9 @@ public class Constants {
 	// 是否处于开发模式
 	public static final boolean DEVELOPER_MODE = true;
 	// 域名或者是IP
-	public static String AppliactionServerIP = "http://120.25.84.123/Noise/GetTips/";
+	public static String AppliactionServerIP = "http://120.25.84.123/Noise/";
 	//
-	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/GetTips/";
+	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
 
 	public static class WeChatConfig {
 		public final static String API_KEY = "wx33f81b034c7f3e04";

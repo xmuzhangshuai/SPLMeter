@@ -15,7 +15,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="15dp"
-        android:text="目前参与人数已达60000，赶紧看一下您周边的噪声污染水平吧，点击“开始”进行。"
         android:textColor="@color/white" />
 
     <RelativeLayout
