@@ -1,8 +1,12 @@
 package com.splmeter.base;
 
+import com.splmeter.dao.DaoMaster;
+import com.splmeter.dao.DaoMaster.OpenHelper;
+import com.splmeter.dao.DaoSession;
 import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Application;
+import android.content.Context;
 
 /**   
  *    
@@ -19,8 +23,8 @@ import android.app.Application;
  */
 public class BaseApplication extends Application {
 	private static BaseApplication myApplication;
-	// private static DaoMaster daoMaster;
-	// private static DaoSession daoSession;
+	private static DaoMaster daoMaster;
+	private static DaoSession daoSession;
 	private SharePreferenceUtil sharePreferenceUtil;
 
 	public synchronized static BaseApplication getInstance() {
@@ -54,41 +58,27 @@ public class BaseApplication extends Application {
 	 * @param context 
 	 * @return 
 	 */
-	//	public static DaoMaster getDaoMaster(Context context) {
-	//		if (daoMaster == null) {
-	//			OpenHelper openHelper = new DaoMaster.DevOpenHelper(context, "quanzi.db", null);
-	//			daoMaster = new DaoMaster(openHelper.getWritableDatabase());
-	//		}
-	//		return daoMaster;
-	//	}
+	public static DaoMaster getDaoMaster(Context context) {
+		if (daoMaster == null) {
+			OpenHelper openHelper = new DaoMaster.DevOpenHelper(context, "splmeter.db", null);
+			daoMaster = new DaoMaster(openHelper.getWritableDatabase());
+		}
+		return daoMaster;
+	}
 
 	/**
 	 * 取得DaoSession 
 	 * @param context
 	 * @return
 	 */
-	//	public static DaoSession getDaoSession(Context context) {
-	//		if (daoSession == null) {
-	//			if (daoMaster == null) {
-	//				daoMaster = getDaoMaster(context);
-	//			}
-	//			daoSession = daoMaster.newSession();
-	//		}
-	//		return daoSession;
-	//	}
-
-	//	public static void initImageLoader(Context context) {
-	//		// This configuration tuning is custom. You can tune every option, you
-	//		// may tune some of them,
-	//		// or you can create default configuration by
-	//		// ImageLoaderConfiguration.createDefault(this);
-	//		// method.
-	//		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-	//				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
-	//				.diskCacheFileNameGenerator(new Md5FileNameGenerator()).tasksProcessingOrder(QueueProcessingType.LIFO)
-	//				.build();
-	//		// Initialize ImageLoader with configuration.
-	//		ImageLoader.getInstance().init(config);
-	//	}
+	public static DaoSession getDaoSession(Context context) {
+		if (daoSession == null) {
+			if (daoMaster == null) {
+				daoMaster = getDaoMaster(context);
+			}
+			daoSession = daoMaster.newSession();
+		}
+		return daoSession;
+	}
 
 }

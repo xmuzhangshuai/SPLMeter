@@ -23,6 +23,7 @@ import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
+import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -88,20 +89,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
+		basicFrequencyList = new ArrayList<>();
 
 		//友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 
-		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
-		basicFrequencyList = new ArrayList<>();
-		initData();
+		//从网络获取数据并存储到本地
+		new ServerUtils(MainActivity.this).initData();
+
 		findViewById();
 		initView();
 	}
@@ -142,6 +144,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		settingBtn.setOnClickListener(this);
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
+
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
@@ -307,8 +310,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				startBtn.setText(R.string.on);
 				next_last(1);
 				for (int i = 0; i < basicFrequencyList.size(); i++) {
-					LogTool.i("frequency---->"+basicFrequencyList.get(i).get("basic_frequency"));
-					LogTool.e("frequency---->"+basicFrequencyList.get(i).get("hz"));
+					LogTool.i("frequency---->" + basicFrequencyList.get(i).get("basic_frequency"));
+					LogTool.e("frequency---->" + basicFrequencyList.get(i).get("hz"));
 				}
 			} else {//开始
 				basicFrequencyList.clear();
@@ -326,41 +329,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		default:
 			break;
 		}
-	}
-
-	/**
-	 * 从网络获取数据并更新
-	 */
-	private void initData() {
-		RequestParams params = new RequestParams();
-
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String response) {
-				// TODO Auto-generated method stub
-				LogTool.i(statusCode + "===" + response);
-				try {
-					JSONObject j1 = new JSONObject(response);
-					String data = j1.getString("data");
-					JSONObject j2 = new JSONObject(data);
-					String t_tiptxt_en = j2.getString("t_tiptxt_en");
-					String t_tiptxt_cn = j2.getString("t_tiptxt_cn");
-					sharePreferenceUtil.setMainLabelTextCN(t_tiptxt_cn);
-					sharePreferenceUtil.setMainLabelTextEN(t_tiptxt_en);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-				// TODO Auto-generated method stub
-				LogTool.e("服务器错误" + errorResponse);
-
-			}
-		};
-		AsyncHttpClientTool.get("GetTips", params, responseHandler);
 	}
 
 	/**

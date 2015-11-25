@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.smallrhino.splmeter.R;
+import com.splmeter.dbservice.SoundSourceDbService;
+import com.splmeter.entities.SoundSource;
+import com.splmeter.utils.CommonTools;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,9 +15,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -31,12 +34,11 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 	private MainActivity mainActivity;
 	private Button lastBtn;
 	private Button nextBtn;
-	private ListView listview1;
-	private ListView listview2;
-	private ListView listview3;
-	private List<String> list1;
-	private List<String> list2;
-	private List<String> list3;
+	private ListView listview1, listview2, listview3;
+	private List<SoundSource> soundSourcesList1, soundSourcesList2, soundSourcesList3;
+	private List<String> soundSourceNameList1, soundSourceNameList2, soundSourceNameList3;
+
+	private SoundSourceDbService soundSourceDbService;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -50,9 +52,34 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
-		list1 = new ArrayList<String>();
-		list2 = new ArrayList<String>();
-		list3 = new ArrayList<String>();
+		soundSourceDbService = SoundSourceDbService.getInstance(getActivity());
+		soundSourcesList1 = soundSourceDbService.getSoundSourceType00();
+		soundSourcesList2 = soundSourceDbService.getSoundSourceType01();
+		soundSourcesList3 = soundSourceDbService.getSoundSourceType02();
+		soundSourceNameList1 = new ArrayList<>();
+		soundSourceNameList2 = new ArrayList<>();
+		soundSourceNameList3 = new ArrayList<>();
+		if (CommonTools.isZh(getActivity())) {
+			for (SoundSource s : soundSourcesList1) {
+				soundSourceNameList1.add(s.getSsi_item_cn());
+			}
+			for (SoundSource s : soundSourcesList2) {
+				soundSourceNameList2.add(s.getSsi_item_cn());
+			}
+			for (SoundSource s : soundSourcesList3) {
+				soundSourceNameList3.add(s.getSsi_item_cn());
+			}
+		} else {
+			for (SoundSource s : soundSourcesList1) {
+				soundSourceNameList1.add(s.getSsi_item_en());
+			}
+			for (SoundSource s : soundSourcesList2) {
+				soundSourceNameList2.add(s.getSsi_item_en());
+			}
+			for (SoundSource s : soundSourcesList3) {
+				soundSourceNameList3.add(s.getSsi_item_en());
+			}
+		}
 	}
 
 	@Override
@@ -76,30 +103,11 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 	}
 
 	private void initView() {
-		initData();
-
-		listview1.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, list1));
-		listview2.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, list2));
-		listview3.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, list3));
+		listview1.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, soundSourceNameList1));
+		listview2.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, soundSourceNameList2));
+		listview3.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, soundSourceNameList3));
 		lastBtn.setOnClickListener(this);
 		nextBtn.setOnClickListener(this);
-	}
-
-	/**
-	 * 初始化多选数据
-	 */
-	private void initData() {
-		list1.add("风声");
-		list1.add("水声");
-		list1.add("鸟声");
-		list1.add("虫鸣声");
-		list1.add("动物声");
-		list2.add("说话声");
-		list2.add("嬉戏声");
-		list3.add("交通声");
-		list3.add("机器声");
-		list3.add("音乐声");
-		list3.add("广播声");
 	}
 
 	@Override
