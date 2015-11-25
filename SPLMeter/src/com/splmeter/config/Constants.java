@@ -11,11 +11,6 @@ public class Constants {
 	//
 	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
 
-	public static class WeChatConfig {
-		public final static String API_KEY = "wx33f81b034c7f3e04";
-		public final static String SECRIT_KEY = "b003237ea4d4d1df9089c97feef5ff76";
-	}
-
 	public static class RecordValue {
 		public static final int CHANNELCONFIGURATION = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 		public static final int AUDIOENCODING = AudioFormat.ENCODING_PCM_16BIT;
