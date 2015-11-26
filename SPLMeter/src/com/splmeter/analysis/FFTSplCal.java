@@ -73,7 +73,7 @@ public class FFTSplCal {
 			//计算Lp的数值
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
-			f_LpA[i] = 10 * Math.log10(Math.pow(10, f_Lp[i]) + Math.pow(10, f_WA[i]));
+			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
 			//最后进行叠加，得到总的声压级
 			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级
