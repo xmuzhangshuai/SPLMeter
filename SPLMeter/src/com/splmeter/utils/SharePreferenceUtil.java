@@ -93,20 +93,20 @@ public class SharePreferenceUtil {
 
 	// 主页参与人数提示
 	public String getMainLabelTextCN() {
-		return sp.getString("mainLabelText", "赶紧看一下您周边的噪声污染水平吧，点击“开始”进行。");
+		return sp.getString("mainLabelTextCN", "赶紧看一下您周边的噪声污染水平吧，点击“开始”进行。");
 	}
 
 	public void setMainLabelTextCN(String mainLabelText) {
-		editor.putString("mainLabelText", mainLabelText);
+		editor.putString("mainLabelTextCN", mainLabelText);
 		editor.commit();
 	}
 
 	public String getMainLabelTextEN() {
-		return sp.getString("mainLabelText", "Press the “Open” to start");
+		return sp.getString("mainLabelTextEN", "Press the “Open” to start");
 	}
 
 	public void setMainLabelTextEN(String mainLabelText) {
-		editor.putString("mainLabelText", mainLabelText);
+		editor.putString("mainLabelTextEN", mainLabelText);
 		editor.commit();
 	}
 }

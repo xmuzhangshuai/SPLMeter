@@ -21,10 +21,6 @@ public class SoundSource {
     public SoundSource() {
     }
 
-    public SoundSource(Integer ssi_id) {
-        this.ssi_id = ssi_id;
-    }
-
     public SoundSource(Integer ssi_id, String ssi_code, String ssi_type, String ssi_item_cn, String ssi_item_en) {
         this.ssi_id = ssi_id;
         this.ssi_code = ssi_code;

@@ -20,7 +20,7 @@ public class Generator {
 	private static void addData(Schema schema) {
 		/****ษ๙ิด*******/
 		Entity equipMentEntity = schema.addEntity("SoundSource");
-		equipMentEntity.addIntProperty("ssi_id").primaryKey();
+		equipMentEntity.addIntProperty("ssi_id");
 		equipMentEntity.addStringProperty("ssi_code");
 		equipMentEntity.addStringProperty("ssi_type");
 		equipMentEntity.addStringProperty("ssi_item_cn");

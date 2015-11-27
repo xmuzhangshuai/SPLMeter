@@ -2,16 +2,9 @@ package com.splmeter.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
@@ -19,7 +12,6 @@ import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
-import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
@@ -94,15 +86,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		//从网络获取数据并存储到本地
+		new ServerUtils(MainActivity.this).initData();
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		basicFrequencyList = new ArrayList<>();
 
 		//友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
-
-		//从网络获取数据并存储到本地
-		new ServerUtils(MainActivity.this).initData();
 
 		findViewById();
 		initView();

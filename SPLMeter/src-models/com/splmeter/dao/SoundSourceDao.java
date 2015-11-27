@@ -14,7 +14,7 @@ import com.splmeter.entities.SoundSource;
 /** 
  * DAO for table "SOUND_SOURCE".
 */
-public class SoundSourceDao extends AbstractDao<SoundSource, Integer> {
+public class SoundSourceDao extends AbstractDao<SoundSource, Void> {
 
     public static final String TABLENAME = "SOUND_SOURCE";
 
@@ -23,7 +23,7 @@ public class SoundSourceDao extends AbstractDao<SoundSource, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Ssi_id = new Property(0, Integer.class, "ssi_id", true, "SSI_ID");
+        public final static Property Ssi_id = new Property(0, Integer.class, "ssi_id", false, "SSI_ID");
         public final static Property Ssi_code = new Property(1, String.class, "ssi_code", false, "SSI_CODE");
         public final static Property Ssi_type = new Property(2, String.class, "ssi_type", false, "SSI_TYPE");
         public final static Property Ssi_item_cn = new Property(3, String.class, "ssi_item_cn", false, "SSI_ITEM_CN");
@@ -43,7 +43,7 @@ public class SoundSourceDao extends AbstractDao<SoundSource, Integer> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SOUND_SOURCE\" (" + //
-                "\"SSI_ID\" INTEGER PRIMARY KEY ," + // 0: ssi_id
+                "\"SSI_ID\" INTEGER," + // 0: ssi_id
                 "\"SSI_CODE\" TEXT," + // 1: ssi_code
                 "\"SSI_TYPE\" TEXT," + // 2: ssi_type
                 "\"SSI_ITEM_CN\" TEXT," + // 3: ssi_item_cn
@@ -89,8 +89,8 @@ public class SoundSourceDao extends AbstractDao<SoundSource, Integer> {
 
     /** @inheritdoc */
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     /** @inheritdoc */
@@ -118,18 +118,15 @@ public class SoundSourceDao extends AbstractDao<SoundSource, Integer> {
     
     /** @inheritdoc */
     @Override
-    protected Integer updateKeyAfterInsert(SoundSource entity, long rowId) {
-        return entity.getSsi_id();
+    protected Void updateKeyAfterInsert(SoundSource entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     /** @inheritdoc */
     @Override
-    public Integer getKey(SoundSource entity) {
-        if(entity != null) {
-            return entity.getSsi_id();
-        } else {
-            return null;
-        }
+    public Void getKey(SoundSource entity) {
+        return null;
     }
 
     /** @inheritdoc */
