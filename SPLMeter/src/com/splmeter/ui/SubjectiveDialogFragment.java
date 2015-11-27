@@ -9,12 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
-import u.aly.v;
 
 /**
  * @description:主观评价对话框
@@ -71,16 +70,22 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		nextBtn.setOnClickListener(this);
 	}
 
+	private void saveResult() {
+		MainActivity.resultParams.put("asmt", "" + (seekBarSoundsize.getProgress() - 2) + "," + (seekBarComfortlevel.getProgress() - 2) + "," + (seekBarHarmony.getProgress() - 2));
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
+
 			mainActivity.next_last(1);
 			break;
 		case R.id.next_btn:
 			this.dismiss();
+			saveResult();
 			mainActivity.next_last(3);
 			break;
 		default:

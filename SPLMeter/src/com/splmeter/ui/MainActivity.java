@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
@@ -81,6 +82,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
+	public static RequestParams resultParams;//最终上传的结果
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		//友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
+
+		resultParams = new RequestParams();
 
 		findViewById();
 		initView();
