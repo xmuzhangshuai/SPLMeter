@@ -39,11 +39,13 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 	private List<String> soundSourceNameList1, soundSourceNameList2, soundSourceNameList3;
 
 	private SoundSourceDbService soundSourceDbService;
+	private StringBuffer soundSourceSelected;//选中的数据
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mainActivity = (MainActivity) getActivity();
+		soundSourceSelected = new StringBuffer();
 		return super.onCreateDialog(savedInstanceState);
 	}
 
@@ -110,6 +112,23 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		nextBtn.setOnClickListener(this);
 	}
 
+	private void saveData() {
+		long[] a = getListSelectededItemIds(listview1);
+		for (int i = 0; i < a.length; i++) {
+			soundSourceSelected.append(soundSourcesList1.get((int) a[i]).getSsi_code() + ",");
+		}
+		long[] b = getListSelectededItemIds(listview2);
+		for (int i = 0; i < b.length; i++) {
+			soundSourceSelected.append(soundSourcesList2.get((int) b[i]).getSsi_code() + ",");
+		}
+		long[] c = getListSelectededItemIds(listview3);
+		for (int i = 0; i < c.length; i++) {
+			soundSourceSelected.append(soundSourcesList3.get((int) c[i]).getSsi_code() + ",");
+		}
+		soundSourceSelected.deleteCharAt(soundSourceSelected.length() - 1);
+		MainActivity.resultParams.put("source", soundSourceSelected);
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -118,6 +137,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 			this.dismiss();
 			break;
 		case R.id.next_btn:
+			saveData();
 			this.dismiss();
 			mainActivity.next_last(2);
 			break;
@@ -125,4 +145,30 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 			break;
 		}
 	}
+
+	// 避免使用getCheckItemIds()方法
+	public long[] getListSelectededItemIds(ListView listView) {
+
+		long[] ids = new long[listView.getCount()];//getCount()即获取到ListView所包含的item总个数
+		//定义用户选中Item的总个数
+		int checkedTotal = 0;
+		for (int i = 0; i < listView.getCount(); i++) {
+			//如果这个Item是被选中的
+			if (listView.isItemChecked(i)) {
+				ids[checkedTotal++] = i;
+			}
+		}
+
+		if (checkedTotal < listView.getCount()) {
+			//定义选中的Item的ID数组
+			final long[] selectedIds = new long[checkedTotal];
+			//数组复制 ids
+			System.arraycopy(ids, 0, selectedIds, 0, checkedTotal);
+			return selectedIds;
+		} else {
+			//用户将所有的Item都选了
+			return ids;
+		}
+	}
+
 }

@@ -14,6 +14,8 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
+import android.media.AudioManager;
+import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -155,35 +157,29 @@ public class CommonTools {
 	}
 
 	/**
-	* 判断学号格式
-	*/
-	public static boolean isStudentNO(String stuNumber) {
-		Pattern pattern = Pattern.compile("^[0-9]{6,18}$");
-		Matcher matcher = pattern.matcher(stuNumber);
-		return matcher.matches();
-	}
-
-	/**
-	* 判断手机号码
-	*/
-	public static boolean isMobileNO(String mobiles) {
-		//		if (mobiles == null) {
-		//			return false;
-		//		}
-		//		Pattern pattern = Pattern.compile("^((13[0-9])|(15[0-9])|(18[0-9])|(17[0-9]))\\d{8}$");
-		//		Matcher matcher = pattern.matcher(mobiles);
-		//		return matcher.matches();
-		return true;
-	}
-
-	/**
-	 * 判断邀请码格式
+	 * 获取IMEI
 	 * @return
 	 */
-	public static boolean isInviteCode(String code) {
-		Pattern pattern = Pattern.compile("^[0-9a-zA-Z]{6}$");
-		Matcher matcher = pattern.matcher(code);
-		return matcher.matches();
+	public static String getIMEI(Context context) {
+		TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		return TelephonyMgr.getDeviceId();
+	}
+
+	/**
+	 *获取手机型号
+	 * @return
+	 */
+	public static String getPhoneType() {
+		return android.os.Build.MODEL;
+	}
+
+	/**
+	 *获取是否插入耳机状态
+	 * @return
+	 */
+	public static boolean getEarPhone(Context context) {
+		AudioManager localAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		return localAudioManager.isWiredHeadsetOn();
 	}
 
 	/**

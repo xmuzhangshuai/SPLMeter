@@ -25,7 +25,7 @@ import java.util.Map;
 */
 public class DateTimeTools {
 	@SuppressLint("SimpleDateFormat")
-	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	static DateFormat formatter2 = SimpleDateFormat.getDateInstance();
 
 	public DateTimeTools() {

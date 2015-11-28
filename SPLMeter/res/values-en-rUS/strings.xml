@@ -30,7 +30,7 @@
     <string name="drag_to_ass">（拖动滑块评价）</string>
     <string name="person_info">简单地描述一下自己</string>
     <string name="age">Age：</string>
-    <string name="done">Done</string>
+    <string name="done">Confirm</string>
     <string name="gender">Gender：</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
