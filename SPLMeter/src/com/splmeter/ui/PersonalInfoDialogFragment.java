@@ -16,6 +16,7 @@ import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -107,34 +108,27 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 			MainActivity.resultParams.put("time", DateTimeTools.getCurrentDateTimeForString());
 			MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 			MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-			MainActivity.resultParams.put("earphone", CommonTools.getEarPhone(mainActivity));
+			MainActivity.resultParams.put("earphone", CommonTools.getEarPhone(mainActivity) ? 1 : 0);
 			MainActivity.resultParams.put("lng", locationTool.getLongitude());
 			MainActivity.resultParams.put("lat", locationTool.getLatitude());
 			MainActivity.resultParams.put("alt", locationTool.getAltitude());
-			LogTool.e("--------" + MainActivity.resultParams.toString());
+			MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
+			LogTool.i("--------" + MainActivity.resultParams.toString());
+			final ProgressDialog dialog = new ProgressDialog(getActivity());
+			dialog.setTitle("结果分享中...");
 
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 				@Override
 				public void onStart() {
 					// TODO Auto-generated method stub
 					super.onStart();
+					dialog.show();
 				}
 
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, String response) {
 					// TODO Auto-generated method stub
 					LogTool.i(statusCode + "===" + response);
-					try {
-						JSONObject j1 = new JSONObject(response);
-						String data = j1.getString("data");
-						JSONObject j2 = new JSONObject(data);
-						String t_tiptxt_en = j2.getString("t_tiptxt_en");
-						String t_tiptxt_cn = j2.getString("t_tiptxt_cn");
-						sharePreferenceUtil.setMainLabelTextCN(t_tiptxt_cn);
-						sharePreferenceUtil.setMainLabelTextEN(t_tiptxt_en);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
 				}
 
 				@Override
@@ -147,9 +141,10 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 				public void onFinish() {
 					// TODO Auto-generated method stub
 					super.onFinish();
+					dialog.dismiss();
 				}
 			};
-			//			AsyncHttpClientTool.get("ReportSPLValue", MainActivity.resultParams, responseHandler);
+			AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
 		}
 	}
 

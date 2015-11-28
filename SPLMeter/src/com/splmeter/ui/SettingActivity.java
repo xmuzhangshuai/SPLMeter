@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private SharePreferenceUtil sharePreferenceUtil;
 	private int in_out_door;
 	private CheckBox shareCheckBox;
+	private EditText clbEditText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		aboutView = findViewById(R.id.about);
 		versionTextView = (TextView) findViewById(R.id.version);
 		shareCheckBox = (CheckBox) findViewById(R.id.share_checkbox);
+		clbEditText = (EditText) findViewById(R.id.clbTxt);
 	}
 
 	@Override
@@ -96,11 +99,17 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		});
 
 		shareCheckBox.setChecked(sharePreferenceUtil.getAutoShare());
+		clbEditText.setText("" + sharePreferenceUtil.getCalibration());
 	}
 
 	private void validateSetting() {
 		sharePreferenceUtil.setInOutDoor(in_out_door);
 		sharePreferenceUtil.setAutoShare(shareCheckBox.isChecked());
+		try {
+			sharePreferenceUtil.setCalibration(Integer.parseInt(clbEditText.getText().toString()));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	/**

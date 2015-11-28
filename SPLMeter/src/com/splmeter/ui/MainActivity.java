@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+
 import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
@@ -14,7 +16,6 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
@@ -305,9 +306,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				startBtn.setBackgroundResource(R.drawable.sel_btn);
 				startBtn.setText(R.string.on);
 				next_last(1);
-				for (int i = 0; i < basicFrequencyList.size(); i++) {
-					LogTool.i("frequency---->" + basicFrequencyList.get(i).get("basic_frequency"));
-					LogTool.e("frequency---->" + basicFrequencyList.get(i).get("hz"));
+				try {
+					JSONArray jsonArray = new JSONArray(basicFrequencyList);
+					MainActivity.resultParams.put("mainEmaxLpaPair", jsonArray.toString());
+				} catch (Exception e) {
+					// TODO: handle exception
 				}
 			} else {//开始
 				basicFrequencyList.clear();
@@ -408,8 +411,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					+ MainActivity.this.getResources().getString(R.string.hz) + "）");
 			//记录主频
 			map = new HashMap<>();
-			map.put("hz", fftCal.getDoubleMaxSudBA(maxSPL));
-			map.put("basic_frequency", fftCal.getDoubleMaxSudHz(maxFrequency));
+			map.put("maxLpa", fftCal.getDoubleMaxSudBA(maxSPL));
+			map.put("mainE", fftCal.getDoubleMaxSudHz(maxFrequency));
 			basicFrequencyList.add(map);
 
 			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级

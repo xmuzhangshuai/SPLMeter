@@ -72,12 +72,12 @@ public class SharePreferenceUtil {
 	}
 
 	// 校准
-	public int getCalibration() {
-		return sp.getInt("Calibration", 0);
+	public float getCalibration() {
+		return sp.getFloat("Calibration", 0f);
 	}
 
-	public void setCalibration(int calibration) {
-		editor.putInt("Calibration", calibration);
+	public void setCalibration(float calibration) {
+		editor.putFloat("Calibration", calibration);
 		editor.commit();
 	}
 
