@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="personal_timecapsule_padding">10dp</dimen>
+    <dimen name="day_recommend_padding">30dp</dimen>
+
+</resources>

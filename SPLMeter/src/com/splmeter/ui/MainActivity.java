@@ -16,6 +16,7 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.CommonTools;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
@@ -29,6 +30,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.BassBoost;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -390,6 +392,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				//停止并且释放声音设备
 				audioRecord.stop();
 				audioRecord.release();
+				myAudioTrack.release();
+				if (mVisualizer != null) {
+					mVisualizer.release();
+				}
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
@@ -434,4 +440,5 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 		}
 	}
+
 }

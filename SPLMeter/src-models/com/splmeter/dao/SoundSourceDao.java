@@ -43,7 +43,7 @@ public class SoundSourceDao extends AbstractDao<SoundSource, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SOUND_SOURCE\" (" + //
-                "\"SSI_ID\" INTEGER," + // 0: ssi_id
+                "\"SSI_ID\" INTEGER UNIQUE ," + // 0: ssi_id
                 "\"SSI_CODE\" TEXT," + // 1: ssi_code
                 "\"SSI_TYPE\" TEXT," + // 2: ssi_type
                 "\"SSI_ITEM_CN\" TEXT," + // 3: ssi_item_cn

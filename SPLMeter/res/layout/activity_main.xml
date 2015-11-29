@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_main_block"
-        android:paddingBottom="15dp"
+        android:paddingBottom="@dimen/personal_timecapsule_padding"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="15dp"
+        android:paddingTop="@dimen/personal_timecapsule_padding"
         android:textColor="@color/white" />
 
     <RelativeLayout
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/participants"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/personal_timecapsule_padding"
         android:background="@drawable/shape_main_block"
         android:padding="10dp" >
 
@@ -133,8 +133,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_button"
         android:layout_below="@+id/relativeLayout1"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="@dimen/personal_timecapsule_padding"
+        android:layout_marginTop="@dimen/personal_timecapsule_padding"
         android:background="@drawable/shape_main_block"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -218,7 +218,7 @@
     <LinearLayout
         android:id="@+id/bottom_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/day_recommend_padding"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal" >

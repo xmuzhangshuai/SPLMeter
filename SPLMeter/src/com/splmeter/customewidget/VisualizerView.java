@@ -68,6 +68,7 @@ public class VisualizerView extends View implements Visualizer.OnDataCaptureList
 
 	//绘制频谱块和倒影
 	protected void drawCylinder(Canvas canvas, float x, byte value) {
+		//		LogTool.e("--------" + value);
 		if (value == 0) {
 			value = 1;
 		} //最少有一个频谱块
@@ -110,7 +111,7 @@ public class VisualizerView extends View implements Visualizer.OnDataCaptureList
 			if (!visualizer.getEnabled()) {
 				visualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[0]);
 			}
-			levelStep = 230 / MAX_LEVEL;
+			levelStep = 130 / MAX_LEVEL;
 			visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate() / 2, false, true);
 
 		} else {

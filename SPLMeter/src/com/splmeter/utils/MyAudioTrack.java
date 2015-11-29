@@ -2,6 +2,7 @@ package com.splmeter.utils;
 
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.audiofx.BassBoost;
 import android.util.Log;
 
 /**
@@ -15,6 +16,7 @@ public class MyAudioTrack {
 	int mChannel; // 声道
 	int mSampBit; // 采样精度
 	AudioTrack mAudioTrack;
+	private BassBoost mBass;
 
 	public MyAudioTrack(int frequency, int channel, int sampbit) {
 		mFrequency = frequency;
@@ -29,15 +31,18 @@ public class MyAudioTrack {
 		// 获得构建对象的最小缓冲区大小
 		int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
 		mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, mFrequency, mChannel, mSampBit, minBufSize, AudioTrack.MODE_STREAM);
+		mBass = new BassBoost(0, mAudioTrack.getAudioSessionId());
+		mBass.setEnabled(true);
+
 		mAudioTrack.play();
 	}
 
 	public void release() {
 		if (mAudioTrack != null) {
+			mBass.release();
 			mAudioTrack.stop();
 			mAudioTrack.release();
 		}
-
 	}
 
 	public int getAudioSessionId() {
