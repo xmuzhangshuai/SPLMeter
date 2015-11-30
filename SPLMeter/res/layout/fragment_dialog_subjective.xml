@@ -40,10 +40,10 @@
             android:orientation="vertical" >
 
             <TextView
+                android:id="@+id/sound_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="声音的大小：小"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -55,11 +55,11 @@
                 android:progress="2" />
 
             <TextView
+                android:id="@+id/comfort_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
-                android:text="声音的舒适度：非常舒适"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -71,11 +71,11 @@
                 android:progress="2" />
 
             <TextView
+                android:id="@+id/coordinated_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
-                android:text="声音与环境的协调度：不协调"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

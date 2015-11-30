@@ -274,8 +274,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 * 获取实时值
 	 * @return
 	 */
-	public String getCurrentValue() {
-		return currentValue.getText().toString();
+	public float getCurrentValue() {
+		float a = 0;
+		try {
+			a = Float.parseFloat(currentValue.getText().toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return a;
 	}
 
 	/**

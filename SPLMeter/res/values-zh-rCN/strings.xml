@@ -53,12 +53,42 @@
     <string name="infoTitle">提示！</string>
     <string name="share_success">分享成功！来看一下群体贡献吧。
 您的参与将有助于我们对城市声环境的研究更加透彻。我们不会泄漏您的任何隐私。您分享了哪些信息，请在设置中查看帮助说明。</string>
+    <string name="Community_contribution">群体贡献</string>
+    <string name="share_detail1">我正在参与公众声环境感知项目。目前身边噪声值为</string>
+    <string name="share_detail2">快来和我一起参加吧。参与工具下载地址</string>
+    <string name="already_copy">已复制到剪贴板，启动应用分享吧。</string>
+    <string name="shareing">结果分享中. . .</string>
+    <string name="share_fail">分享失败！请保障网络畅通或稍后再试</string>
+    <string name="sound_level">声音的大小:</string>
+    <string name="acoustic_comfort_level">声音的舒适度:</string>
+    <string name="coordinated_level">声音与环境的协调度:</string>
 
+    <array name="sound_levelGroup">
+        <item>非常小</item>
+        <item>小</item>
+        <item>适中</item>
+        <item>大</item>
+        <item>非常大</item>
+    </array>
+    <array name="acoustic_comfort_levelGroup">
+        <item>极不舒适</item>
+        <item>不舒适</item>
+        <item>适中</item>
+        <item>舒适</item>
+        <item>极舒适</item>
+    </array>
+    <array name="coordinated_levelGroup">
+        <item>极不协调</item>
+        <item>不协调</item>
+        <item>适中</item>
+        <item>协调</item>
+        <item>极协调</item>
+    </array>
     <array name="levelGroup">
         <item>非常安静</item>
         <item>安静</item>
         <item>适中</item>
-        <item>吵闹	</item>
+        <item>吵闹</item>
         <item>非常吵闹</item>
     </array>
     <array name="ageGroup">
@@ -74,30 +104,5 @@
         <item>室外</item>
         <item>室内</item>
     </array>
-
-    <string name="SPLCaption">SPL</string>
-    <string name="SPL">0.0</string>
-    <string name="weightedCaption">A</string>
-    <string name="maxCaption">最大声压：</string>
-    <string name="longitudeCaption">经度：</string>
-    <string name="latitudeCaption">纬度：</string>
-    <string name="altitudeCaption">海拔：</string>
-    <string name="accuracyCaption">精度： </string>
-    <string name="timeCaption">时间：</string>
-    <string name="startCaptionBtn">开始</string>
-    <string name="shareCaptionBtn">分享</string>
-    <string name="chooseMode">选择地点</string>
-    <string name="openGPS">请开启GPS！</string>
-    <string name="off">结束</string>
-    <string name="aboutTitle">关于噪声计</string>
-    <string name="levelCaption">噪声限值：</string>
-    <string name="aboutMsg">版本 1.0\nlcmgood@163.com</string>
-    <string name="infoMsg">你确定要退出吗？</string>
-    <string name="chooseFeeling">你觉得：</string>
-    <string name="palceHint">点击输入！</string>
-    <string name="placeCaption">地点：</string>
-    <string name="shareDialogTitle">请选择分享对象</string>
-    <string name="reportSuccess">分享成功，感谢您的参与！</string>
-    <string name="reportFailure">分享失败，请稍候再试！</string>
 
 </resources>

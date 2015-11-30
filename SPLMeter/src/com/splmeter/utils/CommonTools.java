@@ -59,6 +59,28 @@ public class CommonTools {
 	//	}
 
 	/**
+	 * 根据声压值返回评级
+	 * @param context
+	 * @return
+	 */
+	public static String getLeverBySPL(float spl, Context context) {
+		String level = "";
+		String[] levels = context.getResources().getStringArray(R.array.levelGroup);
+		if (spl < 50) {
+			level = levels[0];
+		} else if (spl < 55) {
+			level = levels[1];
+		} else if (spl < 60) {
+			level = levels[2];
+		} else if (spl < 65) {
+			level = levels[3];
+		} else {
+			level = levels[4];
+		}
+		return level;
+	}
+
+	/**
 	 * 判断系统语言是否为中文
 	 * @param context
 	 * @return

@@ -142,7 +142,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 			MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
 			LogTool.i("--------" + MainActivity.resultParams.toString());
 			final ProgressDialog dialog = new ProgressDialog(getActivity());
-			dialog.setTitle("结果分享中...");
+			dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
 
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 				@Override

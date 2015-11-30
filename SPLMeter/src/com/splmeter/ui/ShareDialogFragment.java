@@ -13,7 +13,6 @@ import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.SharePreferenceUtil;
-import com.splmeter.utils.ToastTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -102,8 +101,10 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 	 */
 	private void shwoTtip() {
 		final MyAlertDialog myAlertDialog = new MyAlertDialog(getActivity());
-		myAlertDialog.setTitle("以下内容已复制到剪贴板");
-		myAlertDialog.setMessage("“我正在参与公众噪声监测项目，目前身边噪声值为" + mainActivity.getCurrentValue() + "dBA，非常安静，快来和我一起参加吧。下载地址" + Constants.DownLoadPath + "” /n赶快去分享吧~！");
+		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.already_copy));
+		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_detail1) + " " + mainActivity.getCurrentValue() + "dBA，"
+				+ CommonTools.getLeverBySPL(mainActivity.getCurrentValue(), mainActivity) + "，" + mainActivity.getResources().getString(R.string.share_detail2)
+				+ Constants.DownLoadPath + "”");
 		View.OnClickListener comfirm = new OnClickListener() {
 
 			@Override
@@ -111,8 +112,10 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 				// TODO Auto-generated method stub
 				myAlertDialog.dismiss();
 				ClipboardManager clipboardManager = (ClipboardManager) mainActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-				clipboardManager.setPrimaryClip(
-						ClipData.newPlainText(null, "“我正在参与公众噪声监测项目，目前身边噪声值为" + mainActivity.getCurrentValue() + "dBA，非常安静，快来和我一起参加吧。下载地址" + Constants.DownLoadPath + "”"));
+				clipboardManager.setPrimaryClip(ClipData.newPlainText(null,
+						mainActivity.getResources().getString(R.string.share_detail1) + " " + mainActivity.getCurrentValue() + "dBA，"
+								+ CommonTools.getLeverBySPL(mainActivity.getCurrentValue(), mainActivity) + "，" + mainActivity.getResources().getString(R.string.share_detail2)
+								+ Constants.DownLoadPath + "”"));
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {
@@ -123,8 +126,8 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 				myAlertDialog.dismiss();
 			}
 		};
-		myAlertDialog.setPositiveButton("确定", comfirm);
-		myAlertDialog.setNegativeButton("取消", cancle);
+		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
+		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
 		myAlertDialog.show();
 	}
 
@@ -171,7 +174,7 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 		MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
 		LogTool.i("--------" + MainActivity.resultParams.toString());
 		final ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setTitle("结果分享中...");
+		dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 			@Override
