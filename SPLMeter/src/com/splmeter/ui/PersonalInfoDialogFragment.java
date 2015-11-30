@@ -1,12 +1,11 @@
 package com.splmeter.ui;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseApplication;
+import com.splmeter.customewidget.MyAlertDialog;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
@@ -100,6 +99,34 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	}
 
 	/**
+	 * 提示对话框
+	 */
+	private void showSuccessDialog() {
+		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
+		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
+		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
+		View.OnClickListener comfirm = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		View.OnClickListener cancle = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
+		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
+		myAlertDialog.show();
+	}
+
+	/**
 	 * 上传数据
 	 */
 	private void uploadData() {
@@ -129,6 +156,8 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 				public void onSuccess(int statusCode, Header[] headers, String response) {
 					// TODO Auto-generated method stub
 					LogTool.i(statusCode + "===" + response);
+					MainActivity.shareFlag = 2;
+					showSuccessDialog();
 				}
 
 				@Override
@@ -145,6 +174,8 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 				}
 			};
 			AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+		} else {
+			MainActivity.shareFlag = 1;
 		}
 	}
 

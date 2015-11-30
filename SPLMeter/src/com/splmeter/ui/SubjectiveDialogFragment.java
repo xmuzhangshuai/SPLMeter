@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 /**
  * @description:主观评价对话框
@@ -21,7 +22,7 @@ import android.widget.SeekBar;
  * @author：张帅
  * @date 2015年11月19日 下午9:16:11
  */
-public class SubjectiveDialogFragment extends DialogFragment implements OnClickListener {
+public class SubjectiveDialogFragment extends DialogFragment implements OnClickListener, OnSeekBarChangeListener {
 	private View rootView;
 
 	private MainActivity mainActivity;
@@ -68,6 +69,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private void initView() {
 		lastBtn.setOnClickListener(this);
 		nextBtn.setOnClickListener(this);
+		seekBarSoundsize.setOnSeekBarChangeListener(this);
+		seekBarComfortlevel.setOnSeekBarChangeListener(this);
+		seekBarHarmony.setOnSeekBarChangeListener(this);
 	}
 
 	private void saveResult() {
@@ -91,5 +95,23 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		// TODO Auto-generated method stub
+		nextBtn.setEnabled(true);
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		// TODO Auto-generated method stub
+
 	}
 }

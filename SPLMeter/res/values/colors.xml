@@ -9,6 +9,7 @@
     <color name="system_orange">#fb8600</color>
     <color name="unenable">#999999</color>
     <color name="system_gray">#CCCCCC</color> <!-- 系统灰色 -->
+    <color name="gray1">#aaaaaa</color>
     <color name="dark_gray">#666666</color>
     <color name="alert_dialog_blue">#0476F0</color>
     <color name="green">#00aa00</color>

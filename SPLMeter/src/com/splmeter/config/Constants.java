@@ -8,6 +8,9 @@ public class Constants {
 	public static final boolean DEVELOPER_MODE = true;
 	//域名或者是IP
 	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
+	
+	//下载地址
+	public static String DownLoadPath = "http://www.citi-sense.cn/download/";
 
 	public static class RecordValue {
 		public static final int CHANNELCONFIGURATION = AudioFormat.CHANNEL_CONFIGURATION_MONO;

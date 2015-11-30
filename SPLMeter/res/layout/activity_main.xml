@@ -165,7 +165,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="主频：0.0分贝（0.0赫兹）"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>

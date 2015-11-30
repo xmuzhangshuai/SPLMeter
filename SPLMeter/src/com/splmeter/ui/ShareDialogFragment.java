@@ -1,10 +1,23 @@
 package com.splmeter.ui;
 
+import org.apache.http.Header;
+
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.smallrhino.splmeter.R;
+import com.splmeter.base.BaseApplication;
+import com.splmeter.config.Constants;
 import com.splmeter.customewidget.MyAlertDialog;
+import com.splmeter.utils.AsyncHttpClientTool;
+import com.splmeter.utils.CommonTools;
+import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
+import com.splmeter.utils.SharePreferenceUtil;
+import com.splmeter.utils.ToastTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -35,6 +48,8 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 	private TextView shareWechat;
 	private TextView shareTwitter;
 	private TextView shareFacebook;
+	LocationTool locationTool;
+	private SharePreferenceUtil sharePreferenceUtil;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,6 +63,8 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
+		locationTool = new LocationTool(getActivity());
+		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 	}
 
 	@Override
@@ -86,7 +103,7 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 	private void shwoTtip() {
 		final MyAlertDialog myAlertDialog = new MyAlertDialog(getActivity());
 		myAlertDialog.setTitle("以下内容已复制到剪贴板");
-		myAlertDialog.setMessage("“我正在参与公众噪声监测项目，目前身边噪声值为45.2dBA，非常安静，快来和我一起参加吧。下载地址http://www.citi-sense.cn/download/” /n赶快去分享吧~！");
+		myAlertDialog.setMessage("“我正在参与公众噪声监测项目，目前身边噪声值为" + mainActivity.getCurrentValue() + "dBA，非常安静，快来和我一起参加吧。下载地址" + Constants.DownLoadPath + "” /n赶快去分享吧~！");
 		View.OnClickListener comfirm = new OnClickListener() {
 
 			@Override
@@ -94,7 +111,8 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 				// TODO Auto-generated method stub
 				myAlertDialog.dismiss();
 				ClipboardManager clipboardManager = (ClipboardManager) mainActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-				clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "我正在参与公众噪声监测项目，目前身边噪声值为45.2dBA，非常安静，快来和我一起参加吧。下载地址http://www.citi-sense.cn/download/"));
+				clipboardManager.setPrimaryClip(
+						ClipData.newPlainText(null, "“我正在参与公众噪声监测项目，目前身边噪声值为" + mainActivity.getCurrentValue() + "dBA，非常安静，快来和我一起参加吧。下载地址" + Constants.DownLoadPath + "”"));
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {
@@ -110,13 +128,95 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 		myAlertDialog.show();
 	}
 
+	/**
+	 * 提示对话框
+	 */
+	private void showSuccessDialog() {
+		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
+		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
+		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
+		View.OnClickListener comfirm = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		View.OnClickListener cancle = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
+		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
+		myAlertDialog.show();
+	}
+
+	/**
+	 * 上传数据
+	 */
+	private void uploadData() {
+
+		MainActivity.resultParams.put("time", DateTimeTools.getCurrentDateTimeForString());
+		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
+		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+		MainActivity.resultParams.put("earphone", CommonTools.getEarPhone(mainActivity) ? 1 : 0);
+		MainActivity.resultParams.put("lng", locationTool.getLongitude());
+		MainActivity.resultParams.put("lat", locationTool.getLatitude());
+		MainActivity.resultParams.put("alt", locationTool.getAltitude());
+		MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
+		LogTool.i("--------" + MainActivity.resultParams.toString());
+		final ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setTitle("结果分享中...");
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				LogTool.i(statusCode + "===" + response);
+				showSuccessDialog();
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("ReportSPLValue服务器错误" + errorResponse);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
+			}
+		};
+		AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.share_scientist:
 			this.dismiss();
-			shwoTtip();
+			if (MainActivity.shareFlag == 0) {
+				LogTool.e("必须先测试！");
+			} else if (MainActivity.shareFlag == 1) {
+				uploadData();
+			} else if (MainActivity.shareFlag == 2) {
+				LogTool.e("已经分享过！");
+			}
 			break;
 		case R.id.share_sina:
 			this.dismiss();

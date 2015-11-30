@@ -49,6 +49,9 @@
     <string name="timeout">Time out</string>
     <string name="basic_frequency">Basic Frequency</string>
     <string name="hz">HZ</string>
+    <string name="infoTitle">Tips!</string>
+    <string name="share_success">Successful! Check the community contributions?
+The shared results will help us to study more thoroughly on the urban sound environment. Your privacy is safe. You can find what you shared in help and instruction in the option page.</string>
 
     <array name="levelGroup">
         <item>非常安静</item>
@@ -88,7 +91,6 @@
     <string name="aboutTitle">About Noise Meter</string>
     <string name="levelCaption">Noise level</string>
     <string name="aboutMsg">Version 1.0\nlcmgood@163.com</string>
-    <string name="infoTitle">Information!</string>
     <string name="infoMsg">are you sure to quit?</string>
     <string name="chooseFeeling">How do you feel?</string>
     <string name="palceHint">Input!</string>

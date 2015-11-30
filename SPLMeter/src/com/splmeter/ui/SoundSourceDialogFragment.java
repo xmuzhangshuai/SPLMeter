@@ -125,7 +125,10 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		for (int i = 0; i < c.length; i++) {
 			soundSourceSelected.append(soundSourcesList3.get((int) c[i]).getSsi_code() + ",");
 		}
-		soundSourceSelected.deleteCharAt(soundSourceSelected.length() - 1);
+		if (soundSourceSelected.length() > 1) {
+			soundSourceSelected.deleteCharAt(soundSourceSelected.length() - 1);
+		}
+
 		MainActivity.resultParams.put("source", soundSourceSelected);
 	}
 

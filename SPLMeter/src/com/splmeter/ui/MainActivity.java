@@ -16,7 +16,6 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
@@ -30,7 +29,6 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.media.audiofx.BassBoost;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -86,6 +84,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
 	public static RequestParams resultParams;//最终上传的结果
+	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -258,9 +257,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	* 显示分享对话框
 	*/
 	void showShareDialog() {
-		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction. We also want to remove any currently showing
-		// dialog, so make our own transaction and take care of that here.
+
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("share_dialog");
 		if (prev != null) {
@@ -271,6 +268,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// Create and show the dialog.
 		ShareDialogFragment newFragment = new ShareDialogFragment();
 		newFragment.show(ft, "share_dialog");
+	}
+
+	/**
+	 * 获取实时值
+	 * @return
+	 */
+	public String getCurrentValue() {
+		return currentValue.getText().toString();
 	}
 
 	/**
