@@ -417,7 +417,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			SPLBo splBo = new SPLBo();
 			splBo = fftCal.getSPL();
 			double splValue = splBo.getSPLValue();
-			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, RecordValue.CALIBRATEVALUE);
+			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, sharePreferenceUtil.getCalibration());
 			currentValue.setText("" + calibrateSPLValue);
 
 			double maxSPL = splBo.getMaxSPL();

@@ -8,7 +8,7 @@ public class Constants {
 	public static final boolean DEVELOPER_MODE = true;
 	//域名或者是IP
 	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
-	
+
 	//下载地址
 	public static String DownLoadPath = "http://www.citi-sense.cn/download/";
 
@@ -18,7 +18,5 @@ public class Constants {
 		//采样率
 		public static final int FREQUENCY = 44100;
 		public static final int BLOCKSIZE = 2048;
-		//该值应该从配置文件中取
-		public static final int CALIBRATEVALUE = 0;
 	}
 }
