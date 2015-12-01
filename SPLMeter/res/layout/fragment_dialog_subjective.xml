@@ -52,7 +52,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="4"
-                android:progress="2" />
+                android:progress="2"
+                android:progressDrawable="@drawable/seekbar_bg"
+                android:thumb="@drawable/seekbar_thumb" />
 
             <TextView
                 android:id="@+id/comfort_level"
@@ -68,7 +70,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="4"
-                android:progress="2" />
+                android:progress="2"
+                android:progressDrawable="@drawable/seekbar_bg"
+                android:thumb="@drawable/seekbar_thumb" />
 
             <TextView
                 android:id="@+id/coordinated_level"
@@ -84,7 +88,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="4"
-                android:progress="2" />
+                android:progress="2"
+                android:progressDrawable="@drawable/seekbar_bg"
+                android:thumb="@drawable/seekbar_thumb" />
         </LinearLayout>
     </RelativeLayout>
 
