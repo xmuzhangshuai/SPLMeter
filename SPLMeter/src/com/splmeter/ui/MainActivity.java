@@ -23,8 +23,10 @@ import com.umeng.update.UmengUpdateAgent;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -85,6 +87,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
 	public static RequestParams resultParams;//最终上传的结果
 	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
+	AudioManager mAudioManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,8 +159,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		});
 
 		/************控制系统音量大小，防止出现噪音*************/
-		AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 2, 0);
+		mAudioManager.setSpeakerphoneOn(false);
 
 		levels = getResources().getStringArray(R.array.levelGroup);
 		mBaseVisualizerView = new VisualizerView(this);
@@ -172,6 +176,29 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		initCoordinate();
 
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
+
+		/********防止用户改变音量*********/
+		MyVolumeReceiver mVolumeReceiver = new MyVolumeReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("android.media.VOLUME_CHANGED_ACTION");
+		registerReceiver(mVolumeReceiver, filter);
+	}
+
+	/**
+	* 处理音量变化
+	* @author long
+	*/
+	private class MyVolumeReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//如果音量发生变化则更改seekbar的位置
+			if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
+				int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
+				if (currVolume > 2) {
+					mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 2, 0);
+				}
+			}
+		}
 	}
 
 	/**

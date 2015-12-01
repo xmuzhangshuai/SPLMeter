@@ -64,6 +64,8 @@ public abstract class BaseActivity extends Activity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("close");
 		registerReceiver(this.broadcastReceiver, filter); // 注册
+		
+		getActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	/** 

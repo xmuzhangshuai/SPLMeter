@@ -34,7 +34,7 @@ import android.widget.Toast;
 *    
 */
 public abstract class BaseFragmentActivity extends FragmentActivity {
-//	protected ImageLoader imageLoader = ImageLoader.getInstance();
+	//	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	public static final String TAG = BaseFragmentActivity.class.getSimpleName();
 	protected Handler mHandler = null;
 
@@ -66,6 +66,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("close");
 		registerReceiver(this.broadcastReceiver, filter); // 注册  
+		getActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	/** 
@@ -197,7 +198,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		ProgressDialog dialog = new ProgressDialog(this);
 		if (!TextUtils.isEmpty(msg)) {
 			dialog.setMessage(msg);
-		}else{
+		} else {
 			dialog.setMessage("请稍候...");
 		}
 		// dialog.setCancelable(false);

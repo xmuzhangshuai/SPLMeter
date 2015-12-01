@@ -31,6 +31,7 @@ public class MyAudioTrack {
 		// 获得构建对象的最小缓冲区大小
 		int minBufSize = AudioTrack.getMinBufferSize(mFrequency, mChannel, mSampBit);
 		mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, mFrequency, mChannel, mSampBit, minBufSize, AudioTrack.MODE_STREAM);
+
 		mBass = new BassBoost(0, mAudioTrack.getAudioSessionId());
 		mBass.setEnabled(true);
 
