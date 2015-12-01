@@ -11,10 +11,11 @@ package com.splmeter.analysis;
 public class SPLBo {
 	
 	//最大SPL值
-	double maxSPL = 0;
-	//对应的最大频率
-	double maxFrequency = 0;
-	double SPLValue = 0;
+	private double maxSPL = 0;
+	//对应的最大频率（即主频mainF）
+	private double maxFrequency = 0;
+	//循环累加的spl值
+	private double SPLValue = 0;
 	/**
 	 * @return the maxSPL
 	 */

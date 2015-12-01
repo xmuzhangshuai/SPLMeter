@@ -72,12 +72,12 @@ public class FFTSplCal {
 			f_p[i] = Math.pow(transformer.getBand(i), 2);
 			//计算Lp的数值
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
-			//计算Lpa的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
+			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
 			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
-			//最后进行叠加，得到总的声压级
+			//最后进行叠加，得到总的声压级，循环累加计算SPL
 			spl += Math.pow(10, f_LpA[i] / 10);
-			//找出最大的声压级
-			if (f_LpA[i] >= splBo.maxSPL) {
+			//找出最大的声压级maxLpa,并找到对应的频率，即为主频mainF
+			if (f_LpA[i] >= splBo.getMaxSPL()) {
 				splBo.setMaxSPL(f_LpA[i]);
 				splBo.setMaxFrequency(f);
 			}
