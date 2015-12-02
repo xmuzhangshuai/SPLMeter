@@ -136,6 +136,7 @@
         android:layout_marginBottom="@dimen/personal_timecapsule_padding"
         android:layout_marginTop="@dimen/personal_timecapsule_padding"
         android:background="@drawable/shape_main_block"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp" >
@@ -153,7 +154,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
                 android:text="@string/fs_analysis"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
@@ -164,7 +164,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -172,12 +171,20 @@
         <LinearLayout
             android:id="@+id/visualizeView_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/fs_container"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
+            android:paddingBottom="10dp"
             android:paddingLeft="13dp"
-            android:paddingRight="10dp" >
+            android:paddingRight="10dp"
+            android:paddingTop="10dp" >
+
+            <SurfaceView
+                android:id="@+id/SurfaceView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" >
+            </SurfaceView>
         </LinearLayout>
 
         <LinearLayout
@@ -205,11 +212,23 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/abscissa_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/abscissa"
+            android:layout_alignLeft="@+id/ordinate_view"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/system_blue"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/abscissa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/ordinate_view"
-            android:layout_below="@+id/visualizeView_container"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
             android:orientation="horizontal" >
         </LinearLayout>

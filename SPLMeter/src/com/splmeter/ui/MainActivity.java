@@ -9,39 +9,36 @@ import org.json.JSONArray;
 
 import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.AudioProcess;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
 import com.splmeter.base.AppManager;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
+import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
-import com.splmeter.customewidget.VisualizerView;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.MyAudioTrack;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
@@ -78,22 +75,23 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] levels;
 	private SharePreferenceUtil sharePreferenceUtil;
 
-	private LinearLayout visualizerViewLayout;//代码布局
-	VisualizerView mBaseVisualizerView;//频谱图
-	private static final float VISUALIZER_HEIGHT_DIP = 120f;//频谱View高度
-	private Visualizer mVisualizer;//频谱器
-	MyAudioTrack myAudioTrack;
 	private LinearLayout abscissaLayout;//横坐标
 	private LinearLayout ordinateLayout;//纵坐标
-	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
-	private String[] ordinateArray = new String[] { "90", "80", "70", "60", "50" };
+	//	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
+	private List<String> abscissaArray = new ArrayList<>();
+	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
 	public static RequestParams resultParams;//最终上传的结果
 	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
 	AudioManager mAudioManager;
 	boolean isExit;
-	MyVolumeReceiver mVolumeReceiver;
+
+	SurfaceView sfv; //绘图所用
+	AudioProcess audioProcess = new AudioProcess();//处理
+	static final int yMax = 50;//Y轴缩小比例最大值  
+	static final int yMin = 1;//Y轴缩小比例最小值  
+	private int uploadMaxsize = 100;//上传主频对的最大数
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +126,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+
+	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		settingBtn = (Button) findViewById(R.id.setting_btn);
@@ -138,11 +142,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		seekBarLevelThumb = (ImageView) findViewById(R.id.seekbar_level_thumb);
 		levelTextView = (TextView) findViewById(R.id.status);
 		fsLabel = (TextView) findViewById(R.id.fs_label);
-		visualizerViewLayout = (LinearLayout) findViewById(R.id.visualizeView_container);
 		abscissaLayout = (LinearLayout) findViewById(R.id.abscissa);
 		ordinateLayout = (LinearLayout) findViewById(R.id.ordinate);
 		doorLabel = (TextView) findViewById(R.id.in_out_door);
 		tips = (TextView) findViewById(R.id.participants);
+		sfv = (SurfaceView) this.findViewById(R.id.SurfaceView);
 	}
 
 	@Override
@@ -151,6 +155,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		settingBtn.setOnClickListener(this);
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
+
+		//初始化显示
+		audioProcess.initDraw(yMax / 2, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
 
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
@@ -170,24 +177,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		mAudioManager.setSpeakerphoneOn(false);
 
 		levels = getResources().getStringArray(R.array.levelGroup);
-		mBaseVisualizerView = new VisualizerView(this);
 
-		mBaseVisualizerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, //宽度
-				(int) (VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density)//高度
-		));
 		//将频谱View添加到布局
-		visualizerViewLayout.addView(mBaseVisualizerView);
 
 		//横坐标和纵坐标
 		initCoordinate();
 
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
-
-		/********防止用户改变音量*********/
-		mVolumeReceiver = new MyVolumeReceiver();
-		IntentFilter filter = new IntentFilter();
-		filter.addAction("android.media.VOLUME_CHANGED_ACTION");
-		registerReceiver(mVolumeReceiver, filter);
 	}
 
 	/**
@@ -223,35 +219,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	};
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (mVolumeReceiver != null) {
-			unregisterReceiver(mVolumeReceiver);
-		}
-	}
-
-	/**
-	* 处理音量变化
-	* @author long
-	*/
-	private class MyVolumeReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//如果音量发生变化则更改seekbar的位置
-			if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
-				int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
-				if (currVolume > 2) {
-					mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 2, 0);
-				}
-			}
-		}
-	}
-
 	/**
 	 * 横坐标和纵坐标
 	 */
 	private void initCoordinate() {
+		abscissaArray.add("0");
+		for (int index = 64; index <= 512; index = index + 64) {
+			String str = String.valueOf(Constants.RecordValue.FREQUENCY / 1024 * index);
+			abscissaArray.add(str);
+		}
 		for (String abs : abscissaArray) {
 			TextView textView = new TextView(this);
 			textView.setTextColor(Color.argb(255, 7, 251, 251));
@@ -418,20 +394,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
-	 * 生成一个VisualizerView对象，使音频频谱的波段能够反映到 VisualizerView上
-	 */
-	private void setupVisualizerFx(int sessionId) {
-
-		//实例化Visualizer，参数SessionId可以通过MediaPlayer的对象获得
-		mVisualizer = new Visualizer(sessionId);
-		//采样 - 参数内必须是2的位数 - 如64,128,256,512,1024
-		mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-		//设置允许波形表示，并且捕获它
-		mBaseVisualizerView.setVisualizer(mVisualizer);
-		mVisualizer.setEnabled(true);//false 则不显示
-	}
-
-	/**
 	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
 	 * @author lzjing
 	 *
@@ -451,13 +413,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 */
 				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
 						bufferSize);
-				//启动声音
-				audioRecord.startRecording();
 
-				myAudioTrack = new MyAudioTrack(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
-				myAudioTrack.init();
-
-				setupVisualizerFx(myAudioTrack.getAudioSessionId());//添加频谱到界面
+				audioProcess.baseLine = sfv.getHeight() - 15;
+				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
+				audioProcess.start(audioRecord, bufferSize, sfv);
 
 				//新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
@@ -467,9 +426,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					//将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 
-					/**********播放音频************/
-					myAudioTrack.playAudioTrack(buffer, 0, RecordValue.BLOCKSIZE);
-
 					fftCal.transBuffer(bufferReadResult, buffer);
 					transform = fftCal.toTransform;
 					publishProgress(transform);
@@ -477,10 +433,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				//停止并且释放声音设备
 				audioRecord.stop();
 				audioRecord.release();
-				myAudioTrack.release();
-				if (mVisualizer != null) {
-					mVisualizer.release();
-				}
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
@@ -504,7 +456,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			map = new HashMap<>();
 			map.put("maxLpa", fftCal.getDoubleMaxSudBA(maxSPL));
 			map.put("mainE", fftCal.getDoubleMaxSudHz(maxFrequency));
-			basicFrequencyList.add(map);
+			if (basicFrequencyList.size() < uploadMaxsize) {
+				basicFrequencyList.add(map);
+			} else {
+				basicFrequencyList.remove(0);
+				basicFrequencyList.add(map);
+			}
 
 			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
 			if (currentLevel > 4) {
