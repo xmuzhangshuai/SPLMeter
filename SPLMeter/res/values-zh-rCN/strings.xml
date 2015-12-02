@@ -15,7 +15,7 @@
     <string name="share">分享</string>
     <string name="modeCaption">模式： </string>
     <string name="calibrate">校准：</string>
-    <string name="share_label1">资源将结果分享给科学家</string>
+    <string name="share_label1">自愿将结果分享给科学家</string>
     <string name="share_label2">成为公众科学家，为科学家研究贡献自己的力量</string>
     <string name="help">帮助说明</string>
     <string name="check_update">检查更新</string>
@@ -25,7 +25,7 @@
     <string name="evaluate">评价</string>
     <string name="last">上一步</string>
     <string name="next">下一步</string>
-    <string name="sound">您目前听到了哪些声音？</string>
+    <string name="sound">您目前听到了哪些声音</string>
     <string name="mul_choice">(可多选)</string>
     <string name="assessment">请对听到的声音进行评价</string>
     <string name="drag_to_ass">（拖动滑块评价）</string>

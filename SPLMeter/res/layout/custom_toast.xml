@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:maxLines="2"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="12sp" />
 
 </RelativeLayout>

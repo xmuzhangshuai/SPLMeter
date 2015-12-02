@@ -11,7 +11,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">OK</string>
     <string name="on">Start</string>
-    <string name="option">Setting</string>
+    <string name="option">Settings</string>
     <string name="share">Share</string>
     <string name="modeCaption">Mode:</string>
     <string name="calibrate">calibrated value:</string>
@@ -24,7 +24,7 @@
     <string name="evaluate">Evaluate</string>
     <string name="last">Back</string>
     <string name="next">Next</string>
-    <string name="sound">What do you hear？</string>
+    <string name="sound">What do you hear</string>
     <string name="mul_choice">(Multiple Choices)</string>
     <string name="assessment">Please evaluate your hearing sound</string>
     <string name="drag_to_ass">（Drag slider to evaluate）</string>

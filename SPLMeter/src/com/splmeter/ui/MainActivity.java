@@ -11,6 +11,7 @@ import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
+import com.splmeter.base.AppManager;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants.RecordValue;
@@ -34,7 +35,10 @@ import android.media.MediaRecorder;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -88,6 +92,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public static RequestParams resultParams;//最终上传的结果
 	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
 	AudioManager mAudioManager;
+	boolean isExit;
+	MyVolumeReceiver mVolumeReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,10 +184,51 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
 
 		/********防止用户改变音量*********/
-		MyVolumeReceiver mVolumeReceiver = new MyVolumeReceiver();
+		mVolumeReceiver = new MyVolumeReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.media.VOLUME_CHANGED_ACTION");
 		registerReceiver(mVolumeReceiver, filter);
+	}
+
+	/**
+	 * 按两次返回键退出
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			exit();
+			return false;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
+	public void exit() {
+		if (!isExit) {
+			isExit = true;
+			CommonTools.showShortToast(getBaseContext(), "再按一次退出程序");
+			mHandler.sendEmptyMessageDelayed(0, 2000);
+		} else {
+			// close();
+			AppManager.getInstance().AppExit(getApplicationContext());
+		}
+	}
+
+	Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			isExit = false;
+		}
+	};
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mVolumeReceiver != null) {
+			unregisterReceiver(mVolumeReceiver);
+		}
 	}
 
 	/**
