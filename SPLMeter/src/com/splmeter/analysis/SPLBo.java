@@ -16,6 +16,35 @@ public class SPLBo {
 	private double maxFrequency = 0;
 	//循环累加的spl值
 	private double SPLValue = 0;
+	//未累加的声压级（已做A计权修正）
+	private double f_LpA[];
+	//未累加的声压级（未做A计权修正）
+	private double f_Lp[];
+	
+	/**
+	 * @return the f_Lp
+	 */
+	public double[] getF_Lp() {
+		return f_Lp;
+	}
+	/**
+	 * @param f_Lp the f_Lp to set
+	 */
+	public void setF_Lp(double[] f_Lp) {
+		this.f_Lp = f_Lp;
+	}
+	/**
+	 * @return the f_LpA
+	 */
+	public double[] getF_LpA() {
+		return f_LpA;
+	}
+	/**
+	 * @param f_LpA the f_LpA to set
+	 */
+	public void setF_LpA(double[] f_LpA) {
+		this.f_LpA = f_LpA;
+	}
 	/**
 	 * @return the maxSPL
 	 */

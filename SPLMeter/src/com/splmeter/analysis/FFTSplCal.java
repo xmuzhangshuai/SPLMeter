@@ -1,6 +1,7 @@
 package com.splmeter.analysis;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 import com.splmeter.config.Constants.RecordValue;
 
@@ -60,6 +61,7 @@ public class FFTSplCal {
 		// 根据变换所产生的频谱的大小进行for循环（n次循环即为blockSize）处理得到最后的SPL
 		for (int i = 1; i <= blockSize; i++) {
 
+			//f为声音频率（Hz）
 			double f = transformer.indexToFreq(i);
 			double f_s = Math.pow(f, 2);
 			double WA1, WA2;
@@ -70,9 +72,9 @@ public class FFTSplCal {
 			f_WA[i] = WA1 + WA2;
 			//函数getBand(i)返回请求的频带的振幅
 			f_p[i] = Math.pow(transformer.getBand(i), 2);
-			//计算Lp的数值
+			//计算Lp（声压级）的数值，p0通过传声器和声卡量化后为1
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
-			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))
+			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))，A计权网络，对声压级进行计权修正
 			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
 			//最后进行叠加，得到总的声压级，循环累加计算SPL
 			spl += Math.pow(10, f_LpA[i] / 10);
@@ -82,8 +84,20 @@ public class FFTSplCal {
 				splBo.setMaxFrequency(f);
 			}
 		}
+		//循环累加计算得到的spl，得到SPL总声压级
 		splBo.setSPLValue(spl);
+		//将计权修正后的声压级存入数组中
+		splBo.setF_LpA(f_LpA);
+		//未计权修正的声压级存入数组中
+		splBo.setF_Lp(f_Lp);
 		return splBo;
+	}
+	
+	//获取频谱图中的已排序的声压级数据数组
+	public double[] getSPLArr(double[] lpa) {
+		//快速排序
+		Arrays.sort(lpa);
+		return lpa;
 	}
 
 	/**
