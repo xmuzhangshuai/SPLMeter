@@ -2,13 +2,12 @@ package com.splmeter.analysis;
 
 import java.util.ArrayList;
 
+import com.splmeter.utils.LogTool;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.media.AudioRecord;
 import android.util.Log;
@@ -47,7 +46,6 @@ public class AudioProcess {
 	public void start(AudioRecord audioRecord, int minBufferSize, SurfaceView sfvSurfaceView) {
 		isRecording = true;
 		new RecordThread(audioRecord, minBufferSize).start();
-		//new ProcessThread().start();
 		new DrawThread(sfvSurfaceView).start();
 	}
 
@@ -55,9 +53,6 @@ public class AudioProcess {
 	public void stop(SurfaceView sfvSurfaceView) {
 		isRecording = false;
 		inBuf.clear();
-		//sfvSurfaceView;
-		//drawBuf.clear();
-		//outBuf.clear();
 	}
 
 	//录音线程
@@ -100,8 +95,9 @@ public class AudioProcess {
 						Short short1 = tmpBuf[i];
 						complexs[i] = new Complex(short1.doubleValue());
 					}
-					fft(complexs, length);
+					//					fft(complexs, length);
 					for (int i = 0; i < length; i++) {
+						i = i + 1;
 						outInt[i] = complexs[i].getIntValue();
 					}
 					synchronized (outBuf) {
@@ -127,11 +123,8 @@ public class AudioProcess {
 	class DrawThread extends Thread {
 		//画板
 		private SurfaceView sfvSurfaceView;
-		//当前画图所在屏幕x轴的坐标
 		//画笔
 		private Paint mPaint;
-		//		private Paint tPaint;
-		//		private Paint dashPaint;
 
 		public DrawThread(SurfaceView sfvSurfaceView) {
 			this.sfvSurfaceView = sfvSurfaceView;
@@ -140,20 +133,6 @@ public class AudioProcess {
 			mPaint.setColor(Color.argb(255, 7, 251, 251));
 			mPaint.setStrokeWidth(2);
 			mPaint.setAntiAlias(true);
-
-			//			tPaint = new Paint();
-			//			tPaint.setColor(Color.YELLOW);
-			//			tPaint.setStrokeWidth(2);
-			//			tPaint.setAntiAlias(true);
-
-			//			dashPaint = new Paint();
-			//			dashPaint.setStyle(Paint.Style.STROKE);
-			//			dashPaint.setColor(Color.GRAY);
-			//			Path path = new Path();
-			//			path.moveTo(0, 10);
-			//			path.lineTo(480, 10);
-			//			PathEffect effects = new DashPathEffect(new float[] { 5, 5, 5, 5 }, 1);
-			//			dashPaint.setPathEffect(effects);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -190,12 +169,13 @@ public class AudioProcess {
 		 */
 
 		private void SimpleDraw(int[] buffer, int rate, int baseLine) {
+			LogTool.e("------" + buffer.length);
 			Canvas canvas = sfvSurfaceView.getHolder().lockCanvas(new Rect(0, 0, buffer.length, sfvSurfaceView.getHeight()));
 			canvas.drawColor(Color.BLACK);
 			canvas.save();
 			canvas.rotate(-60, sfvSurfaceView.getWidth() - 1, baseLine);
 			canvas.restore();
-			
+
 			int y;
 			for (int i = 0; i < buffer.length; i = i + 1) {
 				y = baseLine - buffer[i] / rateY;

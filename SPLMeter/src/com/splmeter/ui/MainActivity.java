@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout ordinateLayout;//纵坐标
 	//	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
 	private List<String> abscissaArray = new ArrayList<>();
-	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
+	private String[] ordinateArray = new String[] { "75", "70", "67", "60", "55" };
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
 	public static RequestParams resultParams;//最终上传的结果
@@ -89,8 +89,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	SurfaceView sfv; //绘图所用
 	AudioProcess audioProcess = new AudioProcess();//处理
-	static final int yMax = 50;//Y轴缩小比例最大值  
-	static final int yMin = 1;//Y轴缩小比例最小值  
+	static final int yMax = 25;//Y轴缩小比例最大值  
 	private int uploadMaxsize = 100;//上传主频对的最大数
 
 	@Override
@@ -157,7 +156,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		shareBtn.setOnClickListener(this);
 
 		//初始化显示
-		audioProcess.initDraw(yMax / 2, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
+		audioProcess.initDraw(yMax, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
 
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
@@ -171,14 +170,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 
-		/************控制系统音量大小，防止出现噪音*************/
-		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 2, 0);
-		mAudioManager.setSpeakerphoneOn(false);
-
 		levels = getResources().getStringArray(R.array.levelGroup);
-
-		//将频谱View添加到布局
 
 		//横坐标和纵坐标
 		initCoordinate();
@@ -225,7 +217,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private void initCoordinate() {
 		abscissaArray.add("0");
 		for (int index = 64; index <= 512; index = index + 64) {
-			String str = String.valueOf(Constants.RecordValue.FREQUENCY / 1024 * index);
+			int value = Constants.RecordValue.FREQUENCY / 1024 * index;
+			String str = "" + value / 1000 + "K";
 			abscissaArray.add(str);
 		}
 		for (String abs : abscissaArray) {
@@ -414,7 +407,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
 						bufferSize);
 
-				audioProcess.baseLine = sfv.getHeight() - 15;
+				audioProcess.baseLine = sfv.getHeight() - 11;
 				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
 				audioProcess.start(audioRecord, bufferSize, sfv);
 
@@ -433,6 +426,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				//停止并且释放声音设备
 				audioRecord.stop();
 				audioRecord.release();
+				audioProcess.stop(sfv);
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
