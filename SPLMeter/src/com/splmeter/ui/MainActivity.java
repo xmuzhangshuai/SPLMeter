@@ -1,9 +1,7 @@
 package com.splmeter.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 
@@ -20,12 +18,10 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
 
-import android.R.integer;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -83,15 +79,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private List<String> abscissaArray = new ArrayList<>();
 	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
 
-	private List<Map<String, Float>> basicFrequencyList;// 频谱图内容
 	public static RequestParams resultParams;// 最终上传的结果
 	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
 	private int saveFlag = 0;// 为1是开始保存数据
+	private int onFlag = 0;//0为停止监控，1为正在监控
 	AudioManager mAudioManager;
 	boolean isExit;
 
 	SurfaceView sfv; // 绘图所用
-	AudioProcess audioProcess = new AudioProcess();// 处理
+	AudioProcess audioProcess;// 处理
 	static final int yMax = 25;// Y轴缩小比例最大值
 	private int uploadMaxsize = 100;// 上传主频对的最大数
 	AudioRecord audioRecord;
@@ -109,13 +105,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// 从网络获取数据并存储到本地
 		new ServerUtils(MainActivity.this).initData();
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
-		basicFrequencyList = new ArrayList<>();
 		timeList = new ArrayList<>();
 		latitudeList = new ArrayList<>();
 		longtitudeList = new ArrayList<>();
 		accuracyList = new ArrayList<>();
 		altitudeList = new ArrayList<>();
 		splList = new ArrayList<>();
+		earPhoneList = new ArrayList<>();
 		locationTool = new LocationTool(MainActivity.this);
 
 		// 友盟更新
@@ -142,8 +138,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		stopSave();
 		super.onDestroy();
-		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 	@Override
@@ -172,6 +169,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		shareBtn.setOnClickListener(this);
 
 		// 初始化显示
+		audioProcess = new AudioProcess();
 		audioProcess.initDraw(yMax, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
 
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
@@ -373,20 +371,24 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.start_btn:
-			saveFlag = 1;
 			flag++;
 			if (flag % 2 == 0) {// 评价
+				saveFlag = 1;
 				startBtn.setBackgroundResource(R.drawable.sel_btn);
 				startBtn.setText(R.string.on);
 				next_last(1);
-				try {
-					JSONArray jsonArray = new JSONArray(basicFrequencyList);
-					MainActivity.resultParams.put("mainEmaxLpaPair", jsonArray.toString());
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
 			} else {// 开始
-				basicFrequencyList.clear();
+				saveFlag = 0;
+				onFlag = 1;
+				timeList.clear();
+				maxLpa = 0;
+				mainFrenquency = 0;
+				longtitudeList.clear();
+				latitudeList.clear();
+				altitudeList.clear();
+				accuracyList.clear();
+				earPhoneList.clear();
+				splList.clear();
 				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
 				startBtn.setText(R.string.evaluate);
 				recordTask = new RecordAudio();
@@ -408,11 +410,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 */
 	public void stopSave() {
 		saveFlag = 0;
-		if (audioRecord != null) {
-			// 停止并且释放声音设备
-			audioRecord.stop();
-			audioRecord.release();
-		}
+		onFlag = 0;
 	}
 
 	/**
@@ -466,13 +464,29 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	public void saveData() {
+		JSONArray timeArray = new JSONArray(timeList);
+		resultParams.put("time", timeArray.toString());
+		JSONArray longtitudeArray = new JSONArray(longtitudeList);
+		resultParams.put("lng", longtitudeArray.toString());
+		JSONArray latitudeArray = new JSONArray(latitudeList);
+		resultParams.put("lat", latitudeArray.toString());
+		JSONArray altitudeArray = new JSONArray(altitudeList);
+		resultParams.put("alt", altitudeArray.toString());
+		JSONArray accuracyArray = new JSONArray(accuracyList);
+		resultParams.put("acc", accuracyArray.toString());
+		JSONArray earPhoneArray = new JSONArray(earPhoneList);
+		resultParams.put("earphone", earPhoneArray.toString());
+		JSONArray splArray = new JSONArray(splList);
+		resultParams.put("spl", splArray.toString());
+	}
+
 	/**
 	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
 	 * @author lzjing
 	 *
 	 */
 	private class RecordAudio extends AsyncTask<Void, float[], Void> {
-		int count = 0;
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -484,9 +498,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
-				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION,
-						RecordValue.AUDIOENCODING, bufferSize);
-
+				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
 				audioProcess.baseLine = sfv.getHeight() - 11;
 				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
 				audioProcess.start(audioRecord, bufferSize, sfv);
@@ -494,16 +506,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
 				fftCal = new FFTSplCal();
-				while ((flag % 2) != 0) {
+				while (onFlag == 1) {
 					// 将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
-
 					fftCal.transBuffer(bufferReadResult, buffer);
 					transform = fftCal.toTransform;
 					publishProgress(transform);
 				}
-				stopSave();
-				audioProcess.stop(sfv);
+				if (audioRecord != null) {
+					// 停止并且释放声音设备
+					audioRecord.stop();
+					audioRecord.release();
+				}
+				if (audioProcess != null) {
+					audioProcess.stop(sfv);
+				}
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
@@ -526,8 +543,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			// 记录数据
 			if (saveFlag == 1) {
-				count++;
-				LogTool.e("数量" + count);
 				startSave(fftCal.getDoubleMaxSudBA(maxSPL), fftCal.getDoubleMaxSudHz(maxFrequency), calibrateSPLValue);
 			}
 

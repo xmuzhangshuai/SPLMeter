@@ -1,7 +1,6 @@
 package com.splmeter.ui;
 
 import com.smallrhino.splmeter.R;
-import com.splmeter.utils.LogTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,8 +14,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 /**
  * @description:主观评价对话框
@@ -63,6 +62,7 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 
 		findViewById();
 		initView();
+		this.setCancelable(false);
 		return rootView;
 	}
 

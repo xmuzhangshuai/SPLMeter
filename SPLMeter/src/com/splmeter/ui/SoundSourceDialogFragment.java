@@ -93,6 +93,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 
 		findViewById();
 		initView();
+		this.setCancelable(false);
 		return rootView;
 	}
 
@@ -138,6 +139,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
+			mainActivity.stopSave();
 			break;
 		case R.id.next_btn:
 			saveData();

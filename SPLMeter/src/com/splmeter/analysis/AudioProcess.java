@@ -2,8 +2,6 @@ package com.splmeter.analysis;
 
 import java.util.ArrayList;
 
-import com.splmeter.utils.LogTool;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -169,7 +167,6 @@ public class AudioProcess {
 		 */
 
 		private void SimpleDraw(int[] buffer, int rate, int baseLine) {
-			LogTool.e("------" + buffer.length);
 			Canvas canvas = sfvSurfaceView.getHolder().lockCanvas(new Rect(0, 0, buffer.length, sfvSurfaceView.getHeight()));
 			canvas.drawColor(Color.BLACK);
 			canvas.save();

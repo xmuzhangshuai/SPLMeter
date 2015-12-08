@@ -72,6 +72,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 
 		findViewById();
 		initView();
+		this.setCancelable(false);
 		return rootView;
 	}
 
@@ -141,15 +142,9 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	 */
 	private void uploadData() {
 		if (sharePreferenceUtil.getAutoShare()) {
-
-			MainActivity.resultParams.put("time", DateTimeTools.getCurrentDateTimeForString());
 			MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 			MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-			MainActivity.resultParams.put("earphone", CommonTools.getEarPhone(mainActivity) ? 1 : 0);
-			MainActivity.resultParams.put("lng", locationTool.getLongitude());
-			MainActivity.resultParams.put("lat", locationTool.getLatitude());
-			MainActivity.resultParams.put("alt", locationTool.getAltitude());
-			MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
+			mainActivity.saveData();
 			LogTool.i("--------" + MainActivity.resultParams.toString());
 			final ProgressDialog dialog = new ProgressDialog(getActivity());
 			dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
