@@ -16,6 +16,8 @@ public class FFTSplCal {
 
 	int blockSize = RecordValue.BLOCKSIZE;
 	int frequency = RecordValue.FREQUENCY;
+	double cal_a= RecordValue.CALIBRATE_A;
+	double cal_b= RecordValue.CALIBRATE_B;
 	short[] buffer;
 	private float[] toTransform;
 	
@@ -91,7 +93,7 @@ public class FFTSplCal {
 		//循环累加计算得到的spl，得到SPL总声压级
 		splBo.setSPLValue(spl);
 		//将计权修正后的声压级存入数组中
-		splBo.setF_LpA(f_LpA);
+		splBo.setF_LpA(f_Spl);
 		return splBo;
 	}
 	
@@ -109,7 +111,7 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public String getCalibrateSPL(double SPL, double calibrateValue) {
-		return nf.format(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
+		return nf.format(10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue);
 	}
 
 	/**
@@ -118,7 +120,7 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public String getMaxSudBA(double maxSPL) {
-		return nf.format(maxSPL * 1.26067 - 82.00148);
+		return nf.format(maxSPL * cal_a - cal_b);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public float getDoubleMaxSudBA(double maxSPL) {
-		return (float) (maxSPL * 1.26067 - 82.00148);
+		return (float) (maxSPL * cal_a - cal_b);
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public float getDoubleCalibrateSPL(double SPL, double calibrateValue) {
-		return (float) Math.round((10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue) * 10) / 10;
+		return (float) Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10;
 		//		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
 	}
 

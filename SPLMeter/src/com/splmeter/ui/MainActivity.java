@@ -19,6 +19,7 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.DensityUtil;
+import com.splmeter.utils.Double2IntTool;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
@@ -526,7 +527,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 					fftCal.transBuffer(bufferReadResult, buffer);
 
-					drawProcess.draw(bufferReadResult, buffer);
+//					double[] fLPA = fftCal.getSPL().getF_LpA();
+//					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
+					
+					drawProcess.draw(bufferReadResult,buffer);
 
 					transform = fftCal.getToTransform();
 					publishProgress(transform);

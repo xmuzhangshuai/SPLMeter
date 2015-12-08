@@ -18,5 +18,8 @@ public class Constants {
 		//采样率
 		public static final int FREQUENCY = 44100;
 		public static final int BLOCKSIZE = 2048;
+		//校准函数中的参数值
+		public static final double CALIBRATE_A = 1.26067;
+		public static final double CALIBRATE_B = 82.00148;
 	}
 }
