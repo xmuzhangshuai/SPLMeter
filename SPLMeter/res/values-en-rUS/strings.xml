@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Noise Meter</string>
+    <string name="app_name">SPL Meter</string>
     <string name="current_value">SPL</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
@@ -14,10 +14,10 @@
     <string name="option">Settings</string>
     <string name="share">Share</string>
     <string name="modeCaption">Mode:</string>
-    <string name="calibrate">calibrated value:</string>
+    <string name="calibrate">Calibrated value:</string>
     <string name="share_label1">Agree to share measurements to scientists</string>
     <string name="share_label2">To be a citizen scientist, contribute your own power for scientist research.</string>
-    <string name="help">Help</string>
+    <string name="help">Help and instructions</string>
     <string name="check_update">Check for update</string>
     <string name="about">About</string>
     <string name="language">Language:</string>
@@ -60,7 +60,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="share_fail">Failed! Make sure Internet connected or try again later.</string>
     <string name="sound_level">Sound level:</string>
     <string name="acoustic_comfort_level">Acoustic comfort level:</string>
-    <string name="coordinated_level">Coordinated level between sound and environment:</string>
+    <string name="coordinated_level">Coordinated level(sound&amp;environment):</string>
 
     <array name="sound_levelGroup">
         <item>very low</item>

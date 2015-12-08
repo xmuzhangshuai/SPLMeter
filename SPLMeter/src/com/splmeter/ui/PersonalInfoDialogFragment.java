@@ -43,6 +43,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	private Button nextBtn;
 	private Spinner ageSpinner;
 	private RadioButton radioMale;
+	private RadioButton radioFemale;
 	private SharePreferenceUtil sharePreferenceUtil;
 	LocationTool locationTool;
 
@@ -79,6 +80,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		nextBtn = (Button) rootView.findViewById(R.id.next_btn);
 		ageSpinner = (Spinner) rootView.findViewById(R.id.ageSpinner);
 		radioMale = (RadioButton) rootView.findViewById(R.id.radio_male);
+		radioFemale = (RadioButton) rootView.findViewById(R.id.radio_female);
 	}
 
 	private void initView() {
@@ -88,12 +90,20 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		ArrayAdapter<CharSequence> ageAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.ageGroup, android.R.layout.simple_spinner_item);
 		ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		ageSpinner.setAdapter(ageAdapter);
-		ageSpinner.setSelection(2, true);
+		ageSpinner.setSelection(sharePreferenceUtil.getAgeGroup(), true);
+
+		if (sharePreferenceUtil.getGender() == 1) {
+			radioMale.setChecked(true);
+		} else {
+			radioFemale.setChecked(true);
+		}
 	}
 
 	private void saveData() {
 		int gender = radioMale.isChecked() ? 1 : 0;
 		int age = ageSpinner.getSelectedItemPosition() + 1;
+		sharePreferenceUtil.setAgeGroup(age - 1);
+		sharePreferenceUtil.setGender(gender);
 		MainActivity.resultParams.put("gender", gender);
 		MainActivity.resultParams.put("age", age);
 	}

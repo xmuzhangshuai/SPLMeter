@@ -32,22 +32,22 @@ public class SharePreferenceUtil {
 	}
 
 	// 性别
-	public String getGender() {
-		return sp.getString("gender", "");
+	public int getGender() {
+		return sp.getInt("gender", 1);
 	}
 
-	public void setGender(String u_gender) {
-		editor.putString("gender", u_gender);
+	public void setGender(int u_gender) {
+		editor.putInt("gender", u_gender);
 		editor.commit();
 	}
 
 	// 年龄段
-	public String getAgeGroup() {
-		return sp.getString("ageGroup", "");
+	public int getAgeGroup() {
+		return sp.getInt("ageGroup", 2);
 	}
 
-	public void setAgeGroup(String ageGroup) {
-		editor.putString("ageGroup", ageGroup);
+	public void setAgeGroup(int ageGroup) {
+		editor.putInt("ageGroup", ageGroup);
 		editor.commit();
 	}
 
