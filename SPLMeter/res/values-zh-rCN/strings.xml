@@ -2,11 +2,11 @@
 <resources>
 
     <string name="app_name">噪声计</string>
-    <string name="current_value">实时值</string>
+    <string name="current_value">声压级</string>
     <string name="indoor">室内</string>
     <string name="outdoor">室外</string>
     <string name="dBCaption">分贝</string>
-    <string name="standard">评价标准</string>
+    <string name="standard">分级标准</string>
     <string name="fs_analysis">频谱分析</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>

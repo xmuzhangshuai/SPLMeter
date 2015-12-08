@@ -10,15 +10,13 @@ import android.view.SurfaceView;
 
 public class DrawProcess {
 	//应该把处理前后处理后的普线都显示出来
-	private ArrayList<short[]> inBuf = new ArrayList<short[]>();//原始录入数据
 	private ArrayList<int[]> outBuf = new ArrayList<int[]>();//处理后的数据
-	private int shift = 30;
+	private int shift = 20;
 
 	//y轴缩小的比例
 	public int rateY = 25;
 	//y轴基线
 	public int baseLine = 0;
-
 	//画板
 	private SurfaceView sfvSurfaceView;
 	//画笔
@@ -39,9 +37,6 @@ public class DrawProcess {
 	}
 
 	public void draw(int length, short[] buffer) {
-		//		synchronized (inBuf) {
-		//			inBuf.add(buffer);
-		//		}
 		short[] tmpBuf = new short[length];
 		System.arraycopy(buffer, 0, tmpBuf, 0, length);
 

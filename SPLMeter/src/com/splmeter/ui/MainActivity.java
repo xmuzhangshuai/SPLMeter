@@ -1,6 +1,7 @@
 package com.splmeter.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -477,6 +479,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		resultParams.put("earphone", earPhoneArray.toString());
 		JSONArray splArray = new JSONArray(splList);
 		resultParams.put("spl", splArray.toString());
+
+		Collections.sort(splList);
+		Collections.reverse(splList);
+		int length = splList.size();
+		float L10 = splList.get(length / 10);
+		float L50 = splList.get(length / 2);
+		float L90 = splList.get(length * 9 / 10);
+		float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
+		resultParams.put("L10", L10);
+		resultParams.put("L50", L50);
+		resultParams.put("L90", L90);
+		resultParams.put("Laeq", Laeq);
+		currentValue.setText("" + Laeq);
 	}
 
 	/**
