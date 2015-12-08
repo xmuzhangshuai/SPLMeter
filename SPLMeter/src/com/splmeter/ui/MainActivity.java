@@ -20,6 +20,7 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -70,42 +71,42 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView doorLabel;
 	private TextView tips;
 	private float seekBarLevelDrawableWidth;
-	private float seekBarLevelMinValue = 45;//噪音范围最小值
+	private float seekBarLevelMinValue = 45;// 噪音范围最小值
 	private float seekBarLevelBlock = 25;
 	private float seekBarLevelThumbIntial;
 	private int currentLevel = 0;
 	private String[] levels;
 	private SharePreferenceUtil sharePreferenceUtil;
 
-	private LinearLayout abscissaLayout;//横坐标
-	private LinearLayout ordinateLayout;//纵坐标
+	private LinearLayout abscissaLayout;// 横坐标
+	private LinearLayout ordinateLayout;// 纵坐标
 	private List<String> abscissaArray = new ArrayList<>();
 	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
 
-	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
-	public static RequestParams resultParams;//最终上传的结果
-	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
-	private int saveFlag = 0;//为1是开始保存数据
+	private List<Map<String, Float>> basicFrequencyList;// 频谱图内容
+	public static RequestParams resultParams;// 最终上传的结果
+	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
+	private int saveFlag = 0;// 为1是开始保存数据
 	AudioManager mAudioManager;
 	boolean isExit;
 
-	SurfaceView sfv; //绘图所用
-	AudioProcess audioProcess = new AudioProcess();//处理
-	static final int yMax = 25;//Y轴缩小比例最大值  
-	private int uploadMaxsize = 100;//上传主频对的最大数
+	SurfaceView sfv; // 绘图所用
+	AudioProcess audioProcess = new AudioProcess();// 处理
+	static final int yMax = 25;// Y轴缩小比例最大值
+	private int uploadMaxsize = 100;// 上传主频对的最大数
 	AudioRecord audioRecord;
 	private LocationTool locationTool;
-	private float mainSPL, mainFrenquency;
+	private float maxLpa, mainFrenquency;
 	private List<String> timeList;
 	private List<Integer> earPhoneList;
-	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList;
+	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//从网络获取数据并存储到本地
+		// 从网络获取数据并存储到本地
 		new ServerUtils(MainActivity.this).initData();
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		basicFrequencyList = new ArrayList<>();
@@ -114,9 +115,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		longtitudeList = new ArrayList<>();
 		accuracyList = new ArrayList<>();
 		altitudeList = new ArrayList<>();
+		splList = new ArrayList<>();
 		locationTool = new LocationTool(MainActivity.this);
 
-		//友盟更新
+		// 友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 
@@ -130,7 +132,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//室内室外
+		// 室内室外
 		if (sharePreferenceUtil.getInOutDoor() == 0) {
 			doorLabel.setText(getResources().getString(R.string.outdoor));
 		} else {
@@ -169,7 +171,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
 
-		//初始化显示
+		// 初始化显示
 		audioProcess.initDraw(yMax, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
 
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
@@ -186,7 +188,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		levels = getResources().getStringArray(R.array.levelGroup);
 
-		//横坐标和纵坐标
+		// 横坐标和纵坐标
 		initCoordinate();
 
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
@@ -373,7 +375,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		case R.id.start_btn:
 			saveFlag = 1;
 			flag++;
-			if (flag % 2 == 0) {//评价
+			if (flag % 2 == 0) {// 评价
 				startBtn.setBackgroundResource(R.drawable.sel_btn);
 				startBtn.setText(R.string.on);
 				next_last(1);
@@ -383,7 +385,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
-			} else {//开始
+			} else {// 开始
 				basicFrequencyList.clear();
 				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
 				startBtn.setText(R.string.evaluate);
@@ -407,7 +409,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void stopSave() {
 		saveFlag = 0;
 		if (audioRecord != null) {
-			//停止并且释放声音设备
+			// 停止并且释放声音设备
 			audioRecord.stop();
 			audioRecord.release();
 		}
@@ -416,13 +418,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 开始记录数据
 	 */
-	public void startSave(float mainSPL, float mainFrequence) {
-		if (mainSPL > this.mainSPL) {
-			this.mainSPL = mainSPL;
+	public void startSave(float maxLpa, float mainFrequence, float spl) {
+		if (maxLpa > this.maxLpa) {
+			this.maxLpa = maxLpa;
 			this.mainFrenquency = mainFrequence;
 		}
 
-		//记录时间
+		// 记录时间
 		if (timeList.size() < uploadMaxsize) {
 			timeList.add(DateTimeTools.getCurrentDateTimeForString());
 		} else {
@@ -430,7 +432,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			timeList.add(DateTimeTools.getCurrentDateTimeForString());
 		}
 
-		//记录位置
+		// 记录位置
 		if (longtitudeList.size() < uploadMaxsize) {
 			longtitudeList.add((float) locationTool.getLongitude());
 			latitudeList.add((float) locationTool.getLongitude());
@@ -447,6 +449,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			accuracyList.add((float) locationTool.getAccuracy());
 		}
 
+		// 记录耳机状态
+		if (earPhoneList.size() < uploadMaxsize) {
+			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
+		} else {
+			earPhoneList.remove(0);
+			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
+		}
+
+		// 记录声压级
+		if (splList.size() < uploadMaxsize) {
+			splList.add(spl);
+		} else {
+			splList.remove(0);
+			splList.add(spl);
+		}
 	}
 
 	/**
@@ -455,7 +472,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 *
 	 */
 	private class RecordAudio extends AsyncTask<Void, float[], Void> {
-		Map<String, Float> map;
+		int count = 0;
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -467,17 +484,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
-				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
+				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION,
+						RecordValue.AUDIOENCODING, bufferSize);
 
 				audioProcess.baseLine = sfv.getHeight() - 11;
 				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
 				audioProcess.start(audioRecord, bufferSize, sfv);
 
-				//新建一个数组用于缓存声音
+				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
 				fftCal = new FFTSplCal();
 				while ((flag % 2) != 0) {
-					//将声音信息读取到缓存中
+					// 将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 
 					fftCal.transBuffer(bufferReadResult, buffer);
@@ -501,22 +519,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			double maxSPL = splBo.getMaxSPL();
 			double maxFrequency = splBo.getMaxFrequency();
-			//主频以及对应的HZ
+			// 主频以及对应的HZ
 			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + "：" + fftCal.getMaxSudBA(maxSPL)
 					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "(" + fftCal.getMaxSudHz(maxFrequency)
 					+ MainActivity.this.getResources().getString(R.string.hz) + ")");
-			//记录主频
-			map = new HashMap<>();
-			map.put("maxLpa", fftCal.getDoubleMaxSudBA(maxSPL));
-			map.put("mainE", fftCal.getDoubleMaxSudHz(maxFrequency));
-			if (basicFrequencyList.size() < uploadMaxsize) {
-				basicFrequencyList.add(map);
-			} else {
-				basicFrequencyList.remove(0);
-				basicFrequencyList.add(map);
+
+			// 记录数据
+			if (saveFlag == 1) {
+				count++;
+				LogTool.e("数量" + count);
+				startSave(fftCal.getDoubleMaxSudBA(maxSPL), fftCal.getDoubleMaxSudHz(maxFrequency), calibrateSPLValue);
 			}
 
-			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);//当前层级
+			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);// 当前层级
 			if (currentLevel > 4) {
 				currentLevel = 4;
 			} else if (currentLevel < 0) {
@@ -531,7 +546,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				ratio = 1;
 			}
 
-			//初始化  
+			// 初始化
 			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 		}
 	}
