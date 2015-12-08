@@ -7,7 +7,7 @@ import org.json.JSONArray;
 
 import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
-import com.splmeter.analysis.AudioProcess;
+import com.splmeter.analysis.DrawProcess;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
 import com.splmeter.base.AppManager;
@@ -87,8 +87,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	boolean isExit;
 
 	SurfaceView sfv; // 绘图所用
-	AudioProcess audioProcess;// 处理
-	static final int yMax = 25;// Y轴缩小比例最大值
+	DrawProcess drawProcess;// 处理
 	private int uploadMaxsize = 100;// 上传主频对的最大数
 	AudioRecord audioRecord;
 	private LocationTool locationTool;
@@ -169,8 +168,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		shareBtn.setOnClickListener(this);
 
 		// 初始化显示
-		audioProcess = new AudioProcess();
-		audioProcess.initDraw(yMax, sfv.getHeight(), this, Constants.RecordValue.FREQUENCY);
+		drawProcess = new DrawProcess(sfv);
 
 		ViewTreeObserver vto = seekBarLevelDrawable.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
@@ -499,9 +497,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
-				audioProcess.baseLine = sfv.getHeight() - 11;
-				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
-				audioProcess.start(audioRecord, bufferSize, sfv);
+				audioRecord.startRecording();
+				drawProcess.baseLine = sfv.getHeight() - 11;
 
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
@@ -510,6 +507,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					// 将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 					fftCal.transBuffer(bufferReadResult, buffer);
+
+					drawProcess.draw(bufferReadResult, buffer);
+
 					transform = fftCal.toTransform;
 					publishProgress(transform);
 				}
@@ -518,9 +518,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					audioRecord.stop();
 					audioRecord.release();
 				}
-				if (audioProcess != null) {
-					audioProcess.stop(sfv);
-				}
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
 			}
@@ -528,6 +525,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 
 		protected void onProgressUpdate(float[]... transform) {
+
 			SPLBo splBo = new SPLBo();
 			splBo = fftCal.getSPL();
 			double splValue = splBo.getSPLValue();
