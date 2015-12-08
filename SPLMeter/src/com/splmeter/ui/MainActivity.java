@@ -18,7 +18,9 @@ import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.DensityUtil;
 import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -168,6 +170,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
 
+		LogTool.e("--------" + DensityUtil.getScreenWidthforPX(this));
 		// 初始化显示
 		drawProcess = new DrawProcess(sfv);
 
@@ -513,6 +516,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
 				audioRecord.startRecording();
 				drawProcess.baseLine = sfv.getHeight() - 11;
+				drawProcess.sfvWidth = sfv.getWidth();
 
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];

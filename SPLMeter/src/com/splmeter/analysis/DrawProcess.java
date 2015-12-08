@@ -2,6 +2,10 @@ package com.splmeter.analysis;
 
 import java.util.ArrayList;
 
+import com.splmeter.config.Constants;
+import com.splmeter.utils.DensityUtil;
+import com.splmeter.utils.LogTool;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,6 +25,8 @@ public class DrawProcess {
 	private SurfaceView sfvSurfaceView;
 	//画笔
 	private Paint mPaint;
+	public int sfvWidth;
+	private float intervel;
 
 	public DrawProcess(SurfaceView sfvSurfaceView) {
 		this.sfvSurfaceView = sfvSurfaceView;
@@ -37,6 +43,8 @@ public class DrawProcess {
 	}
 
 	public void draw(int length, short[] buffer) {
+		intervel = (float) sfvWidth / buffer.length;
+
 		short[] tmpBuf = new short[length];
 		System.arraycopy(buffer, 0, tmpBuf, 0, length);
 
@@ -80,7 +88,7 @@ public class DrawProcess {
 		int y;
 		for (int i = 0; i < buffer.length; i = i + 1) {
 			y = baseLine - buffer[i] / rateY;
-			canvas.drawLine(2 * i + shift, baseLine, 2 * i + shift, y, mPaint);
+			canvas.drawLine(i * intervel + shift, baseLine, i * intervel + shift, y, mPaint);
 		}
 		sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 	}
