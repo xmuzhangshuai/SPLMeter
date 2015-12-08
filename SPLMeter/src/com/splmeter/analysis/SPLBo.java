@@ -18,21 +18,7 @@ public class SPLBo {
 	private double SPLValue = 0;
 	//未累加的声压级（已做A计权修正）
 	private double f_LpA[];
-	//未累加的声压级（未做A计权修正）
-	private double f_Lp[];
 	
-	/**
-	 * @return the f_Lp
-	 */
-	public double[] getF_Lp() {
-		return f_Lp;
-	}
-	/**
-	 * @param f_Lp the f_Lp to set
-	 */
-	public void setF_Lp(double[] f_Lp) {
-		this.f_Lp = f_Lp;
-	}
 	/**
 	 * @return the f_LpA
 	 */

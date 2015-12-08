@@ -528,7 +528,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 					drawProcess.draw(bufferReadResult, buffer);
 
-					transform = fftCal.toTransform;
+					transform = fftCal.getToTransform();
 					publishProgress(transform);
 				}
 				if (audioRecord != null) {

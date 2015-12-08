@@ -17,7 +17,8 @@ public class FFTSplCal {
 	int blockSize = RecordValue.BLOCKSIZE;
 	int frequency = RecordValue.FREQUENCY;
 	short[] buffer;
-	public float[] toTransform;
+	private float[] toTransform;
+	
 	DecimalFormat nf = new DecimalFormat("0.0");
 	FFT transformer;
 
@@ -57,6 +58,7 @@ public class FFTSplCal {
 		double f_Lp[] = new double[ALenght];
 		double f_WA[] = new double[ALenght];
 		double f_LpA[] = new double[ALenght];
+		double f_Spl[] = new double[ALenght];
 
 		// 根据变换所产生的频谱的大小进行for循环（n次循环即为blockSize）处理得到最后的SPL
 		for (int i = 1; i <= blockSize; i++) {
@@ -76,8 +78,10 @@ public class FFTSplCal {
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))，A计权网络，对声压级进行计权修正
 			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
+			//将循环累加前的数值存入数组中，用于绘制频谱图
+			f_Spl[i] = Math.pow(10, f_LpA[i] / 10);
 			//最后进行叠加，得到总的声压级，循环累加计算SPL
-			spl += Math.pow(10, f_LpA[i] / 10);
+			spl += f_Spl[i];
 			//找出最大的声压级maxLpa,并找到对应的频率，即为主频mainF
 			if (f_LpA[i] >= splBo.getMaxSPL()) {
 				splBo.setMaxSPL(f_LpA[i]);
@@ -88,8 +92,6 @@ public class FFTSplCal {
 		splBo.setSPLValue(spl);
 		//将计权修正后的声压级存入数组中
 		splBo.setF_LpA(f_LpA);
-		//未计权修正的声压级存入数组中
-		splBo.setF_Lp(f_Lp);
 		return splBo;
 	}
 	
@@ -155,6 +157,20 @@ public class FFTSplCal {
 	 */
 	public float getDoubleMaxSudHz(double maxFrequency) {
 		return (float) (maxFrequency);
+	}
+	
+	/**
+	 * @return the toTransform
+	 */
+	public float[] getToTransform() {
+		return toTransform;
+	}
+
+	/**
+	 * @param toTransform the toTransform to set
+	 */
+	public void setToTransform(float[] toTransform) {
+		this.toTransform = toTransform;
 	}
 
 }
