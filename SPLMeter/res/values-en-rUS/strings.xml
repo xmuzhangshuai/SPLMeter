@@ -34,7 +34,7 @@
     <string name="gender">Gender：</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="share_title">Who do you want to share with?</string>
+    <string name="share_title">Who do you want to share with</string>
     <string name="share_scientist">Scientist</string>
     <string name="share_sina">Sina microblog</string>
     <string name="share_tx_weibo">Tencent microblog</string>
@@ -47,7 +47,7 @@
     <string name="newest">The current version is the latest</string>
     <string name="no_wifi">No wifi connection, wifi is required</string>
     <string name="timeout">Time out</string>
-    <string name="basic_frequency">Main Frequency</string>
+    <string name="basic_frequency">Main Freq</string>
     <string name="hz">HZ</string>
     <string name="infoTitle">Tips!</string>
     <string name="share_success">Successful! Check the community contributions?\n

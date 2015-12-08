@@ -19,7 +19,6 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -550,7 +549,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			double maxSPL = splBo.getMaxSPL();
 			double maxFrequency = splBo.getMaxFrequency();
 			// 主频以及对应的HZ
-			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + "：" + fftCal.getMaxSudBA(maxSPL)
+			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + ":" + fftCal.getMaxSudBA(maxSPL)
 					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "(" + fftCal.getMaxSudHz(maxFrequency)
 					+ MainActivity.this.getResources().getString(R.string.hz) + ")");
 
