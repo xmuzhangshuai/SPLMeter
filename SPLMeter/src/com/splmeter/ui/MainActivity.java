@@ -18,13 +18,15 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
+import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
 
+import android.R.integer;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -77,13 +79,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private LinearLayout abscissaLayout;//横坐标
 	private LinearLayout ordinateLayout;//纵坐标
-	//	private String[] abscissaArray = new String[] { "20", "50", "100", "200", "500", "1K", "5K", "10K", "20K" };
 	private List<String> abscissaArray = new ArrayList<>();
-	private String[] ordinateArray = new String[] { "100", "90", "80", "70", "60", "50", "40", "30", "20", "10", "0" };
+	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
 
 	private List<Map<String, Float>> basicFrequencyList;//频谱图内容
 	public static RequestParams resultParams;//最终上传的结果
 	public static int shareFlag = 0;//0为未测试，1为测试过，2为已经分享成功
+	private int saveFlag = 0;//为1是开始保存数据
 	AudioManager mAudioManager;
 	boolean isExit;
 
@@ -91,6 +93,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	AudioProcess audioProcess = new AudioProcess();//处理
 	static final int yMax = 25;//Y轴缩小比例最大值  
 	private int uploadMaxsize = 100;//上传主频对的最大数
+	AudioRecord audioRecord;
+	private LocationTool locationTool;
+	private float mainSPL, mainFrenquency;
+	private List<String> timeList;
+	private List<Integer> earPhoneList;
+	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +109,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		new ServerUtils(MainActivity.this).initData();
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		basicFrequencyList = new ArrayList<>();
+		timeList = new ArrayList<>();
+		latitudeList = new ArrayList<>();
+		longtitudeList = new ArrayList<>();
+		accuracyList = new ArrayList<>();
+		altitudeList = new ArrayList<>();
+		locationTool = new LocationTool(MainActivity.this);
 
 		//友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
@@ -357,6 +371,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.start_btn:
+			saveFlag = 1;
 			flag++;
 			if (flag % 2 == 0) {//评价
 				startBtn.setBackgroundResource(R.drawable.sel_btn);
@@ -387,6 +402,54 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 停止记录数据
+	 */
+	public void stopSave() {
+		saveFlag = 0;
+		if (audioRecord != null) {
+			//停止并且释放声音设备
+			audioRecord.stop();
+			audioRecord.release();
+		}
+	}
+
+	/**
+	 * 开始记录数据
+	 */
+	public void startSave(float mainSPL, float mainFrequence) {
+		if (mainSPL > this.mainSPL) {
+			this.mainSPL = mainSPL;
+			this.mainFrenquency = mainFrequence;
+		}
+
+		//记录时间
+		if (timeList.size() < uploadMaxsize) {
+			timeList.add(DateTimeTools.getCurrentDateTimeForString());
+		} else {
+			timeList.remove(0);
+			timeList.add(DateTimeTools.getCurrentDateTimeForString());
+		}
+
+		//记录位置
+		if (longtitudeList.size() < uploadMaxsize) {
+			longtitudeList.add((float) locationTool.getLongitude());
+			latitudeList.add((float) locationTool.getLongitude());
+			altitudeList.add((float) locationTool.getLongitude());
+			accuracyList.add((float) locationTool.getAccuracy());
+		} else {
+			longtitudeList.remove(0);
+			latitudeList.remove(0);
+			altitudeList.remove(0);
+			accuracyList.remove(0);
+			longtitudeList.add((float) locationTool.getLongitude());
+			latitudeList.add((float) locationTool.getLatitude());
+			altitudeList.add((float) locationTool.getAltitude());
+			accuracyList.add((float) locationTool.getAccuracy());
+		}
+
+	}
+
+	/**
 	 * RecordAudio继承异步任务类，实现获取声音得到缓存声频
 	 * @author lzjing
 	 *
@@ -404,8 +467,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
-				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
-						bufferSize);
+				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
 
 				audioProcess.baseLine = sfv.getHeight() - 11;
 				audioProcess.frequence = Constants.RecordValue.FREQUENCY;
@@ -413,7 +475,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 				//新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
-				//				float[] toTransform = new float[RecordValue.BLOCKSIZE];
 				fftCal = new FFTSplCal();
 				while ((flag % 2) != 0) {
 					//将声音信息读取到缓存中
@@ -423,9 +484,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					transform = fftCal.toTransform;
 					publishProgress(transform);
 				}
-				//停止并且释放声音设备
-				audioRecord.stop();
-				audioRecord.release();
+				stopSave();
 				audioProcess.stop(sfv);
 			} catch (Throwable t) {
 				Log.e("AudioRecord", "Recording Failed" + t.toString());
@@ -444,8 +503,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			double maxFrequency = splBo.getMaxFrequency();
 			//主频以及对应的HZ
 			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + "：" + fftCal.getMaxSudBA(maxSPL)
-					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "（" + fftCal.getMaxSudHz(maxFrequency)
-					+ MainActivity.this.getResources().getString(R.string.hz) + "）");
+					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "(" + fftCal.getMaxSudHz(maxFrequency)
+					+ MainActivity.this.getResources().getString(R.string.hz) + ")");
 			//记录主频
 			map = new HashMap<>();
 			map.put("maxLpa", fftCal.getDoubleMaxSudBA(maxSPL));

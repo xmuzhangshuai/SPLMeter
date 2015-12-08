@@ -103,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
                 android:button="@drawable/checkbox"
                 android:checked="true" />
         </RelativeLayout>
@@ -139,7 +140,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/sel_setting_bg"
             android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
+            android:paddingTop="10dp"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="match_parent"

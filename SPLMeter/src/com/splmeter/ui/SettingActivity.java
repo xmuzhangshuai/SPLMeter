@@ -3,6 +3,7 @@ package com.splmeter.ui;
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
+import com.splmeter.customewidget.MyAlertDialog;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.splmeter.utils.ToastTool;
 import com.umeng.update.UmengUpdateAgent;
@@ -36,9 +37,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private Button confirmBtn;
 	private Spinner modeSpinner;
 	private View helpView;
-	private View checkUpdateView;
+	//	private View checkUpdateView;
 	private View aboutView;
-	private TextView versionTextView;
+	//	private TextView versionTextView;
 	private SharePreferenceUtil sharePreferenceUtil;
 	private int in_out_door;
 	private CheckBox shareCheckBox;
@@ -60,9 +61,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		confirmBtn = (Button) findViewById(R.id.confirm_btn);
 		modeSpinner = (Spinner) findViewById(R.id.modeSpinner);
 		helpView = findViewById(R.id.help);
-		checkUpdateView = findViewById(R.id.check_update);
+		//		checkUpdateView = findViewById(R.id.check_update);
 		aboutView = findViewById(R.id.about);
-		versionTextView = (TextView) findViewById(R.id.version);
+		//		versionTextView = (TextView) findViewById(R.id.version);
 		shareCheckBox = (CheckBox) findViewById(R.id.share_checkbox);
 		clbEditText = (EditText) findViewById(R.id.clbTxt);
 	}
@@ -73,9 +74,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		cancelBtn.setOnClickListener(this);
 		confirmBtn.setOnClickListener(this);
 		helpView.setOnClickListener(this);
-		checkUpdateView.setOnClickListener(this);
+		//		checkUpdateView.setOnClickListener(this);
 		aboutView.setOnClickListener(this);
-		versionTextView.setText(getVersion());
+		//		versionTextView.setText(getVersion());
 		in_out_door = sharePreferenceUtil.getInOutDoor();
 
 		/************设置户内户外**********/
@@ -113,6 +114,34 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 提示对话框
+	 */
+	private void showAboutDialog() {
+		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
+		myAlertDialog.setTitle(this.getResources().getString(R.string.about));
+		myAlertDialog.setMessage(getVersion());
+		View.OnClickListener comfirm = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		View.OnClickListener cancle = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				myAlertDialog.dismiss();
+			}
+		};
+		myAlertDialog.setPositiveButton(this.getResources().getString(R.string.confirm), comfirm);
+		myAlertDialog.setNegativeButton(this.getResources().getString(R.string.cancel), cancle);
+		myAlertDialog.show();
+	}
+
+	/**
 	 * 获取版本号
 	 * @return 当前应用的版本号
 	 */
@@ -140,8 +169,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.about:
-			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://smallrhino.net").putExtra("title", "小犀牛"));
-			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			showAboutDialog();
 			break;
 		case R.id.help:
 			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://smallrhino.net").putExtra("title", "小犀牛"));
