@@ -525,7 +525,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 					fftCal.transBuffer(bufferReadResult, buffer);
 
-					double[] fLPA = fftCal.getSPL().getF_LpA();
+					double[] fLPA = fftCal.getFrequencyAndSPL();
 					for (int i = 0; i < fLPA.length; i++) {
 						//						LogTool.e("-----------" + fLPA[i]);
 					}
@@ -552,7 +552,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				SPLBo splBo = new SPLBo();
 				splBo = fftCal.getSPL();
 				double splValue = splBo.getSPLValue();
-				float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, sharePreferenceUtil.getCalibration());
+				float calibrateSPLValue = fftCal.getCalibrateSPLDouble(splValue, sharePreferenceUtil.getCalibration());
 				currentValue.setText("" + calibrateSPLValue);
 
 				double maxSPL = splBo.getMaxSPL();
@@ -564,7 +564,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 				// 记录数据
 				if (saveFlag == 1) {
-					startSave(fftCal.getDoubleMaxSudBA(maxSPL), fftCal.getDoubleMaxSudHz(maxFrequency), calibrateSPLValue);
+					startSave(fftCal.getMaxSudBADouble(maxSPL), fftCal.getMaxSudHzDouble(maxFrequency), calibrateSPLValue);
 				}
 
 				currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);// 当前层级

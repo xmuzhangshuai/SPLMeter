@@ -97,6 +97,14 @@ public class FFTSplCal {
 	
 
 	/**
+	 * 获得频率和声压级的数值用于绘制频谱图
+	 * @return double[]
+	 */
+	public double[] getFrequencyAndSPL() {
+		return getSPL().getF_LpA();
+	}
+	
+	/**
 	 * 获得校准之后的SPL值
 	 * @param SPL 通过
 	 * @param calibrateValue 配置中的基准值
