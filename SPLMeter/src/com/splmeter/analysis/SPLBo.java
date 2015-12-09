@@ -29,6 +29,10 @@ public class SPLBo {
 	 * @param f_LpA the f_LpA to set
 	 */
 	public void setF_LpA(double[] f_LpA) {
+		//对值做取正操作，再set入
+		for (int i = 0; i < f_LpA.length; i++) {
+			f_LpA[i] = Math.abs(f_LpA[i]);
+		}
 		this.f_LpA = f_LpA;
 	}
 	/**

@@ -16,8 +16,8 @@ public class FFTSplCal {
 
 	int blockSize = RecordValue.BLOCKSIZE;
 	int frequency = RecordValue.FREQUENCY;
-	double cal_a= RecordValue.CALIBRATE_A;
-	double cal_b= RecordValue.CALIBRATE_B;
+	double cal_a = RecordValue.CALIBRATE_A;
+	double cal_b = RecordValue.CALIBRATE_B;
 	short[] buffer;
 	private float[] toTransform;
 	
@@ -60,7 +60,6 @@ public class FFTSplCal {
 		double f_Lp[] = new double[ALenght];
 		double f_WA[] = new double[ALenght];
 		double f_LpA[] = new double[ALenght];
-		double f_Spl[] = new double[ALenght];
 
 		// 根据变换所产生的频谱的大小进行for循环（n次循环即为blockSize）处理得到最后的SPL
 		for (int i = 1; i <= blockSize; i++) {
@@ -80,10 +79,9 @@ public class FFTSplCal {
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))，A计权网络，对声压级进行计权修正
 			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
-			//将循环累加前的数值存入数组中，用于绘制频谱图
-			f_Spl[i] = Math.pow(10, f_LpA[i] / 10);
+//			System.out.println("声压级（振幅）："+Math.abs(f_LpA[i])+"  频率："+ f +" 角标："+ i +" 或者未修正-"+"声压级（振幅）："+Math.abs(f_Lp[i])+"  频率："+f +" 角标："+i);
 			//最后进行叠加，得到总的声压级，循环累加计算SPL
-			spl += f_Spl[i];
+			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级maxLpa,并找到对应的频率，即为主频mainF
 			if (f_LpA[i] >= splBo.getMaxSPL()) {
 				splBo.setMaxSPL(f_LpA[i]);
@@ -93,16 +91,10 @@ public class FFTSplCal {
 		//循环累加计算得到的spl，得到SPL总声压级
 		splBo.setSPLValue(spl);
 		//将计权修正后的声压级存入数组中
-		splBo.setF_LpA(f_Spl);
+		splBo.setF_LpA(f_LpA);
 		return splBo;
 	}
 	
-	//获取频谱图中的已排序的声压级数据数组
-	public double[] getSPLArr(double[] lpa) {
-		//快速排序
-		Arrays.sort(lpa);
-		return lpa;
-	}
 
 	/**
 	 * 获得校准之后的SPL值
@@ -111,7 +103,37 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public String getCalibrateSPL(double SPL, double calibrateValue) {
-		return nf.format(10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue);
+		//return nf.format(10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue);
+		return nf.format(Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10);
+	}
+	
+	/**
+	 * 获得校准之后的SPL值
+	 * @param SPL 通过
+	 * @param calibrateValue 配置中的基准值
+	 * @return
+	 */
+	public float getCalibrateSPLDouble(double SPL, double calibrateValue) {
+		return (float) Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10;
+		//	return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
+	}
+	
+	/**
+	 * 获取最大声压（声音的频率）的Hz，即单位为Hz
+	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
+	 * @return
+	 */
+	public String getMaxSudHz(double maxFrequency) {
+		return nf.format(Math.round(maxFrequency * 10) / 10);
+	}
+	
+	/**
+	 * 获取最大声压（声音的频率）Hz，即单位为Hz
+	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
+	 * @return 保留一位小数
+	 */
+	public float getMaxSudHzDouble(double maxFrequency) {
+		return (float) Math.round(maxFrequency * 10) / 10;
 	}
 
 	/**
@@ -120,47 +142,18 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public String getMaxSudBA(double maxSPL) {
-		return nf.format(maxSPL * cal_a - cal_b);
+		return nf.format(Math.round((maxSPL * cal_a - cal_b) * 10) / 10);
 	}
-
-	/**
-	 * 获取最大声压（声音的频率）的Hz，即单位为Hz
-	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
-	 * @return
-	 */
-	public String getMaxSudHz(double maxFrequency) {
-		return nf.format(maxFrequency);
-	}
-
+	
 	/**
 	 * 获取最大声压（声音的强度）dBA，即单位为dBA
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL
-	 * @return
+	 * @return 保留一位小数
 	 */
-	public float getDoubleMaxSudBA(double maxSPL) {
-		return (float) (maxSPL * cal_a - cal_b);
+	public float getMaxSudBADouble(double maxSPL) {
+		return (float) Math.round((maxSPL * cal_a - cal_b) * 10) / 10;
 	}
 
-	/**
-	 * 获得校准之后的SPL值
-	 * @param SPL 通过
-	 * @param calibrateValue 配置中的基准值
-	 * @return
-	 */
-	public float getDoubleCalibrateSPL(double SPL, double calibrateValue) {
-		return (float) Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10;
-		//		return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
-	}
-
-	/**
-	 * 获取最大声压（声音的频率）Hz，即单位为Hz
-	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
-	 * @return
-	 */
-	public float getDoubleMaxSudHz(double maxFrequency) {
-		return (float) (maxFrequency);
-	}
-	
 	/**
 	 * @return the toTransform
 	 */
