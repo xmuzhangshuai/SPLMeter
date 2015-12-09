@@ -18,10 +18,7 @@ import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
-import com.splmeter.utils.DensityUtil;
-import com.splmeter.utils.Double2IntTool;
 import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -171,7 +168,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startBtn.setOnClickListener(this);
 		shareBtn.setOnClickListener(this);
 
-		LogTool.e("--------" + DensityUtil.getScreenWidthforPX(this));
 		// 初始化显示
 		drawProcess = new DrawProcess(sfv);
 
@@ -494,6 +490,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		resultParams.put("L50", L50);
 		resultParams.put("L90", L90);
 		resultParams.put("Laeq", Laeq);
+		resultParams.put("mainF", mainFrenquency);
+		resultParams.put("maxLpa", maxLpa);
 		currentValue.setText("" + Laeq);
 	}
 
@@ -527,10 +525,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 					fftCal.transBuffer(bufferReadResult, buffer);
 
-//					double[] fLPA = fftCal.getSPL().getF_LpA();
-//					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
-					
-					drawProcess.draw(bufferReadResult,buffer);
+					double[] fLPA = fftCal.getSPL().getF_LpA();
+					for (int i = 0; i < fLPA.length; i++) {
+						//						LogTool.e("-----------" + fLPA[i]);
+					}
+					//					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
+
+					drawProcess.draw(bufferReadResult, buffer);
 
 					transform = fftCal.getToTransform();
 					publishProgress(transform);
@@ -547,42 +548,43 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 
 		protected void onProgressUpdate(float[]... transform) {
+			if (onFlag == 1) {
+				SPLBo splBo = new SPLBo();
+				splBo = fftCal.getSPL();
+				double splValue = splBo.getSPLValue();
+				float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, sharePreferenceUtil.getCalibration());
+				currentValue.setText("" + calibrateSPLValue);
 
-			SPLBo splBo = new SPLBo();
-			splBo = fftCal.getSPL();
-			double splValue = splBo.getSPLValue();
-			float calibrateSPLValue = fftCal.getDoubleCalibrateSPL(splValue, sharePreferenceUtil.getCalibration());
-			currentValue.setText("" + calibrateSPLValue);
+				double maxSPL = splBo.getMaxSPL();
+				double maxFrequency = splBo.getMaxFrequency();
+				// 主频以及对应的HZ
+				fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + ":" + fftCal.getMaxSudBA(maxSPL)
+						+ MainActivity.this.getResources().getString(R.string.dBCaption) + "(" + fftCal.getMaxSudHz(maxFrequency)
+						+ MainActivity.this.getResources().getString(R.string.hz) + ")");
 
-			double maxSPL = splBo.getMaxSPL();
-			double maxFrequency = splBo.getMaxFrequency();
-			// 主频以及对应的HZ
-			fsLabel.setText(MainActivity.this.getResources().getString(R.string.basic_frequency) + ":" + fftCal.getMaxSudBA(maxSPL)
-					+ MainActivity.this.getResources().getString(R.string.dBCaption) + "(" + fftCal.getMaxSudHz(maxFrequency)
-					+ MainActivity.this.getResources().getString(R.string.hz) + ")");
+				// 记录数据
+				if (saveFlag == 1) {
+					startSave(fftCal.getDoubleMaxSudBA(maxSPL), fftCal.getDoubleMaxSudHz(maxFrequency), calibrateSPLValue);
+				}
 
-			// 记录数据
-			if (saveFlag == 1) {
-				startSave(fftCal.getDoubleMaxSudBA(maxSPL), fftCal.getDoubleMaxSudHz(maxFrequency), calibrateSPLValue);
+				currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);// 当前层级
+				if (currentLevel > 4) {
+					currentLevel = 4;
+				} else if (currentLevel < 0) {
+					currentLevel = 0;
+				}
+				levelTextView.setText(levels[currentLevel]);
+
+				float ratio = (calibrateSPLValue - seekBarLevelMinValue) / seekBarLevelBlock;
+				if (ratio < 0) {
+					ratio = 0;
+				} else if (ratio > 1) {
+					ratio = 1;
+				}
+
+				// 初始化
+				seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 			}
-
-			currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);// 当前层级
-			if (currentLevel > 4) {
-				currentLevel = 4;
-			} else if (currentLevel < 0) {
-				currentLevel = 0;
-			}
-			levelTextView.setText(levels[currentLevel]);
-
-			float ratio = (calibrateSPLValue - seekBarLevelMinValue) / seekBarLevelBlock;
-			if (ratio < 0) {
-				ratio = 0;
-			} else if (ratio > 1) {
-				ratio = 1;
-			}
-
-			// 初始化
-			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 		}
 	}
 

@@ -9,10 +9,10 @@ import com.splmeter.config.Constants;
 import com.splmeter.customewidget.MyAlertDialog;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.SharePreferenceUtil;
+import com.splmeter.utils.ToastTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -164,14 +164,9 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 	 */
 	private void uploadData() {
 
-		MainActivity.resultParams.put("time", DateTimeTools.getCurrentDateTimeForString());
 		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-		MainActivity.resultParams.put("earphone", CommonTools.getEarPhone(mainActivity) ? 1 : 0);
-		MainActivity.resultParams.put("lng", locationTool.getLongitude());
-		MainActivity.resultParams.put("lat", locationTool.getLatitude());
-		MainActivity.resultParams.put("alt", locationTool.getAltitude());
-		MainActivity.resultParams.put("acc", sharePreferenceUtil.getCalibration());
+		mainActivity.saveData();
 		LogTool.i("--------" + MainActivity.resultParams.toString());
 		final ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
@@ -219,6 +214,7 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 				uploadData();
 			} else if (MainActivity.shareFlag == 2) {
 				LogTool.e("已经分享过！");
+				ToastTool.showShort(getActivity(), "已经分享过！");
 			}
 			break;
 		case R.id.share_sina:
