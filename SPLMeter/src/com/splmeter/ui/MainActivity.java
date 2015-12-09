@@ -6,23 +6,6 @@ import java.util.List;
 
 import org.json.JSONArray;
 
-import com.loopj.android.http.RequestParams;
-import com.smallrhino.splmeter.R;
-import com.splmeter.analysis.DrawProcess;
-import com.splmeter.analysis.FFTSplCal;
-import com.splmeter.analysis.SPLBo;
-import com.splmeter.base.AppManager;
-import com.splmeter.base.BaseActivity;
-import com.splmeter.base.BaseApplication;
-import com.splmeter.config.Constants;
-import com.splmeter.config.Constants.RecordValue;
-import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.DateTimeTools;
-import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.ServerUtils;
-import com.splmeter.utils.SharePreferenceUtil;
-import com.umeng.update.UmengUpdateAgent;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -46,6 +29,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.loopj.android.http.RequestParams;
+import com.smallrhino.splmeter.R;
+import com.splmeter.analysis.DrawProcess;
+import com.splmeter.analysis.FFTSplCal;
+import com.splmeter.analysis.SPLBo;
+import com.splmeter.base.AppManager;
+import com.splmeter.base.BaseActivity;
+import com.splmeter.base.BaseApplication;
+import com.splmeter.config.Constants;
+import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.utils.CommonTools;
+import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.Double2IntTool;
+import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.ServerUtils;
+import com.splmeter.utils.SharePreferenceUtil;
+import com.umeng.update.UmengUpdateAgent;
 
 /**
  * @description:主页面
@@ -529,9 +530,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					for (int i = 0; i < fLPA.length; i++) {
 						//						LogTool.e("-----------" + fLPA[i]);
 					}
-					//					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
+					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
 
-					drawProcess.draw(bufferReadResult, buffer);
+//					drawProcess.draw(bufferReadResult, buffer);
 
 					transform = fftCal.getToTransform();
 					publishProgress(transform);

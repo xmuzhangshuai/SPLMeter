@@ -16,9 +16,7 @@ public class Double2IntTool {
 		int length = data.length;
 		short tempArr[] = new short[length];
 		for(int i = 0;i < length;i++){
-			//放大10倍
-			tempArr[i] = (short)(data[i]*100);
-//			System.out.println(tempArr[i]);
+			tempArr[i] = (short)((data[i]*10)/10);
 		}
 		return tempArr;
 	}

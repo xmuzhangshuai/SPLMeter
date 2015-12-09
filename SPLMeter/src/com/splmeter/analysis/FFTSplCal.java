@@ -3,7 +3,10 @@ package com.splmeter.analysis;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import android.os.Looper;
+
 import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.utils.LogTool;
 
 /**
  * 
@@ -79,7 +82,7 @@ public class FFTSplCal {
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))，A计权网络，对声压级进行计权修正
 			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
-//			System.out.println("声压级（振幅）："+Math.abs(f_LpA[i])+"  频率："+ f +" 角标："+ i +" 或者未修正-"+"声压级（振幅）："+Math.abs(f_Lp[i])+"  频率："+f +" 角标："+i);
+//			LogTool.i("声压级（振幅）："+ f_LpA[i] +"  频率："+ f +" 角标："+ i );
 			//最后进行叠加，得到总的声压级，循环累加计算SPL
 			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级maxLpa,并找到对应的频率，即为主频mainF
