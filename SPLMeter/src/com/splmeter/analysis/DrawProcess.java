@@ -2,8 +2,6 @@ package com.splmeter.analysis;
 
 import java.util.ArrayList;
 
-import com.splmeter.config.Constants;
-import com.splmeter.utils.DensityUtil;
 import com.splmeter.utils.LogTool;
 
 import android.graphics.Canvas;
@@ -17,8 +15,6 @@ public class DrawProcess {
 	private ArrayList<int[]> outBuf = new ArrayList<int[]>();//处理后的数据
 	private int shift = 20;
 
-	//y轴缩小的比例
-	public int rateY = 25;
 	//y轴基线
 	public int baseLine = 0;
 	//画板
@@ -26,7 +22,9 @@ public class DrawProcess {
 	//画笔
 	private Paint mPaint;
 	public int sfvWidth;
-	private float intervel;
+	public int sfvHeight;
+	private float intervelW;
+	private float intervelH;
 
 	public DrawProcess(SurfaceView sfvSurfaceView) {
 		this.sfvSurfaceView = sfvSurfaceView;
@@ -42,8 +40,10 @@ public class DrawProcess {
 		mPaint.setAntiAlias(true);
 	}
 
-	public void draw(int length, short[] buffer) {
-		intervel = (float) sfvWidth / buffer.length;
+	public void draw(short[] buffer) {
+		int length = buffer.length;
+		intervelW = (float) sfvWidth / length;
+		intervelH = (float) sfvHeight / 100;
 
 		short[] tmpBuf = new short[length];
 		System.arraycopy(buffer, 0, tmpBuf, 0, length);
@@ -54,7 +54,6 @@ public class DrawProcess {
 			Short short1 = tmpBuf[i];
 			complexs[i] = new Complex(short1.doubleValue());
 		}
-		//					fft(complexs, length);
 		for (int i = 0; i < length; i++) {
 			i = i + 1;
 			outInt[i] = complexs[i].getIntValue();
@@ -79,17 +78,22 @@ public class DrawProcess {
 	}
 
 	private void SimpleDraw(int[] buffer, int baseLine) {
+		int max = buffer[1];
 		Canvas canvas = sfvSurfaceView.getHolder().lockCanvas(new Rect(0, 0, buffer.length, sfvSurfaceView.getHeight()));
 		canvas.drawColor(Color.BLACK);
 		canvas.save();
 		canvas.rotate(-60, sfvSurfaceView.getWidth() - 1, baseLine);
 		canvas.restore();
 
-		int y;
+		float y;
 		for (int i = 0; i < buffer.length; i = i + 1) {
-			y = baseLine - buffer[i] / rateY;
-			canvas.drawLine(i * intervel + shift, baseLine, i * intervel + shift, y, mPaint);
+			y = (baseLine - buffer[i] * intervelH);
+			if (buffer[i] < max && buffer[i] != 0) {
+				max = buffer[i];
+			}
+			canvas.drawLine(i * intervelW + shift, baseLine, i * intervelW + shift, y, mPaint);
 		}
+		LogTool.e("----" + max);
 		sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 	}
 }

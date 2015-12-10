@@ -1,9 +1,6 @@
 package com.splmeter.analysis;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-
-import android.os.Looper;
 
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.LogTool;
@@ -23,7 +20,7 @@ public class FFTSplCal {
 	double cal_b = RecordValue.CALIBRATE_B;
 	short[] buffer;
 	private float[] toTransform;
-	
+
 	DecimalFormat nf = new DecimalFormat("0.0");
 	FFT transformer;
 
@@ -81,8 +78,8 @@ public class FFTSplCal {
 			//计算Lp（声压级）的数值，p0通过传声器和声卡量化后为1
 			f_Lp[i] = 10 * Math.log10(f_p[i]);
 			//计算Lpa（声压级）的数值(计算公式：Lpa = 10lg(10Lpa/10+10Wa/10))，A计权网络，对声压级进行计权修正
-			f_LpA[i] = 10 * Math.log10(Math.pow(10,f_Lp[i]/10) + Math.pow(10,f_WA[i]/10));
-//			LogTool.i("声压级（振幅）："+ f_LpA[i] +"  频率："+ f +" 角标："+ i );
+			f_LpA[i] = 10 * Math.log10(Math.pow(10, f_Lp[i] / 10) + Math.pow(10, f_WA[i] / 10));
+			//			LogTool.i("声压级（振幅）："+ f_LpA[i] +"  频率："+ f +" 角标："+ i );
 			//最后进行叠加，得到总的声压级，循环累加计算SPL
 			spl += Math.pow(10, f_LpA[i] / 10);
 			//找出最大的声压级maxLpa,并找到对应的频率，即为主频mainF
@@ -97,16 +94,21 @@ public class FFTSplCal {
 		splBo.setF_LpA(f_LpA);
 		return splBo;
 	}
-	
 
 	/**
 	 * 获得频率和声压级的数值用于绘制频谱图
 	 * @return double[]
 	 */
-	public double[] getFrequencyAndSPL() {
-		return getSPL().getF_LpA();
+	public short[] getFrequencyAndSPL() {
+		double[] temp = getSPL().getF_LpA();
+		int l = temp.length / 2 - 1;
+		short[] t = new short[l];
+		for (int i = 0; i < l; i++) {
+			t[i] = (short) ((temp[i + 1] * 10) / 10);
+		}
+		return t;
 	}
-	
+
 	/**
 	 * 获得校准之后的SPL值
 	 * @param SPL 通过
@@ -115,9 +117,9 @@ public class FFTSplCal {
 	 */
 	public String getCalibrateSPL(double SPL, double calibrateValue) {
 		//return nf.format(10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue);
-		return nf.format(Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10);
+		return nf.format(Math.round((10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue) * 10) / 10);
 	}
-	
+
 	/**
 	 * 获得校准之后的SPL值
 	 * @param SPL 通过
@@ -125,10 +127,10 @@ public class FFTSplCal {
 	 * @return
 	 */
 	public float getCalibrateSPLDouble(double SPL, double calibrateValue) {
-		return (float) Math.round((10 * Math.log10(SPL) * cal_a  - cal_b + calibrateValue) * 10) / 10;
+		return (float) Math.round((10 * Math.log10(SPL) * cal_a - cal_b + calibrateValue) * 10) / 10;
 		//	return (float)(10 * Math.log10(SPL) * 1.26067 - 82.00148 + calibrateValue);
 	}
-	
+
 	/**
 	 * 获取最大声压（声音的频率）的Hz，即单位为Hz
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
@@ -137,7 +139,7 @@ public class FFTSplCal {
 	public String getMaxSudHz(double maxFrequency) {
 		return nf.format(Math.round(maxFrequency * 10) / 10);
 	}
-	
+
 	/**
 	 * 获取最大声压（声音的频率）Hz，即单位为Hz
 	 * @param maxFrequency 通过getSPL初始化后得到maxFrequency
@@ -155,7 +157,7 @@ public class FFTSplCal {
 	public String getMaxSudBA(double maxSPL) {
 		return nf.format(Math.round((maxSPL * cal_a - cal_b) * 10) / 10);
 	}
-	
+
 	/**
 	 * 获取最大声压（声音的强度）dBA，即单位为dBA
 	 * @param maxSPL 通过getSPL初始化后得到maxSPL

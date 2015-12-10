@@ -6,30 +6,6 @@ import java.util.List;
 
 import org.json.JSONArray;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
-
 import com.loopj.android.http.RequestParams;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.DrawProcess;
@@ -42,11 +18,35 @@ import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
-import com.splmeter.utils.Double2IntTool;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
+
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 /**
  * @description:主页面
@@ -235,12 +235,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			String str = "" + value / 1000 + "K";
 			abscissaArray.add(str);
 		}
-		for (String abs : abscissaArray) {
+		for (int i = 0; i < abscissaArray.size(); i++) {
 			TextView textView = new TextView(this);
 			textView.setTextColor(Color.argb(255, 7, 251, 251));
 			textView.setTextSize(10);
-			textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
-			textView.setText(abs);
+			if (i == abscissaArray.size() - 1) {
+				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			} else {
+				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
+			}
+
+			textView.setText(abscissaArray.get(i));
 			abscissaLayout.addView(textView);
 		}
 		for (String odr : ordinateArray) {
@@ -517,6 +522,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				audioRecord.startRecording();
 				drawProcess.baseLine = sfv.getHeight() - 11;
 				drawProcess.sfvWidth = sfv.getWidth();
+				drawProcess.sfvHeight = sfv.getHeight();
 
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
@@ -526,13 +532,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);
 					fftCal.transBuffer(bufferReadResult, buffer);
 
-					double[] fLPA = fftCal.getFrequencyAndSPL();
-					for (int i = 0; i < fLPA.length; i++) {
-						//						LogTool.e("-----------" + fLPA[i]);
-					}
-					drawProcess.draw(bufferReadResult, Double2IntTool.Double2Short(fLPA));
-
-//					drawProcess.draw(bufferReadResult, buffer);
+					short[] a = fftCal.getFrequencyAndSPL();
+					drawProcess.draw(a);
 
 					transform = fftCal.getToTransform();
 					publishProgress(transform);
