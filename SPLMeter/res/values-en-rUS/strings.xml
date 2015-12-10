@@ -55,7 +55,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="Community_contribution">Community contribution</string>
     <string name="share_detail1">I am involving citizen sound environment sense program. Current noise level is </string>
     <string name="share_detail2">Let’s participated together. The tool can be downloaded from </string>
-    <string name="already_copy">Saved to the clipboard, open your social applications to share with friends.</string>
+    <string name="already_copy">Saved to the clipboard, open your social applications to share with friends</string>
     <string name="shareing">Sharing. . .</string>
     <string name="share_fail">Failed! Make sure Internet connected or try again later.</string>
     <string name="sound_level">Sound level:</string>

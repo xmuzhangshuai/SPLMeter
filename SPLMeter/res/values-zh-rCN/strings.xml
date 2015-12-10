@@ -56,7 +56,7 @@
     <string name="Community_contribution">群体贡献</string>
     <string name="share_detail1">我正在参与公众声环境感知项目。目前身边噪声值为</string>
     <string name="share_detail2">快来和我一起参加吧。参与工具下载地址</string>
-    <string name="already_copy">已复制到剪贴板，启动应用分享吧。</string>
+    <string name="already_copy">已复制到剪贴板，启动应用分享吧</string>
     <string name="shareing">结果分享中. . .</string>
     <string name="share_fail">分享失败！请保障网络畅通或稍后再试</string>
     <string name="sound_level">声音的大小:</string>
