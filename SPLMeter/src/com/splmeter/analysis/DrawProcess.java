@@ -2,8 +2,6 @@ package com.splmeter.analysis;
 
 import java.util.ArrayList;
 
-import com.splmeter.utils.LogTool;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
