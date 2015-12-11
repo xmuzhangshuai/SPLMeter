@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import com.smallrhino.splmeter.R;
+
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -112,7 +114,7 @@ public class NetworkUtils {
 	 */
 	public static void networkStateTips(Context context) {
 		if (!isNetworkAvailable(context)) {
-			CommonTools.showShortToast(context, "网络故障，请先检查网络连接");
+			CommonTools.showShortToast(context, context.getResources().getString(R.string.network_fail));
 		}
 	}
 

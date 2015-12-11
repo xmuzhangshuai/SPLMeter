@@ -104,7 +104,7 @@ public class FFTSplCal {
 		int l = temp.length / 2 - 1;
 		short[] t = new short[l];
 		for (int i = 0; i < l; i++) {
-			t[i] = (short) ((temp[i + 1] * 10) / 10);
+			t[i] = (short) (((temp[i + 1] * 10) / 10)-35);
 		}
 		return t;
 	}

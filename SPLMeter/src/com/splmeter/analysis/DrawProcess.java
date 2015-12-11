@@ -36,7 +36,7 @@ public class DrawProcess {
 		//设置画笔属性
 		mPaint = new Paint();
 		mPaint.setColor(Color.argb(255, 7, 251, 251));
-		mPaint.setStrokeWidth(2);
+		mPaint.setStrokeWidth(1);
 		mPaint.setAntiAlias(true);
 	}
 
@@ -78,7 +78,6 @@ public class DrawProcess {
 	}
 
 	private void SimpleDraw(int[] buffer, int baseLine) {
-		int max = buffer[1];
 		Canvas canvas = sfvSurfaceView.getHolder().lockCanvas(new Rect(0, 0, buffer.length, sfvSurfaceView.getHeight()));
 		canvas.drawColor(Color.BLACK);
 		canvas.save();
@@ -88,12 +87,8 @@ public class DrawProcess {
 		float y;
 		for (int i = 0; i < buffer.length; i = i + 1) {
 			y = (baseLine - buffer[i] * intervelH);
-			if (buffer[i] < max && buffer[i] != 0) {
-				max = buffer[i];
-			}
 			canvas.drawLine(i * intervelW + shift, baseLine, i * intervelW + shift, y, mPaint);
 		}
-		LogTool.e("----" + max);
 		sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 	}
 }

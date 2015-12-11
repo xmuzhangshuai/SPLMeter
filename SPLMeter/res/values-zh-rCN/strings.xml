@@ -62,6 +62,7 @@
     <string name="sound_level">声音的大小:</string>
     <string name="acoustic_comfort_level">声音的舒适度:</string>
     <string name="coordinated_level">声音与环境的协调度:</string>
+    <string name="network_fail">网络故障，请先检查网络连接</string>
 
     <array name="sound_levelGroup">
         <item>非常小</item>
