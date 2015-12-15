@@ -26,7 +26,10 @@ import com.umeng.update.UmengUpdateAgent;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -79,7 +82,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout abscissaLayout;// 横坐标
 	private LinearLayout ordinateLayout;// 纵坐标
 	private List<String> abscissaArray = new ArrayList<>();
-	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20", "0" };
+	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20" };
 
 	public static RequestParams resultParams;// 最终上传的结果
 	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
@@ -229,6 +232,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 * 横坐标和纵坐标
 	 */
 	private void initCoordinate() {
+		Paint dashPaint;
+		dashPaint = new Paint();
+		dashPaint.setStyle(Paint.Style.STROKE);
+		dashPaint.setColor(Color.GRAY);
+
 		abscissaArray.add("0");
 		for (int index = 64; index <= 512; index = index + 64) {
 			int value = Constants.RecordValue.FREQUENCY / 1024 * index;
@@ -242,7 +250,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			if (i == abscissaArray.size() - 1) {
 				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			} else {
-				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
+				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f));
+				textView.setPadding(0, 0, 20, 0);
 			}
 
 			textView.setText(abscissaArray.get(i));
@@ -254,6 +263,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			textView.setTextColor(Color.argb(255, 7, 251, 251));
 			textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
 			textView.setTextSize(10);
+			textView.setGravity(Gravity.TOP);
 			ordinateLayout.addView(textView);
 		}
 	}
@@ -520,9 +530,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 */
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
 				audioRecord.startRecording();
-				drawProcess.baseLine = sfv.getHeight() - 11;
+				drawProcess.baseLine = sfv.getHeight() - 13;
 				drawProcess.sfvWidth = sfv.getWidth();
 				drawProcess.sfvHeight = sfv.getHeight();
+				drawProcess.shift = (int) ordinateLayout.getX() - 5;
 
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];

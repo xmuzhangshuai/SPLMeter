@@ -112,30 +112,30 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	/**
 	 * 提示对话框
 	 */
-	private void showSuccessDialog() {
-		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
-		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
-		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
-		View.OnClickListener comfirm = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-			}
-		};
-		View.OnClickListener cancle = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-			}
-		};
-		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
-		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
-		myAlertDialog.show();
-	}
+//	private void showSuccessDialog() {
+//		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
+//		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
+//		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
+//		View.OnClickListener comfirm = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//			}
+//		};
+//		View.OnClickListener cancle = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//			}
+//		};
+//		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
+//		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
+//		myAlertDialog.show();
+//	}
 
 	/**
 	 * 上传数据
@@ -162,7 +162,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 					// TODO Auto-generated method stub
 					LogTool.i(statusCode + "===" + response);
 					MainActivity.shareFlag = 2;
-					showSuccessDialog();
+//					showSuccessDialog();
 				}
 
 				@Override
