@@ -11,7 +11,6 @@ import android.view.SurfaceView;
 public class DrawProcess {
 	//应该把处理前后处理后的普线都显示出来
 	private ArrayList<int[]> outBuf = new ArrayList<int[]>();//处理后的数据
-	public int shift = 0;
 
 	//y轴基线
 	public int baseLine = 0;
@@ -49,7 +48,7 @@ public class DrawProcess {
 		intervelW = (float) sfvWidth / length;
 		intervelH = (float) sfvHeight / 100;
 		backIntervelW = (float) sfvWidth / 8;
-		backIntervelH = (float) sfvHeight / 5;
+		backIntervelH = (float) sfvHeight / 6;
 
 		short[] tmpBuf = new short[length];
 		System.arraycopy(buffer, 0, tmpBuf, 0, length);
@@ -91,16 +90,16 @@ public class DrawProcess {
 		canvas.restore();
 
 		for (int index = 1; index < 10; index++) {
-			canvas.drawLine(shift + index * backIntervelW - 20, baseLine, shift + index * backIntervelW - 20, 20, dashPaint);
+			canvas.drawLine(index * backIntervelW, baseLine, index * backIntervelW, 20, dashPaint);
 			if (index < 6) {
-				canvas.drawLine(shift, baseLine - index * backIntervelH, sfvSurfaceView.getWidth(), baseLine - index * backIntervelH, dashPaint);
+				canvas.drawLine(0, baseLine - index * backIntervelH, sfvSurfaceView.getWidth(), baseLine - index * backIntervelH, dashPaint);
 			}
 		}
 
 		float y;
 		for (int i = 0; i < buffer.length; i = i + 1) {
 			y = (baseLine - buffer[i] * intervelH);
-			canvas.drawLine(i * intervelW + shift, baseLine, i * intervelW + shift, y, mPaint);
+			canvas.drawLine(i * intervelW, baseLine, i * intervelW, y, mPaint);
 		}
 		sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 	}

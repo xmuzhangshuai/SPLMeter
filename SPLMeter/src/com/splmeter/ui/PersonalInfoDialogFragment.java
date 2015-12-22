@@ -193,7 +193,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 			mainActivity.next_last(2);
 			break;
 		case R.id.next_btn:
-			mainActivity.stopSave();
+			mainActivity.stopRecord();
 			saveData();
 			uploadData();
 			this.dismiss();

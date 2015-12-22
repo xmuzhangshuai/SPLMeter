@@ -93,7 +93,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/sel_btn"
-            android:text="@string/last"
+            android:text="@string/giveup"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

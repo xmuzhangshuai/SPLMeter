@@ -173,33 +173,30 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/visualizeView_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/fs_container"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="13dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp" >
-
-            <SurfaceView
-                android:id="@+id/SurfaceView"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent" >
-            </SurfaceView>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/ordinate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_above="@+id/abscissa"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/fs_container"
-            android:paddingTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingTop="5dp" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/visualizeView_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/abscissa_view"
+            android:layout_below="@+id/fs_container"
+            android:layout_toRightOf="@+id/ordinate_view"
+            android:orientation="horizontal" >
+
+            <SurfaceView
+                android:id="@+id/SurfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </SurfaceView>
         </LinearLayout>
 
         <LinearLayout
@@ -221,8 +218,6 @@
             android:layout_height="1dp"
             android:layout_above="@+id/abscissa"
             android:layout_alignLeft="@+id/ordinate_view"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:background="@color/system_blue"
             android:orientation="horizontal" >
         </LinearLayout>

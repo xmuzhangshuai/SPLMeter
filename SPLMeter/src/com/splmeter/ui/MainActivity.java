@@ -26,10 +26,8 @@ import com.umeng.update.UmengUpdateAgent;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -38,7 +36,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -82,7 +79,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout abscissaLayout;// 横坐标
 	private LinearLayout ordinateLayout;// 纵坐标
 	private List<String> abscissaArray = new ArrayList<>();
-	private String[] ordinateArray = new String[] { "100", "80", "60", "40", "20" };
+	private String[] ordinateArray = new String[] { "120", "100", "80", "60", "40", "20" };
 
 	public static RequestParams resultParams;// 最终上传的结果
 	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
@@ -143,7 +140,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		stopSave();
+		stopRecord();
 		super.onDestroy();
 	}
 
@@ -263,7 +260,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			textView.setTextColor(Color.argb(255, 7, 251, 251));
 			textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
 			textView.setTextSize(10);
-			textView.setGravity(Gravity.TOP);
 			ordinateLayout.addView(textView);
 		}
 	}
@@ -425,6 +421,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 */
 	public void stopSave() {
 		saveFlag = 0;
+		timeList.clear();
+		earPhoneList.clear();
+		latitudeList.clear();
+		longtitudeList.clear();
+		accuracyList.clear();
+		altitudeList.clear();
+		splList.clear();
+	}
+
+	public void stopRecord() {
+		saveFlag = 0;
 		onFlag = 0;
 	}
 
@@ -530,10 +537,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 */
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
 				audioRecord.startRecording();
-				drawProcess.baseLine = sfv.getHeight() - 13;
+				drawProcess.baseLine = sfv.getHeight();
 				drawProcess.sfvWidth = sfv.getWidth();
 				drawProcess.sfvHeight = sfv.getHeight();
-				drawProcess.shift = (int) ordinateLayout.getX() - 5;
 
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
