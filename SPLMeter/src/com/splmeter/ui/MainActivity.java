@@ -248,7 +248,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			} else {
 				textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f));
-				textView.setPadding(0, 0, 20, 0);
+				textView.setScrollX(15);
 			}
 
 			textView.setText(abscissaArray.get(i));

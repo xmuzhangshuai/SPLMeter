@@ -18,13 +18,13 @@ public class DrawProcess {
 	private SurfaceView sfvSurfaceView;
 	//画笔
 	private Paint mPaint;
-	private Paint dashPaint;
+//	private Paint dashPaint;
 	public int sfvWidth;
 	public int sfvHeight;
 	private float intervelW;
 	private float intervelH;
-	private float backIntervelW;
-	private float backIntervelH;
+//	private float backIntervelW;
+//	private float backIntervelH;
 
 	public DrawProcess(SurfaceView sfvSurfaceView) {
 		this.sfvSurfaceView = sfvSurfaceView;
@@ -38,17 +38,17 @@ public class DrawProcess {
 		mPaint.setColor(Color.argb(255, 7, 251, 251));
 		mPaint.setStrokeWidth(1);
 		mPaint.setAntiAlias(true);
-		dashPaint = new Paint();
-		dashPaint.setStyle(Paint.Style.STROKE);
-		dashPaint.setColor(Color.GRAY);
+//		dashPaint = new Paint();
+//		dashPaint.setStyle(Paint.Style.STROKE);
+//		dashPaint.setColor(Color.GRAY);
 	}
 
 	public void draw(short[] buffer) {
 		int length = buffer.length;
 		intervelW = (float) sfvWidth / length;
 		intervelH = (float) sfvHeight / 100;
-		backIntervelW = (float) sfvWidth / 8;
-		backIntervelH = (float) sfvHeight / 6;
+//		backIntervelW = (float) sfvWidth / 8;
+//		backIntervelH = (float) sfvHeight / 6;
 
 		short[] tmpBuf = new short[length];
 		System.arraycopy(buffer, 0, tmpBuf, 0, length);
@@ -89,12 +89,12 @@ public class DrawProcess {
 		canvas.rotate(-60, sfvSurfaceView.getWidth() - 1, baseLine);
 		canvas.restore();
 
-		for (int index = 1; index < 10; index++) {
-			canvas.drawLine(index * backIntervelW, baseLine, index * backIntervelW, 20, dashPaint);
-			if (index < 6) {
-				canvas.drawLine(0, baseLine - index * backIntervelH, sfvSurfaceView.getWidth(), baseLine - index * backIntervelH, dashPaint);
-			}
-		}
+//		for (int index = 1; index < 10; index++) {
+//			canvas.drawLine(index * backIntervelW, baseLine, index * backIntervelW, 20, dashPaint);
+//			if (index < 6) {
+//				canvas.drawLine(0, baseLine - index * backIntervelH, sfvSurfaceView.getWidth(), baseLine - index * backIntervelH, dashPaint);
+//			}
+//		}
 
 		float y;
 		for (int i = 0; i < buffer.length; i = i + 1) {
