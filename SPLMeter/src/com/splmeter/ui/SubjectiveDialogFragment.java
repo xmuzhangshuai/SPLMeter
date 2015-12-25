@@ -1,6 +1,7 @@
 package com.splmeter.ui;
 
 import com.smallrhino.splmeter.R;
+import com.splmeter.utils.LogTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -90,7 +91,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	}
 
 	private void saveResult() {
-		MainActivity.resultParams.put("asmt", "" + (seekBarSoundsize.getProgress() - 2) + "," + (seekBarComfortlevel.getProgress() - 2) + "," + (seekBarHarmony.getProgress() - 2));
+		MainActivity.resultParams.put("asmt",
+				"" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
+		LogTool.e("-----" + "" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
 	}
 
 	@Override
@@ -99,7 +102,6 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
-
 			mainActivity.next_last(1);
 			break;
 		case R.id.next_btn:
@@ -115,13 +117,14 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		// TODO Auto-generated method stub
+		int p = progress / 10;
 		nextBtn.setEnabled(true);
 		if (seekBar == seekBarSoundsize) {
-			sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level) + soundLevles[progress]);
+			sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level) + soundLevles[p]);
 		} else if (seekBar == seekBarComfortlevel) {
-			comfort_levelText.setText(mainActivity.getResources().getString(R.string.acoustic_comfort_level) + comfortLevels[progress]);
+			comfort_levelText.setText(mainActivity.getResources().getString(R.string.acoustic_comfort_level) + comfortLevels[p]);
 		} else if (seekBar == seekBarHarmony) {
-			coordinated_levelText.setText(mainActivity.getResources().getString(R.string.coordinated_level) + coordiantedLevels[progress]);
+			coordinated_levelText.setText(mainActivity.getResources().getString(R.string.coordinated_level) + coordiantedLevels[p]);
 		}
 	}
 

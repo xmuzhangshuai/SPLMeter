@@ -111,6 +111,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
 
 		MainActivity.shareFlag = 2;
+		MainActivity.startOrEva = 0;
 		mainActivity.refresh();
 	}
 

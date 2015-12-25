@@ -51,8 +51,7 @@
     <string name="basic_frequency">主频</string>
     <string name="hz">赫兹</string>
     <string name="infoTitle">提示</string>
-    <string name="share_success">分享成功！来看一下群体贡献吧。
-您的参与将有助于我们对城市声环境的研究更加透彻。我们不会泄漏您的任何隐私。您分享了哪些信息，请在设置中查看帮助说明。</string>
+    <string name="share_success">分享成功！\n您的参与将有助于我们对城市声环境的研究更加透彻。我们不会泄漏您的任何隐私。您分享了哪些信息，请在设置中查看帮助说明。</string>
     <string name="Community_contribution">群体贡献</string>
     <string name="share_detail1">我正在参与公众声环境感知项目。目前身边噪声值为</string>
     <string name="share_detail2">快来和我一起参加吧。参与工具下载地址</string>

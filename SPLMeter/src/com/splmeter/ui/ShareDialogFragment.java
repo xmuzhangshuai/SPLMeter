@@ -165,6 +165,10 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 		mainActivity.saveData();
 		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+		
+		MainActivity.shareFlag = 2;
+		MainActivity.startOrEva = 0;
+		mainActivity.refresh();
 	}
 
 	/**

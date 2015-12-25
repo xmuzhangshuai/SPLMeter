@@ -115,30 +115,30 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 提示对话框
 	 */
-	private void showAboutDialog() {
-		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
-		myAlertDialog.setTitle(this.getResources().getString(R.string.about));
-		myAlertDialog.setMessage(getVersion());
-		View.OnClickListener comfirm = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-			}
-		};
-		View.OnClickListener cancle = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-			}
-		};
-		myAlertDialog.setPositiveButton(this.getResources().getString(R.string.confirm), comfirm);
-		myAlertDialog.setNegativeButton(this.getResources().getString(R.string.cancel), cancle);
-		myAlertDialog.show();
-	}
+//	private void showAboutDialog() {
+//		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
+//		myAlertDialog.setTitle(this.getResources().getString(R.string.about));
+//		myAlertDialog.setMessage(getVersion());
+//		View.OnClickListener comfirm = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//			}
+//		};
+//		View.OnClickListener cancle = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//			}
+//		};
+//		myAlertDialog.setPositiveButton(this.getResources().getString(R.string.confirm), comfirm);
+//		myAlertDialog.setNegativeButton(this.getResources().getString(R.string.cancel), cancle);
+//		myAlertDialog.show();
+//	}
 
 	/**
 	 * 获取版本号
@@ -168,7 +168,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.about:
-			showAboutDialog();
+			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://www.citi-sense.cn/pss.html").putExtra("title", ""));
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.help:
 			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://www.citi-sense.cn/splmeter_help.html").putExtra("title", ""));

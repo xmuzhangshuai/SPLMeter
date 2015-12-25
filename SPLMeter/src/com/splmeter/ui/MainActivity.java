@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Button settingBtn;
 	private Button startBtn;
 	private Button shareBtn;
-	private int flag = 0;
+	//	private int flag = 0;
 	private TextView currentValue;
 	private FFTSplCal fftCal;
 	private RecordAudio recordTask;
@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
 	public static int currentPage = 1;//是否为当前页面
+	public static int startOrEva = 0;//0为开始，1为评价
 	AudioManager mAudioManager;
 	boolean isExit;
 
@@ -394,15 +395,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.start_btn:
-			flag++;
-			if (flag % 2 == 0) {// 评价
+			if (startOrEva == 1) {// 评价
 				saveFlag = 1;
-				startBtn.setBackgroundResource(R.drawable.sel_btn);
-				startBtn.setText(R.string.on);
 				next_last(1);
 			} else {// 开始
 				saveFlag = 0;
 				onFlag = 1;
+				startOrEva = 1;
+				shareFlag = 0;
+				shareBtn.setEnabled(false);
 				timeList.clear();
 				maxLpa = 0;
 				mainFrenquency = 0;
@@ -499,6 +500,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public void saveData() {
+		startOrEva = 0;
+		startBtn.setBackgroundResource(R.drawable.sel_btn);
+		startBtn.setText(R.string.on);
+
 		JSONArray timeArray = new JSONArray(timeList);
 		resultParams.put("time", timeArray.toString());
 		JSONArray longtitudeArray = new JSONArray(longtitudeList);
@@ -517,16 +522,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		Collections.sort(splList);
 		Collections.reverse(splList);
 		int length = splList.size();
-		float L10 = splList.get(length / 10);
-		float L50 = splList.get(length / 2);
-		float L90 = splList.get(length * 9 / 10);
-		float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
-		currentValue.setText("" + Laeq);//修改主界面值
+		if (length > 0) {
+			float L10 = splList.get(length / 10);
+			float L50 = splList.get(length / 2);
+			float L90 = splList.get(length * 9 / 10);
+			float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
+			currentValue.setText("" + Laeq);//修改主界面值
 
-		resultParams.put("L10", L10);
-		resultParams.put("L50", L50);
-		resultParams.put("L90", L90);
-		resultParams.put("Laeq", Laeq);
+			resultParams.put("L10", L10);
+			resultParams.put("L50", L50);
+			resultParams.put("L90", L90);
+			resultParams.put("Laeq", Laeq);
+		}
+
 		resultParams.put("mainF", mainFrenquency);
 		resultParams.put("maxLpa", maxLpa);
 	}

@@ -51,8 +51,8 @@
                 android:id="@+id/seekBar_soundsize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="4"
-                android:progress="2"
+                android:max="49"
+                android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
 
@@ -69,8 +69,8 @@
                 android:id="@+id/seekBar_comfortlevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="4"
-                android:progress="2"
+               android:max="49"
+                android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
 
@@ -87,8 +87,8 @@
                 android:id="@+id/seekBar_harmony"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="4"
-                android:progress="2"
+               android:max="49"
+                android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
         </LinearLayout>
