@@ -19,6 +19,7 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -129,12 +130,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		// 室内室外
-		if (sharePreferenceUtil.getInOutDoor() == 0) {
-			doorLabel.setText(getResources().getString(R.string.outdoor));
-		} else {
-			doorLabel.setText(getResources().getString(R.string.indoor));
-		}
+		refresh();
 	}
 
 	@Override
@@ -192,6 +188,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
 	}
 
+	public void refresh() {
+		// 室内室外
+		if (sharePreferenceUtil.getInOutDoor() == 0) {
+			doorLabel.setText(getResources().getString(R.string.outdoor));
+		} else {
+			doorLabel.setText(getResources().getString(R.string.indoor));
+		}
+
+		if (shareFlag == 0) {
+			shareBtn.setEnabled(false);
+		} else {
+			shareBtn.setEnabled(true);
+		}
+	}
+
 	/**
 	 * 按两次返回键退出
 	 */
@@ -208,7 +219,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void exit() {
 		if (!isExit) {
 			isExit = true;
-			CommonTools.showShortToast(getBaseContext(), "再按一次退出程序");
+			CommonTools.showShortToast(getBaseContext(), CommonTools.isZh(MainActivity.this) ? "再按一次退出程序" : "Click again to exit the program");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
 			// close();
@@ -509,13 +520,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		float L50 = splList.get(length / 2);
 		float L90 = splList.get(length * 9 / 10);
 		float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
+		currentValue.setText("" + Laeq);//修改主界面值
+
 		resultParams.put("L10", L10);
 		resultParams.put("L50", L50);
 		resultParams.put("L90", L90);
 		resultParams.put("Laeq", Laeq);
 		resultParams.put("mainF", mainFrenquency);
 		resultParams.put("maxLpa", maxLpa);
-		currentValue.setText("" + Laeq);
 	}
 
 	/**

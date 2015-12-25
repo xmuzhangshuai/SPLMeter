@@ -172,7 +172,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			showAboutDialog();
 			break;
 		case R.id.help:
-			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://smallrhino.net").putExtra("title", "小犀牛"));
+			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://www.citi-sense.cn/splmeter_help.html").putExtra("title", ""));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.check_update:

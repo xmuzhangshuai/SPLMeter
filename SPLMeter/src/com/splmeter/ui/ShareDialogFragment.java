@@ -11,8 +11,8 @@ import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
+import com.splmeter.utils.NetworkUtils;
 import com.splmeter.utils.SharePreferenceUtil;
-import com.splmeter.utils.ToastTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -159,47 +159,54 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 		myAlertDialog.show();
 	}
 
+	private void saveData() {
+		MainActivity.resultParams.put("gender", sharePreferenceUtil.getGender());
+		MainActivity.resultParams.put("age", sharePreferenceUtil.getAgeGroup() + 1);
+		mainActivity.saveData();
+		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
+		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+	}
+
 	/**
 	 * 上传数据
 	 */
 	private void uploadData() {
+		if (NetworkUtils.isNetworkAvailable(getActivity())) {
+			final ProgressDialog dialog = new ProgressDialog(getActivity());
+			dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
 
-		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
-		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-		mainActivity.saveData();
-		LogTool.i("--------" + MainActivity.resultParams.toString());
-		final ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog.show();
+				}
 
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				dialog.show();
-			}
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					LogTool.i(statusCode + "===" + response);
+					showSuccessDialog();
+				}
 
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String response) {
-				// TODO Auto-generated method stub
-				LogTool.i(statusCode + "===" + response);
-				showSuccessDialog();
-			}
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("ReportSPLValue服务器错误" + errorResponse);
+				}
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-				// TODO Auto-generated method stub
-				LogTool.e("ReportSPLValue服务器错误" + errorResponse);
-			}
-
-			@Override
-			public void onFinish() {
-				// TODO Auto-generated method stub
-				super.onFinish();
-				dialog.dismiss();
-			}
-		};
-		AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					super.onFinish();
+					dialog.dismiss();
+				}
+			};
+			AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+		} else {
+			CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
+		}
 	}
 
 	@Override
@@ -211,10 +218,10 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 			if (MainActivity.shareFlag == 0) {
 				LogTool.e("必须先测试！");
 			} else if (MainActivity.shareFlag == 1) {
+				saveData();
 				uploadData();
 			} else if (MainActivity.shareFlag == 2) {
 				LogTool.e("已经分享过！");
-				ToastTool.showShort(getActivity(), "已经分享过！");
 			}
 			break;
 		case R.id.share_sina:

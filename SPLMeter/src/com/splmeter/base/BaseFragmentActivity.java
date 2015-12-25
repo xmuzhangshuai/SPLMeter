@@ -46,16 +46,16 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		}
 	};
 	//监听网络状态
-	private BroadcastReceiver netBroadCastReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			if (!NetworkUtils.isNetworkAvailable(BaseFragmentActivity.this)) {
-				NetworkUtils.networkStateTips(BaseFragmentActivity.this);
-			}
-		}
-	};
+//	private BroadcastReceiver netBroadCastReceiver = new BroadcastReceiver() {
+//
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			// TODO Auto-generated method stub
+//			if (!NetworkUtils.isNetworkAvailable(BaseFragmentActivity.this)) {
+//				NetworkUtils.networkStateTips(BaseFragmentActivity.this);
+//			}
+//		}
+//	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("close");
 		registerReceiver(this.broadcastReceiver, filter); // 注册  
-		getActionBar().setDisplayShowHomeEnabled(false);
+//		getActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	/** 
@@ -91,9 +91,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onPause();
 		// 卸载广播
-		if (netBroadCastReceiver != null) {
-			BaseFragmentActivity.this.unregisterReceiver(netBroadCastReceiver);
-		}
+//		if (netBroadCastReceiver != null) {
+//			BaseFragmentActivity.this.unregisterReceiver(netBroadCastReceiver);
+//		}
 
 		// 友盟统计
 		MobclickAgent.onPause(this);
@@ -104,9 +104,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		// 注册广播
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		BaseFragmentActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
+//		IntentFilter intentFilter = new IntentFilter();
+//		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//		BaseFragmentActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
 
 		// 友盟统计
 		MobclickAgent.onResume(this);

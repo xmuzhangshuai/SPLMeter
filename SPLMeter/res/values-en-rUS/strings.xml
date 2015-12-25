@@ -29,7 +29,7 @@
     <string name="assessment">Please evaluate your hearing sound</string>
     <string name="drag_to_ass">（Drag slider to evaluate）</string>
     <string name="person_info">Briefly describe yourself</string>
-    <string name="age">Age：</string>
+    <string name="age">Age Group：</string>
     <string name="done">Confirm</string>
     <string name="gender">Gender：</string>
     <string name="male">Male</string>

@@ -42,16 +42,16 @@ public abstract class BaseActivity extends Activity {
 	};
 
 	// 监听网络状态
-	private BroadcastReceiver netBroadCastReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			if (!NetworkUtils.isNetworkAvailable(BaseActivity.this)) {
-				NetworkUtils.networkStateTips(BaseActivity.this);
-			}
-		}
-	};
+//	private BroadcastReceiver netBroadCastReceiver = new BroadcastReceiver() {
+//
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			// TODO Auto-generated method stub
+//			if (!NetworkUtils.isNetworkAvailable(BaseActivity.this)) {
+//				NetworkUtils.networkStateTips(BaseActivity.this);
+//			}
+//		}
+//	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public abstract class BaseActivity extends Activity {
 		filter.addAction("close");
 		registerReceiver(this.broadcastReceiver, filter); // 注册
 		
-		getActionBar().setDisplayShowHomeEnabled(false);
+//		getActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	/** 
@@ -90,9 +90,9 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onPause();
 		// 卸载广播
-		if (netBroadCastReceiver != null) {
-			BaseActivity.this.unregisterReceiver(netBroadCastReceiver);
-		}
+//		if (netBroadCastReceiver != null) {
+//			BaseActivity.this.unregisterReceiver(netBroadCastReceiver);
+//		}
 
 		// 友盟统计
 		MobclickAgent.onPageEnd(this.getClass().getName());// 统计页面
@@ -104,9 +104,9 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		// 注册广播
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		BaseActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
+//		IntentFilter intentFilter = new IntentFilter();
+//		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//		BaseActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
 
 		// 友盟统计
 		MobclickAgent.onPageStart(this.getClass().getCanonicalName());// 统计页面

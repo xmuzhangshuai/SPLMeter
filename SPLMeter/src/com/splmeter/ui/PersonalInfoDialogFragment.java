@@ -5,12 +5,11 @@ import org.apache.http.Header;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseApplication;
-import com.splmeter.customewidget.MyAlertDialog;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
+import com.splmeter.utils.NetworkUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Dialog;
@@ -107,78 +106,85 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		sharePreferenceUtil.setGender(gender);
 		MainActivity.resultParams.put("gender", gender);
 		MainActivity.resultParams.put("age", age);
+		mainActivity.saveData();
+		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
+		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+
+		MainActivity.shareFlag = 2;
+		mainActivity.refresh();
 	}
 
 	/**
 	 * 提示对话框
 	 */
-//	private void showSuccessDialog() {
-//		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
-//		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
-//		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
-//		View.OnClickListener comfirm = new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				myAlertDialog.dismiss();
-//			}
-//		};
-//		View.OnClickListener cancle = new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				myAlertDialog.dismiss();
-//			}
-//		};
-//		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
-//		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
-//		myAlertDialog.show();
-//	}
+	//	private void showSuccessDialog() {
+	//		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
+	//		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
+	//		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
+	//		View.OnClickListener comfirm = new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View v) {
+	//				// TODO Auto-generated method stub
+	//				myAlertDialog.dismiss();
+	//			}
+	//		};
+	//		View.OnClickListener cancle = new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View v) {
+	//				// TODO Auto-generated method stub
+	//				myAlertDialog.dismiss();
+	//			}
+	//		};
+	//		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
+	//		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
+	//		myAlertDialog.show();
+	//	}
 
 	/**
 	 * 上传数据
 	 */
 	private void uploadData() {
 		if (sharePreferenceUtil.getAutoShare()) {
-			MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
-			MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-			mainActivity.saveData();
-			LogTool.i("--------" + MainActivity.resultParams.toString());
-			final ProgressDialog dialog = new ProgressDialog(getActivity());
-			dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
+			if (NetworkUtils.isNetworkAvailable(getActivity())) {
+				final ProgressDialog dialog = new ProgressDialog(getActivity());
+				dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
 
-			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-				@Override
-				public void onStart() {
-					// TODO Auto-generated method stub
-					super.onStart();
-					dialog.show();
-				}
+				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+					@Override
+					public void onStart() {
+						// TODO Auto-generated method stub
+						super.onStart();
+						dialog.show();
+					}
 
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, String response) {
-					// TODO Auto-generated method stub
-					LogTool.i(statusCode + "===" + response);
-					MainActivity.shareFlag = 2;
-//					showSuccessDialog();
-				}
+					@Override
+					public void onSuccess(int statusCode, Header[] headers, String response) {
+						// TODO Auto-generated method stub
+						LogTool.i(statusCode + "===" + response);
 
-				@Override
-				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-					// TODO Auto-generated method stub
-					LogTool.e("ReportSPLValue服务器错误" + errorResponse);
-				}
+						//						showSuccessDialog();
+					}
 
-				@Override
-				public void onFinish() {
-					// TODO Auto-generated method stub
-					super.onFinish();
-					dialog.dismiss();
-				}
-			};
-			AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+					@Override
+					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+						// TODO Auto-generated method stub
+						LogTool.e("ReportSPLValue服务器错误" + errorResponse);
+					}
+
+					@Override
+					public void onFinish() {
+						// TODO Auto-generated method stub
+						super.onFinish();
+						dialog.dismiss();
+					}
+				};
+				AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+			} else {
+				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
+			}
+
 		} else {
 			MainActivity.shareFlag = 1;
 		}
