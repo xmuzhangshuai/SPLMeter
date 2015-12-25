@@ -1,5 +1,6 @@
 package com.splmeter.base;
 
+import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.dao.DaoMaster;
 import com.splmeter.dao.DaoMaster.OpenHelper;
 import com.splmeter.dao.DaoSession;
@@ -7,6 +8,8 @@ import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Application;
 import android.content.Context;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 
 /**   
  *    

@@ -61,16 +61,6 @@ public class SharePreferenceUtil {
 		editor.commit();
 	}
 
-	// 语言
-	public String getLanguage() {
-		return sp.getString("Language", "zh");
-	}
-
-	public void setLanguage(String Language) {
-		editor.putString("Language", Language);
-		editor.commit();
-	}
-
 	// 校准
 	public float getCalibration() {
 		return sp.getFloat("Calibration", 0f);
@@ -93,7 +83,7 @@ public class SharePreferenceUtil {
 
 	// 主页参与人数提示
 	public String getMainLabelTextCN() {
-		return sp.getString("mainLabelTextCN", "赶紧看一下您周边的噪声污染水平吧，点击“开始”进行。");
+		return sp.getString("mainLabelTextCN", "");
 	}
 
 	public void setMainLabelTextCN(String mainLabelText) {
@@ -102,7 +92,7 @@ public class SharePreferenceUtil {
 	}
 
 	public String getMainLabelTextEN() {
-		return sp.getString("mainLabelTextEN", "Press the “Open” to start");
+		return sp.getString("mainLabelTextEN", "");
 	}
 
 	public void setMainLabelTextEN(String mainLabelText) {

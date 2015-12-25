@@ -87,8 +87,8 @@ public class CommonTools {
 	 */
 	public static boolean isZh(Context context) {
 		Locale locale = context.getResources().getConfiguration().locale;
-		String language = locale.getLanguage();
-		if (language.endsWith("zh"))
+		String language = locale.getCountry();
+		if (language.equals("CN"))
 			return true;
 		else
 			return false;

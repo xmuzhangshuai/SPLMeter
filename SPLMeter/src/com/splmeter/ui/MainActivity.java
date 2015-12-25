@@ -19,7 +19,6 @@ import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -86,13 +85,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
+	public static int currentPage = 1;//是否为当前页面
 	AudioManager mAudioManager;
 	boolean isExit;
 
 	SurfaceView sfv; // 绘图所用
 	DrawProcess drawProcess;// 处理
 	private int uploadMaxsize = 100;// 上传主频对的最大数
-	AudioRecord audioRecord;
 	private LocationTool locationTool;
 	private float maxLpa, mainFrenquency;
 	private List<String> timeList;
@@ -201,6 +200,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		} else {
 			shareBtn.setEnabled(true);
 		}
+		currentPage = 1;
 	}
 
 	/**
@@ -388,6 +388,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.setting_btn:
+			currentPage = 0;
 			Intent intent = new Intent(MainActivity.this, SettingActivity.class);
 			startActivity(intent);
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -535,19 +536,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 * @author lzjing
 	 *
 	 */
-	private class RecordAudio extends AsyncTask<Void, float[], Void> {
+	private class RecordAudio extends AsyncTask<Void, short[], Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				float[] transform;
 				int bufferSize = AudioRecord.getMinBufferSize(RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING);
 				/*
 				 * 关于采样的注释： audioSource音频源，此参数的值为MIC
 				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
-				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING, bufferSize);
+				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
+						bufferSize);
 				audioRecord.startRecording();
 				drawProcess.baseLine = sfv.getHeight();
 				drawProcess.sfvWidth = sfv.getWidth();
@@ -562,10 +563,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					fftCal.transBuffer(bufferReadResult, buffer);
 
 					short[] a = fftCal.getFrequencyAndSPL();
-					drawProcess.draw(a);
 
-					transform = fftCal.getToTransform();
-					publishProgress(transform);
+					publishProgress(a);
 				}
 				if (audioRecord != null) {
 					// 停止并且释放声音设备
@@ -578,8 +577,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			return null;
 		}
 
-		protected void onProgressUpdate(float[]... transform) {
-			if (onFlag == 1) {
+		protected void onProgressUpdate(short[]... transform) {
+			if (currentPage == 1) {
+				drawProcess.draw(transform[0]);
+
 				SPLBo splBo = new SPLBo();
 				splBo = fftCal.getSPL();
 				double splValue = splBo.getSPLValue();
