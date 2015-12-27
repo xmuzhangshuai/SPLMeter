@@ -5,7 +5,7 @@ import android.media.AudioFormat;
 public class Constants {
 
 	// 是否处于开发模式
-	public static final boolean DEVELOPER_MODE = true;
+	public static final boolean DEVELOPER_MODE = false;
 	//域名或者是IP
 	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
 

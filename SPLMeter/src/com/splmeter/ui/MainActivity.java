@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.DrawProcess;
 import com.splmeter.analysis.FFTSplCal;
@@ -16,9 +20,11 @@ import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LocationTool;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -186,6 +192,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		initCoordinate();
 
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
+		getTips();
 	}
 
 	public void refresh() {
@@ -628,4 +635,39 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 首页的提示
+	 */
+	public void getTips() {
+		RequestParams params = new RequestParams();
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				LogTool.i(statusCode + "===" + response);
+				try {
+					JSONObject j1 = new JSONObject(response);
+					String data = j1.getString("data");
+					JSONObject j2 = new JSONObject(data);
+					String t_tiptxt_en = j2.getString("t_tiptxt_en");
+					String t_tiptxt_cn = j2.getString("t_tiptxt_cn");
+					sharePreferenceUtil.setMainLabelTextCN(t_tiptxt_cn);
+					sharePreferenceUtil.setMainLabelTextEN(t_tiptxt_en);
+					tips.setText(CommonTools.isZh(MainActivity.this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("getTips服务器错误" + errorResponse);
+
+			}
+		};
+		AsyncHttpClientTool.get("GetTips", params, responseHandler);
+	}
 }
