@@ -7,7 +7,7 @@
     <string name="outdoor">Outdoor</string>
     <string name="dBCaption">dB(A)</string>
     <string name="standard">Classification</string>
-    <string name="fs_analysis">Frequency analysis</string>
+    <string name="fs_analysis">Freq analysis</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">OK</string>
     <string name="on">Start</string>
@@ -15,7 +15,7 @@
     <string name="share">Share</string>
     <string name="modeCaption">Mode:</string>
     <string name="calibrate">Calibrated value:</string>
-    <string name="share_label1">Agree to share measurements to scientists</string>
+    <string name="share_label1">Agree to share results to scientists</string>
     <string name="share_label2">To be a citizen scientist, contribute your own power for scientist research.</string>
     <string name="help">Help and instructions</string>
     <string name="check_update">Check for update</string>
@@ -53,14 +53,14 @@
     <string name="share_success">Successful!\n
 The shared results will help us to study more thoroughly on the urban sound environment. Your privacy is safe. You can find what you shared in help and instruction in the option page.</string>
     <string name="Community_contribution">Community contribution</string>
-    <string name="share_detail1">I am involving citizen sound environment sense program. Current noise level is </string>
-    <string name="share_detail2">Let’s participated together. The tool can be downloaded from </string>
+    <string name="share_detail1">I am involving participatory soundscape sensing program. Current noise level is </string>
+    <string name="share_detail2">The tool can be downloaded from </string>
     <string name="already_copy">Saved to the clipboard, open your social applications to share with friends</string>
     <string name="shareing">Sharing. . .</string>
     <string name="share_fail">Failed! Make sure Internet connected or try again later.</string>
     <string name="sound_level">Sound level:</string>
     <string name="acoustic_comfort_level">Acoustic comfort level:</string>
-    <string name="coordinated_level">Coordinated level(sound&amp;environment):</string>
+    <string name="coordinated_level">Harmonious level(sound&amp;environment):</string>
     <string name="network_fail">Network failure, please check the network connection</string>
     <string name="giveup">Give up</string>
 
@@ -79,11 +79,11 @@ The shared results will help us to study more thoroughly on the urban sound envi
         <item>very comfortable</item>
     </array>
     <array name="coordinated_levelGroup">
-        <item>very uncoordinated</item>
-        <item>uncoordinated</item>
+        <item>very unharmonious</item>
+        <item>unharmonious</item>
         <item>moderate</item>
-        <item>coordinated</item>
-        <item>very coordinated</item>
+        <item>harmonious</item>
+        <item>very harmonious</item>
     </array>
     <array name="levelGroup">
         <item>Very quiet</item>

@@ -15,7 +15,7 @@
     <string name="share">分享</string>
     <string name="modeCaption">模式： </string>
     <string name="calibrate">校准：</string>
-    <string name="share_label1">自愿将结果分享给科学家</string>
+    <string name="share_label1">自愿将测量结果分享给科学家</string>
     <string name="share_label2">成为公众科学家，为科学家研究贡献自己的力量</string>
     <string name="help">帮助说明</string>
     <string name="check_update">检查更新</string>
@@ -53,14 +53,14 @@
     <string name="infoTitle">提示</string>
     <string name="share_success">分享成功！\n您的参与将有助于我们对城市声环境的研究更加透彻。我们不会泄漏您的任何隐私。您分享了哪些信息，请在设置中查看帮助说明。</string>
     <string name="Community_contribution">群体贡献</string>
-    <string name="share_detail1">我正在参与公众声环境感知项目。目前身边噪声值为</string>
+    <string name="share_detail1">我正在参与公众声声景感知项目。目前身边噪声值为</string>
     <string name="share_detail2">快来和我一起参加吧。参与工具下载地址</string>
     <string name="already_copy">已复制到剪贴板，启动应用分享吧</string>
     <string name="shareing">结果分享中. . .</string>
     <string name="share_fail">分享失败！请保障网络畅通或稍后再试</string>
-    <string name="sound_level">声音的大小:</string>
-    <string name="acoustic_comfort_level">声音的舒适度:</string>
-    <string name="coordinated_level">声音与环境的协调度:</string>
+    <string name="sound_level">大小:</string>
+    <string name="acoustic_comfort_level">舒适度:</string>
+    <string name="coordinated_level">协调度:</string>
     <string name="network_fail">网络故障，请先检查网络连接</string>
     <string name="giveup">放弃</string>
 
