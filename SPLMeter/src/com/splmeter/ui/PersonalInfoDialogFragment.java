@@ -181,7 +181,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 						dialog.dismiss();
 					}
 				};
-				AsyncHttpClientTool.post("ReportSPLValue", MainActivity.resultParams, responseHandler);
+				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
 			} else {
 				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
 			}

@@ -56,7 +56,7 @@ public class ServerUtils {
 
 			}
 		};
-		AsyncHttpClientTool.post("ReportUserState", params, responseHandler);
+		AsyncHttpClientTool.post("?m=Home&a=ReportUserState", params, responseHandler);
 	}
 
 	/**
@@ -95,6 +95,6 @@ public class ServerUtils {
 
 			}
 		};
-		AsyncHttpClientTool.get("GetSoundSource", params, responseHandler);
+		AsyncHttpClientTool.post("?m=Home&a=GetSoundSource", params, responseHandler);
 	}
 }

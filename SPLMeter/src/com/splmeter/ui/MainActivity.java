@@ -668,6 +668,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			}
 		};
-		AsyncHttpClientTool.get("GetTips", params, responseHandler);
+		AsyncHttpClientTool.post("?m=Home&a=GetTips", params, responseHandler);
 	}
 }

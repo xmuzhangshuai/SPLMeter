@@ -7,7 +7,7 @@ public class Constants {
 	// 是否处于开发模式
 	public static final boolean DEVELOPER_MODE = false;
 	//域名或者是IP
-	public static String AppliactionServerDomain = "http://120.25.84.123/Noise/";
+	public static String AppliactionServerDomain = "http://www.citi-sense.cn/Noise/";
 
 	//下载地址
 	public static String DownLoadPath = "http://www.citi-sense.cn/download/";

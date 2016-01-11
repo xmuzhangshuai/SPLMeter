@@ -21,10 +21,12 @@ public class AsyncHttpClientTool {
 	}
 
 	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+		params.put("token", "dq3421bswikwb52jp0sa34hmdltwq1fb");
 		client.post(getAbsoluteUrl(url), params, responseHandler);
 	}
 
 	public static void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+		params.put("token", "dq3421bswikwb52jp0sa34hmdltwq1fb");
 		client.post(context, getAbsoluteUrl(url), params, responseHandler);
 	}
 
