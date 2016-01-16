@@ -476,8 +476,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		if (longtitudeList.size() < uploadMaxsize) {
 			longtitudeList.add((float) locationTool.getLongitude());
 			latitudeList.add((float) locationTool.getLongitude());
-			altitudeList.add((float) locationTool.getLongitude());
+			altitudeList.add((float) locationTool.getAltitude());
 			accuracyList.add((float) locationTool.getAccuracy());
+			LogTool.e("lng" + (float) locationTool.getLongitude());
+			LogTool.e("latitudeList" + (float) locationTool.getLongitude());
+			LogTool.e("altitudeList" + (float) locationTool.getAltitude());
+			LogTool.e("accuracyList" + (float) locationTool.getAccuracy());
 		} else {
 			longtitudeList.remove(0);
 			latitudeList.remove(0);

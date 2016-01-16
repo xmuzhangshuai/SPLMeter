@@ -3,7 +3,6 @@ package com.splmeter.ui;
 import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
-import com.splmeter.customewidget.MyAlertDialog;
 import com.splmeter.utils.SharePreferenceUtil;
 import com.splmeter.utils.ToastTool;
 import com.umeng.update.UmengUpdateAgent;
@@ -15,6 +14,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -100,6 +101,51 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 		shareCheckBox.setChecked(sharePreferenceUtil.getAutoShare());
 		clbEditText.setText("" + sharePreferenceUtil.getCalibration());
+
+		clbEditText.addTextChangedListener(new TextWatcher() {
+			private boolean isChanged = false;
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				if (isChanged) {// ----->如果字符未改变则返回      
+					return;
+				}
+				String str = s.toString();
+
+				isChanged = true;
+				String cuttedStr = str;
+				boolean flag = false;
+				/* 删除字符串中的dot */
+				for (int i = str.length() - 1; i >= 0; i--) {
+					char c = str.charAt(i);
+					if ('.' == c && i == str.length() - 3) {
+						cuttedStr = str.substring(0, i + 2);
+						if (cuttedStr.endsWith(".")) {
+							cuttedStr = cuttedStr.substring(0, i + 1);
+						}
+						flag = true;
+						break;
+					}
+				}
+				if (flag) {
+					clbEditText.setText(cuttedStr);
+				}
+				isChanged = false;
+			}
+		});
 	}
 
 	private void validateSetting() {
@@ -115,30 +161,30 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 提示对话框
 	 */
-//	private void showAboutDialog() {
-//		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
-//		myAlertDialog.setTitle(this.getResources().getString(R.string.about));
-//		myAlertDialog.setMessage(getVersion());
-//		View.OnClickListener comfirm = new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				myAlertDialog.dismiss();
-//			}
-//		};
-//		View.OnClickListener cancle = new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				myAlertDialog.dismiss();
-//			}
-//		};
-//		myAlertDialog.setPositiveButton(this.getResources().getString(R.string.confirm), comfirm);
-//		myAlertDialog.setNegativeButton(this.getResources().getString(R.string.cancel), cancle);
-//		myAlertDialog.show();
-//	}
+	//	private void showAboutDialog() {
+	//		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
+	//		myAlertDialog.setTitle(this.getResources().getString(R.string.about));
+	//		myAlertDialog.setMessage(getVersion());
+	//		View.OnClickListener comfirm = new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View v) {
+	//				// TODO Auto-generated method stub
+	//				myAlertDialog.dismiss();
+	//			}
+	//		};
+	//		View.OnClickListener cancle = new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View v) {
+	//				// TODO Auto-generated method stub
+	//				myAlertDialog.dismiss();
+	//			}
+	//		};
+	//		myAlertDialog.setPositiveButton(this.getResources().getString(R.string.confirm), comfirm);
+	//		myAlertDialog.setNegativeButton(this.getResources().getString(R.string.cancel), cancle);
+	//		myAlertDialog.show();
+	//	}
 
 	/**
 	 * 获取版本号

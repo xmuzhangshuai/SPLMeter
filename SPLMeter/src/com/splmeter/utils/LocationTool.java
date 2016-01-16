@@ -1,5 +1,7 @@
 package com.splmeter.utils;
 
+import java.math.BigDecimal;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -69,6 +71,8 @@ public class LocationTool {
 				latitude = location.getLatitude(); //经度   
 				longitude = location.getLongitude(); //纬度
 				altitude = location.getAltitude();//海拔
+				BigDecimal b = new BigDecimal(altitude);
+				altitude = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 				accuracy = location.getAccuracy();
 			}
 		}
@@ -95,6 +99,8 @@ public class LocationTool {
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
 			altitude = location.getAltitude();
+			BigDecimal b = new BigDecimal(altitude);
+			altitude = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			accuracy = location.getAccuracy();
 		}
 	}

@@ -63,7 +63,7 @@ public class SharePreferenceUtil {
 
 	// 校准
 	public float getCalibration() {
-		return sp.getFloat("Calibration", 0f);
+		return sp.getFloat("Calibration", 0.0f);
 	}
 
 	public void setCalibration(float calibration) {

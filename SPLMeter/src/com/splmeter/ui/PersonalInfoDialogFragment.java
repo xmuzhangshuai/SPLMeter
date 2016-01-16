@@ -109,6 +109,8 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		mainActivity.saveData();
 		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+		MainActivity.resultParams.put("calb", sharePreferenceUtil.getCalibration());
+		MainActivity.resultParams.put("mode", sharePreferenceUtil.getInOutDoor() == 1 ? 0 : 1);
 
 		MainActivity.shareFlag = 2;
 		MainActivity.startOrEva = 0;
