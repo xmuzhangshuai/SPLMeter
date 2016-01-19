@@ -4,13 +4,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import com.smallrhino.splmeter.R;
-
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import cn.citisense.splmeter.R;
 
 /**   
 *    

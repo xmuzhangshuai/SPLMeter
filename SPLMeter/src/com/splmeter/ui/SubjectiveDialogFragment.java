@@ -1,6 +1,5 @@
 package com.splmeter.ui;
 
-import com.smallrhino.splmeter.R;
 import com.splmeter.utils.LogTool;
 
 import android.app.Dialog;
@@ -16,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import cn.citisense.splmeter.R;
 import android.widget.TextView;
 
 /**

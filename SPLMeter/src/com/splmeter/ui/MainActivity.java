@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.smallrhino.splmeter.R;
 import com.splmeter.analysis.DrawProcess;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
@@ -52,6 +51,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import cn.citisense.splmeter.R;
 import android.widget.TextView;
 
 /**

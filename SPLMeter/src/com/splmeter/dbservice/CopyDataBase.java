@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class CopyDataBase {
 	@SuppressLint("SdCardPath")
-	private static String DATABASE_PATH = "/data/data/com.smallrhino.splmeter/databases/";
+	private static String DATABASE_PATH = "/data/data/cn.citisense.splmeter/databases/";
 	public static SQLiteDatabase database;
 	public static String dbName = "spl.db";
 	private Context myContext;

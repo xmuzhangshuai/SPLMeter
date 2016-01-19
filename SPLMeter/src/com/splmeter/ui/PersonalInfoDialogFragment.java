@@ -3,7 +3,6 @@ package com.splmeter.ui;
 import org.apache.http.Header;
 
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
@@ -27,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:个人信息对话框

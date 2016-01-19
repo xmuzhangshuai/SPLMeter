@@ -1,6 +1,5 @@
 package com.splmeter.ui;
 
-import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.utils.SharePreferenceUtil;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import cn.citisense.splmeter.R;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;

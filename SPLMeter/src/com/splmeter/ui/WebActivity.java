@@ -1,6 +1,5 @@
 package com.splmeter.ui;
 
-import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseActivity;
 
 import android.app.ActionBar;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:各种html页面

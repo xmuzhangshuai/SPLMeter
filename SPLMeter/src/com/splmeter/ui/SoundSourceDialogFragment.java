@@ -3,7 +3,6 @@ package com.splmeter.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.smallrhino.splmeter.R;
 import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.entities.SoundSource;
 import com.splmeter.utils.CommonTools;
@@ -21,6 +20,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:声源辨析对话框

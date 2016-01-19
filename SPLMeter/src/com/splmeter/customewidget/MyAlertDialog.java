@@ -1,12 +1,11 @@
 package com.splmeter.customewidget;
 
-import com.smallrhino.splmeter.R;
-
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import cn.citisense.splmeter.R;
 
 public class MyAlertDialog {
 	Context context;

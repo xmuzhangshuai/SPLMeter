@@ -3,7 +3,6 @@ package com.splmeter.ui;
 import org.apache.http.Header;
 
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.smallrhino.splmeter.R;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.customewidget.MyAlertDialog;
@@ -29,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:分享窗口

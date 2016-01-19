@@ -1,12 +1,11 @@
 package com.splmeter.utils;
 
-import com.smallrhino.splmeter.R;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
+import cn.citisense.splmeter.R;
 
 /**
  * 
