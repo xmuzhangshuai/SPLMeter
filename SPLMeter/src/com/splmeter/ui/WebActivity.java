@@ -23,7 +23,7 @@ public class WebActivity extends BaseActivity {
 	private Button backBtn;
 	private ActionBar actionBar;
 	private String url;
-	private String title;
+//	private String title;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class WebActivity extends BaseActivity {
 		setContentView(R.layout.activity_web);
 
 		url = getIntent().getStringExtra("url");
-		title = getIntent().getStringExtra("title");
+//		title = getIntent().getStringExtra("title");
 		if (TextUtils.isEmpty(url)) {
 			finish();
 			return;
@@ -53,7 +53,7 @@ public class WebActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		actionBar = getActionBar();
-		actionBar.setTitle(title);
+//		actionBar.setTitle(title);
 
 		webView.loadUrl(url);
 		backBtn.setOnClickListener(new OnClickListener() {

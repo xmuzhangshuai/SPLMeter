@@ -5,7 +5,7 @@
     <string name="current_value">SPL</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
-    <string name="dBCaption">dB(A)</string>
+    <string name="dBCaption">dBA</string>
     <string name="standard">Classification</string>
     <string name="fs_analysis">Freq analysis</string>
     <string name="cancel">Cancel</string>
@@ -16,7 +16,7 @@
     <string name="modeCaption">Mode:</string>
     <string name="calibrate">Calibrated value:</string>
     <string name="share_label1">Agree to share results to scientists</string>
-    <string name="share_label2">To be a citizen scientist, contribute your own power for scientist research.</string>
+    <string name="share_label2">To be a citizen scientist, contribute your own power for scientific research.</string>
     <string name="help">Help and instructions</string>
     <string name="check_update">Check for update</string>
     <string name="about">About</string>
@@ -51,7 +51,7 @@
     <string name="hz">HZ</string>
     <string name="infoTitle">Tips</string>
     <string name="share_success">Successful!\n
-The shared results will help us to study more thoroughly on the urban sound environment. Your privacy is safe. You can find what you shared in help and instruction in the option page.</string>
+The shared results will help us to study more thoroughly on the urban sound environment. Your privacy is safe. You can find what you shared in help and instruction in the Settings page.</string>
     <string name="Community_contribution">Community contribution</string>
     <string name="share_detail1">I am involving participatory soundscape sensing program. Current noise level is </string>
     <string name="share_detail2">The tool can be downloaded from </string>

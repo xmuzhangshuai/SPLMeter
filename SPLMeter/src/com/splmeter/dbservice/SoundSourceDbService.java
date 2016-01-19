@@ -38,16 +38,16 @@ public class SoundSourceDbService {
 		return instance;
 	}
 
-	public List<SoundSource> getSoundSourceType00() {
-		return soundSourceDao.queryBuilder().where(Properties.Ssi_type.eq("00")).list();
-	}
-
 	public List<SoundSource> getSoundSourceType01() {
 		return soundSourceDao.queryBuilder().where(Properties.Ssi_type.eq("01")).list();
 	}
 
 	public List<SoundSource> getSoundSourceType02() {
 		return soundSourceDao.queryBuilder().where(Properties.Ssi_type.eq("02")).list();
+	}
+
+	public List<SoundSource> getSoundSourceType03() {
+		return soundSourceDao.queryBuilder().where(Properties.Ssi_type.eq("03")).list();
 	}
 
 	public void addSoundSource(SoundSource soundSource) {

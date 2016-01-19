@@ -55,9 +55,9 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
 		soundSourceDbService = SoundSourceDbService.getInstance(getActivity());
-		soundSourcesList1 = soundSourceDbService.getSoundSourceType00();
-		soundSourcesList2 = soundSourceDbService.getSoundSourceType01();
-		soundSourcesList3 = soundSourceDbService.getSoundSourceType02();
+		soundSourcesList1 = soundSourceDbService.getSoundSourceType01();
+		soundSourcesList2 = soundSourceDbService.getSoundSourceType02();
+		soundSourcesList3 = soundSourceDbService.getSoundSourceType03();
 		soundSourceNameList1 = new ArrayList<>();
 		soundSourceNameList2 = new ArrayList<>();
 		soundSourceNameList3 = new ArrayList<>();
