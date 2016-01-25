@@ -412,6 +412,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				shareFlag = 0;
 				shareBtn.setEnabled(false);
 				timeList.clear();
+				MainActivity.resultParams = new RequestParams();
 				maxLpa = 0;
 				mainFrenquency = 0;
 				longtitudeList.clear();
