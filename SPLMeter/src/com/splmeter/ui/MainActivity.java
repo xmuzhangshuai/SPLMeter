@@ -2,6 +2,7 @@ package com.splmeter.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -98,7 +99,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	SurfaceView sfv; // 绘图所用
 	DrawProcess drawProcess;// 处理
-	private int uploadMaxsize = 100;// 上传主频对的最大数
+	//	private int uploadMaxsize = 100;// 上传主频对的最大数
+	private Date lastTime;
 	private LocationTool locationTool;
 	private float maxLpa, mainFrenquency;
 	private List<String> timeList;
@@ -193,6 +195,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		tips.setText(CommonTools.isZh(this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
 		getTips();
+		lastTime = DateTimeTools.getCurrentDate();
 	}
 
 	public void refresh() {
@@ -460,50 +463,54 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 * 开始记录数据
 	 */
 	public void startSave(float maxLpa, float mainFrequence, float spl) {
-		if (maxLpa > this.maxLpa) {
-			this.maxLpa = maxLpa;
-			this.mainFrenquency = mainFrequence;
-		}
-
-		// 记录时间
-		if (timeList.size() < uploadMaxsize) {
-			timeList.add(DateTimeTools.getCurrentDateTimeForString());
+		if (DateTimeTools.getIntervalForSecond(lastTime) < 1) {
 		} else {
-			timeList.remove(0);
-			timeList.add(DateTimeTools.getCurrentDateTimeForString());
-		}
+			lastTime = DateTimeTools.getCurrentDate();
+			if (maxLpa > this.maxLpa) {
+				this.maxLpa = maxLpa;
+				this.mainFrenquency = mainFrequence;
+			}
 
-		// 记录位置
-		if (longtitudeList.size() < uploadMaxsize) {
+			// 记录时间
+			//		if (timeList.size() < uploadMaxsize) {
+			timeList.add(DateTimeTools.getCurrentDateTimeForString());
+			//		} else {
+			//			timeList.remove(0);
+			//			timeList.add(DateTimeTools.getCurrentDateTimeForString());
+			//		}
+
+			// 记录位置
+			//		if (longtitudeList.size() < uploadMaxsize) {
 			longtitudeList.add((float) locationTool.getLongitude());
 			latitudeList.add((float) locationTool.getLongitude());
 			altitudeList.add((float) locationTool.getAltitude());
 			accuracyList.add((float) locationTool.getAccuracy());
-		} else {
-			longtitudeList.remove(0);
-			latitudeList.remove(0);
-			altitudeList.remove(0);
-			accuracyList.remove(0);
-			longtitudeList.add((float) locationTool.getLongitude());
-			latitudeList.add((float) locationTool.getLatitude());
-			altitudeList.add((float) locationTool.getAltitude());
-			accuracyList.add((float) locationTool.getAccuracy());
-		}
+			//		} else {
+			//			longtitudeList.remove(0);
+			//			latitudeList.remove(0);
+			//			altitudeList.remove(0);
+			//			accuracyList.remove(0);
+			//			longtitudeList.add((float) locationTool.getLongitude());
+			//			latitudeList.add((float) locationTool.getLatitude());
+			//			altitudeList.add((float) locationTool.getAltitude());
+			//			accuracyList.add((float) locationTool.getAccuracy());
+			//		}
 
-		// 记录耳机状态
-		if (earPhoneList.size() < uploadMaxsize) {
+			// 记录耳机状态
+			//		if (earPhoneList.size() < uploadMaxsize) {
 			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
-		} else {
-			earPhoneList.remove(0);
-			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
-		}
+			//		} else {
+			//			earPhoneList.remove(0);
+			//			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
+			//		}
 
-		// 记录声压级
-		if (splList.size() < uploadMaxsize) {
+			// 记录声压级
+			//		if (splList.size() < uploadMaxsize) {
 			splList.add(spl);
-		} else {
-			splList.remove(0);
-			splList.add(spl);
+			//		} else {
+			//			splList.remove(0);
+			//			splList.add(spl);
+			//		}
 		}
 	}
 
@@ -573,6 +580,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				// 新建一个数组用于缓存声音
 				short[] buffer = new short[RecordValue.BLOCKSIZE];
 				fftCal = new FFTSplCal();
+
 				while (onFlag == 1) {
 					// 将声音信息读取到缓存中
 					int bufferReadResult = audioRecord.read(buffer, 0, RecordValue.BLOCKSIZE);

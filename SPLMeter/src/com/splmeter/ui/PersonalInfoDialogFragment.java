@@ -115,7 +115,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		MainActivity.shareFlag = 2;
 		MainActivity.startOrEva = 0;
 		mainActivity.refresh();
-		
+
 	}
 
 	/**
@@ -151,6 +151,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	 */
 	private void uploadData() {
 		if (sharePreferenceUtil.getAutoShare()) {
+			LogTool.i(MainActivity.resultParams.toString());
 			if (NetworkUtils.isNetworkAvailable(getActivity())) {
 				final ProgressDialog dialog = new ProgressDialog(getActivity());
 				dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
@@ -185,7 +186,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 					}
 				};
 				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
-				
+
 			} else {
 				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
 			}

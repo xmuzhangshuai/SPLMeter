@@ -184,6 +184,12 @@ public class DateTimeTools {
 		return intervalString;
 	}
 
+	public static float getIntervalForSecond(Date date) {
+		// 获取时间差
+		Map<String, Integer> interval = DateTimeTools.compareTo(DateTimeTools.getCurrentDateTime(), date);
+		return interval.get("second");
+	}
+
 	/**
 	 * 计算日期时间之间的差值， date1得时间必须大于date2的时间
 	 * @param date1 
