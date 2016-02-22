@@ -5,7 +5,7 @@
     <string name="current_value">SPL</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
-    <string name="dBCaption">dB(A)</string>
+    <string name="dBCaption">dBA</string>
     <string name="standard">Classification</string>
     <string name="fs_analysis">Frequency analysis</string>
     <string name="cancel">Cancel</string>
@@ -48,7 +48,7 @@
     <string name="no_wifi">No wifi connection, wifi is required</string>
     <string name="timeout">Time out</string>
     <string name="basic_frequency">Main Freq</string>
-    <string name="hz">HZ</string>
+    <string name="hz">Hz</string>
     <string name="infoTitle">Tips</string>
     <string name="share_success">Successful!\n
 The shared results will help us to study more thoroughly on the urban sound environment. Your privacy is safe. You can find what you shared in help and instruction in the option page.</string>
