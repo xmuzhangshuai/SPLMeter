@@ -609,7 +609,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				splBo = fftCal.getSPL();
 				double splValue = splBo.getSPLValue();
 				float calibrateSPLValue = fftCal.getCalibrateSPLDouble(splValue, sharePreferenceUtil.getCalibration());
-				currentValue.setText("" + calibrateSPLValue);
+				if (onFlag == 1) {
+					currentValue.setText("" + calibrateSPLValue);
+				}
 
 				double maxSPL = splBo.getMaxSPL();
 				double maxFrequency = splBo.getMaxFrequency();
