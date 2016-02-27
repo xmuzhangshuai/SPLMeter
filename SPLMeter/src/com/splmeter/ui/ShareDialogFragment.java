@@ -114,7 +114,7 @@ public class ShareDialogFragment extends DialogFragment implements OnClickListen
 				ClipboardManager clipboardManager = (ClipboardManager) mainActivity.getSystemService(Context.CLIPBOARD_SERVICE);
 				clipboardManager.setPrimaryClip(ClipData.newPlainText(null,
 						mainActivity.getResources().getString(R.string.share_detail1) + " " + mainActivity.getCurrentValue() + "dBA，"
-								+ CommonTools.getLeverBySPL(mainActivity.getCurrentValue(), mainActivity) + "，" + mainActivity.getResources().getString(R.string.share_detail2)
+								+ CommonTools.getLeverBySPL(mainActivity.getCurrentValue(), mainActivity) + "。" + mainActivity.getResources().getString(R.string.share_detail2)
 								+ Constants.DownLoadPath + "”"));
 			}
 		};

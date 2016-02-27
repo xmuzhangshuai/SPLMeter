@@ -482,7 +482,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			// 记录位置
 			//		if (longtitudeList.size() < uploadMaxsize) {
 			longtitudeList.add((float) locationTool.getLongitude());
-			latitudeList.add((float) locationTool.getLongitude());
+			latitudeList.add((float) locationTool.getLatitude());
 			altitudeList.add((float) locationTool.getAltitude());
 			accuracyList.add((float) locationTool.getAccuracy());
 			//		} else {

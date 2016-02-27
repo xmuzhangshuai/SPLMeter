@@ -54,7 +54,7 @@
     <string name="share_success">分享成功！\n您的参与将有助于我们对城市声环境的研究更加透彻。我们不会泄漏您的任何隐私。您分享了哪些信息，请在设置中查看帮助说明。</string>
     <string name="Community_contribution">群体贡献</string>
     <string name="share_detail1">我正在参与公众声景感知项目。目前身边噪声值为</string>
-    <string name="share_detail2">快来和我一起参加吧。参与工具下载地址</string>
+    <string name="share_detail2">参与工具下载地址</string>
     <string name="already_copy">已复制到剪贴板，启动应用分享吧</string>
     <string name="shareing">结果分享中. . .</string>
     <string name="share_fail">分享失败！请保障网络畅通或稍后再试</string>
