@@ -234,6 +234,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
 			// close();
+			shareFlag = 0;
 			AppManager.getInstance().AppExit(getApplicationContext());
 		}
 	}
