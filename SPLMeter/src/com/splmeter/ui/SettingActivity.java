@@ -152,7 +152,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		sharePreferenceUtil.setInOutDoor(in_out_door);
 		sharePreferenceUtil.setAutoShare(shareCheckBox.isChecked());
 		try {
-			sharePreferenceUtil.setCalibration(Integer.parseInt(clbEditText.getText().toString()));
+			sharePreferenceUtil.setCalibration(Float.parseFloat(clbEditText.getText().toString()));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
