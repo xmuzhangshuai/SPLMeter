@@ -235,7 +235,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		} else {
 			// close();
 			shareFlag = 0;
-			AppManager.getInstance().AppExit(getApplicationContext());
+			stopRecord();
+			stopSave();
+			try {
+				if (recordTask != null) {
+					recordTask.cancel(true);
+				}
+				AppManager.getInstance().AppExit(getApplicationContext());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 	}
 

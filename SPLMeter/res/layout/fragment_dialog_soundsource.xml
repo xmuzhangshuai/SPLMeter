@@ -35,7 +35,7 @@
         <LinearLayout
             android:id="@+id/datalist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_below="@+id/label"
             android:layout_marginTop="10dp"
             android:orientation="horizontal" >
@@ -43,7 +43,7 @@
             <ListView
                 android:id="@+id/listView1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:choiceMode="multipleChoice"
                 android:divider="@color/transparent"
@@ -55,7 +55,7 @@
             <ListView
                 android:id="@+id/listView2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:choiceMode="multipleChoice"
                 android:divider="@color/transparent"
@@ -67,7 +67,7 @@
             <ListView
                 android:id="@+id/listView3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:choiceMode="multipleChoice"
                 android:divider="@color/transparent"
