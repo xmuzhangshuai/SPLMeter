@@ -233,15 +233,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			CommonTools.showShortToast(getBaseContext(), CommonTools.isZh(MainActivity.this) ? "再按一次退出程序" : "Click again to exit the program");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
-			// close();
 			shareFlag = 0;
-			stopRecord();
-			stopSave();
 			try {
-				if (recordTask != null) {
-					recordTask.cancel(true);
-				}
-				AppManager.getInstance().AppExit(getApplicationContext());
+				//				AppManager.getInstance().AppExit(getApplicationContext());
+				Intent startMain = new Intent(Intent.ACTION_MAIN);
+
+				startMain.addCategory(Intent.CATEGORY_HOME);
+
+				startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+				startActivity(startMain);
+
+				android.os.Process.killProcess(android.os.Process.myPid());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
