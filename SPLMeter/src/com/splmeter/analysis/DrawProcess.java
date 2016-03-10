@@ -77,16 +77,18 @@ public class DrawProcess {
 
 	private void SimpleDraw(int[] buffer, int baseLine) {
 		Canvas canvas = sfvSurfaceView.getHolder().lockCanvas(new Rect(0, 0, buffer.length, sfvSurfaceView.getHeight()));
-		canvas.drawColor(Color.BLACK);
-		canvas.save();
-		canvas.rotate(-60, sfvSurfaceView.getWidth() - 1, baseLine);
-		canvas.restore();
+		if (canvas != null) {
+			canvas.drawColor(Color.BLACK);
+			canvas.save();
+			canvas.rotate(-60, sfvSurfaceView.getWidth() - 1, baseLine);
+			canvas.restore();
 
-		float y;
-		for (int i = 0; i < buffer.length; i = i + 1) {
-			y = (baseLine - buffer[i] * intervelH);
-			canvas.drawLine(i * intervelW, baseLine, i * intervelW, y, mPaint);
+			float y;
+			for (int i = 0; i < buffer.length; i = i + 1) {
+				y = (baseLine - buffer[i] * intervelH);
+				canvas.drawLine(i * intervelW, baseLine, i * intervelW, y, mPaint);
+			}
+			sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 		}
-		sfvSurfaceView.getHolder().unlockCanvasAndPost(canvas);
 	}
 }

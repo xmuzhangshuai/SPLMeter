@@ -31,7 +31,10 @@ import com.umeng.update.UmengUpdateAgent;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioManager;
@@ -41,6 +44,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
@@ -107,6 +111,25 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private List<Integer> earPhoneList;
 	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
 
+	private BroadcastReceiver mHomeKeyEventReceiver = new BroadcastReceiver() {
+		String SYSTEM_REASON = "reason";
+		String SYSTEM_HOME_KEY = "homekey";
+		String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+				String reason = intent.getStringExtra(SYSTEM_REASON);
+				if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+					currentPage = 0;
+				} else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+					//表示长按home键,显示最近使用的程序列表  
+				}
+			}
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -127,6 +150,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// 友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
+		registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 		resultParams = new RequestParams();
 
