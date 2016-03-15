@@ -15,7 +15,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.splmeter.analysis.DrawProcess;
 import com.splmeter.analysis.FFTSplCal;
 import com.splmeter.analysis.SPLBo;
-import com.splmeter.base.AppManager;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
@@ -56,8 +55,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import cn.citisense.splmeter.R;
 import android.widget.TextView;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:主页面
@@ -581,6 +580,24 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
 			currentValue.setText("" + Laeq);//修改主界面值
 
+			currentLevel = (int) ((Laeq - seekBarLevelMinValue) / 5);// 当前层级
+			if (currentLevel > 4) {
+				currentLevel = 4;
+			} else if (currentLevel < 0) {
+				currentLevel = 0;
+			}
+			levelTextView.setText(levels[currentLevel]);
+
+			float ratio = (Laeq - seekBarLevelMinValue) / seekBarLevelBlock;
+			if (ratio < 0) {
+				ratio = 0;
+			} else if (ratio > 1) {
+				ratio = 1;
+			}
+
+			// 初始化
+			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
+
 			resultParams.put("L10", L10);
 			resultParams.put("L50", L50);
 			resultParams.put("L90", L90);
@@ -662,23 +679,25 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					startSave(fftCal.getMaxSudBADouble(maxSPL), fftCal.getMaxSudHzDouble(maxFrequency), calibrateSPLValue);
 				}
 
+				if (onFlag == 1) {
+					if (currentLevel > 4) {
+						currentLevel = 4;
+					} else if (currentLevel < 0) {
+						currentLevel = 0;
+					}
+					levelTextView.setText(levels[currentLevel]);
+
+					float ratio = (calibrateSPLValue - seekBarLevelMinValue) / seekBarLevelBlock;
+					if (ratio < 0) {
+						ratio = 0;
+					} else if (ratio > 1) {
+						ratio = 1;
+					}
+
+					// 初始化
+					seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
+				}
 				currentLevel = (int) ((calibrateSPLValue - seekBarLevelMinValue) / 5);// 当前层级
-				if (currentLevel > 4) {
-					currentLevel = 4;
-				} else if (currentLevel < 0) {
-					currentLevel = 0;
-				}
-				levelTextView.setText(levels[currentLevel]);
-
-				float ratio = (calibrateSPLValue - seekBarLevelMinValue) / seekBarLevelBlock;
-				if (ratio < 0) {
-					ratio = 0;
-				} else if (ratio > 1) {
-					ratio = 1;
-				}
-
-				// 初始化
-				seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 			}
 		}
 	}
