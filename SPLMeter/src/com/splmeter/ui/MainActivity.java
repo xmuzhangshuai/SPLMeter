@@ -322,6 +322,27 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	
+	/**
+	 * 显示所在地对话框
+	 */
+	void showModeDialog() {
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("mode_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		ModeDialogFragment newFragment = new ModeDialogFragment();
+		newFragment.show(ft, "mode_dialog");
+	}
+
+	
 	/**
 	 * 显示声源辨析对话框
 	 */
@@ -416,12 +437,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void next_last(int flag) {
 		switch (flag) {
 		case 1:
-			showSoundSourceDialog();
+			showModeDialog();
 			break;
 		case 2:
-			showSubjectiveDialog();
+			showSoundSourceDialog();
 			break;
 		case 3:
+			showSubjectiveDialog();
+			break;
+		case 4:
 			showPersonalInfoDialog();
 			break;
 

@@ -102,12 +102,12 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
-			mainActivity.next_last(1);
+			mainActivity.next_last(2);
 			break;
 		case R.id.next_btn:
 			this.dismiss();
 			saveResult();
-			mainActivity.next_last(3);
+			mainActivity.next_last(4);
 			break;
 		default:
 			break;

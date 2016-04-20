@@ -139,12 +139,12 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
-			mainActivity.stopSave();
+			mainActivity.next_last(1);
 			break;
 		case R.id.next_btn:
 			saveData();
 			this.dismiss();
-			mainActivity.next_last(2);
+			mainActivity.next_last(3);
 			break;
 		default:
 			break;

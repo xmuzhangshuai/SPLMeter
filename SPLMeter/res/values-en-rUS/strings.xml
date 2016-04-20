@@ -63,6 +63,8 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="coordinated_level">Harmonious level(sound&amp;environment):</string>
     <string name="network_fail">Network failure, please check the network connection</string>
     <string name="giveup">Give up</string>
+    
+    <string name="where">Whrer are you now</string>
 
     <array name="sound_levelGroup">
         <item>very low</item>

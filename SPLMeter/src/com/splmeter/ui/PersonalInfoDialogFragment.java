@@ -202,7 +202,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
-			mainActivity.next_last(2);
+			mainActivity.next_last(3);
 			break;
 		case R.id.next_btn:
 			mainActivity.stopRecord();
