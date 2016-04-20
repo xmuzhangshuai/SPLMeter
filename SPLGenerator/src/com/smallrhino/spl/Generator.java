@@ -2,7 +2,9 @@ package com.smallrhino.spl;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.greenrobot.daogenerator.ToMany;
 
 public class Generator {
 	/**
@@ -32,5 +34,41 @@ public class Generator {
 		modeEntity.addStringProperty("mode_code");
 		modeEntity.addStringProperty("mode_name_cn");
 		modeEntity.addStringProperty("mode_name_en");
+
+		/****asmtValue*******/
+		Entity asmtValueEntity = schema.addEntity("AsmtValue");
+		asmtValueEntity.addIdProperty().autoincrement();
+		asmtValueEntity.addStringProperty("imei");
+		asmtValueEntity.addStringProperty("modeltype");
+		asmtValueEntity.addStringProperty("mode");
+		asmtValueEntity.addStringProperty("source");
+		asmtValueEntity.addStringProperty("asmt");
+		asmtValueEntity.addIntProperty("gender");
+		asmtValueEntity.addIntProperty("age");
+		asmtValueEntity.addFloatProperty("mF");
+		asmtValueEntity.addFloatProperty("mLpa");
+		asmtValueEntity.addFloatProperty("l10");
+		asmtValueEntity.addFloatProperty("l50");
+		asmtValueEntity.addFloatProperty("l90");
+		asmtValueEntity.addFloatProperty("laeq");
+		asmtValueEntity.addFloatProperty("calb");
+		asmtValueEntity.addIntProperty("post");
+
+		/****SPLValue*******/
+		Entity splValueEntity = schema.addEntity("SPLValue");
+		splValueEntity.addIdProperty().autoincrement();
+		splValueEntity.addDateProperty("time");
+		splValueEntity.addIntProperty("earphone");
+		splValueEntity.addFloatProperty("lng");
+		splValueEntity.addFloatProperty("lat");
+		splValueEntity.addFloatProperty("alt");
+		splValueEntity.addFloatProperty("acc");
+		splValueEntity.addFloatProperty("spl");
+		splValueEntity.addFloatProperty("mainF");
+		splValueEntity.addFloatProperty("mainLpa");
+		Property splvalue_asmt_id = splValueEntity.addLongProperty("asmt_id").notNull().getProperty();
+		splValueEntity.addToOne(asmtValueEntity, splvalue_asmt_id);
+		ToMany asmtSplValue = asmtValueEntity.addToMany(splValueEntity, splvalue_asmt_id);
+		asmtSplValue.setName("splValueList");
 	}
 }
