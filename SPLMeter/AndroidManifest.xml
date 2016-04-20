@@ -56,6 +56,12 @@
             android:screenOrientation="portrait" >
         </activity>
 
+        <!-- 结果页面 -->
+        <activity
+            android:name="com.splmeter.ui.ResultActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <!-- Web页面 -->
         <activity
             android:name="com.splmeter.ui.WebActivity"

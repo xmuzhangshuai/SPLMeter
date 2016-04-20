@@ -12,7 +12,7 @@
     <string name="confirm">OK</string>
     <string name="on">Start</string>
     <string name="option">Settings</string>
-    <string name="share">Share</string>
+    <string name="result">Result</string>
     <string name="modeCaption">Mode:</string>
     <string name="calibrate">Calibrated value:</string>
     <string name="share_label1">Agree to share results to scientists</string>

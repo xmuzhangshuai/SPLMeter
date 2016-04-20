@@ -264,13 +264,13 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/share_btn"
+            android:id="@+id/result_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:background="@drawable/sel_btn"
-            android:text="@string/share"
+            android:text="@string/result"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

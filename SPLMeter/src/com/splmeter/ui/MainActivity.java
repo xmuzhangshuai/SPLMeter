@@ -67,7 +67,7 @@ import cn.citisense.splmeter.R;
 public class MainActivity extends BaseActivity implements OnClickListener {
 	private Button settingBtn;
 	private Button startBtn;
-	private Button shareBtn;
+	private Button resultBtn;
 	//	private int flag = 0;
 	private TextView currentValue;
 	private FFTSplCal fftCal;
@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] ordinateArray = new String[] { "120", "100", "80", "60", "40", "20" };
 
 	public static RequestParams resultParams;// 最终上传的结果
-	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
+	//	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
 	public static int currentPage = 1;//是否为当前页面
@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		settingBtn = (Button) findViewById(R.id.setting_btn);
 		startBtn = (Button) findViewById(R.id.start_btn);
-		shareBtn = (Button) findViewById(R.id.share_btn);
+		resultBtn = (Button) findViewById(R.id.result_btn);
 		currentValue = (TextView) findViewById(R.id.current_value);
 		seekBarLevelDrawable = (ImageView) findViewById(R.id.seekbar_level_drawable);
 		seekBarLevelThumb = (ImageView) findViewById(R.id.seekbar_level_thumb);
@@ -194,7 +194,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		settingBtn.setOnClickListener(this);
 		startBtn.setOnClickListener(this);
-		shareBtn.setOnClickListener(this);
+		resultBtn.setOnClickListener(this);
 
 		// 初始化显示
 		drawProcess = new DrawProcess(sfv);
@@ -229,11 +229,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			doorLabel.setText(getResources().getString(R.string.indoor));
 		}
 
-		if (shareFlag == 0) {
-			shareBtn.setEnabled(false);
-		} else {
-			shareBtn.setEnabled(true);
-		}
+		//		if (shareFlag == 0) {
+		//			shareBtn.setEnabled(false);
+		//		} else {
+		//			shareBtn.setEnabled(true);
+		//		}
 		currentPage = 1;
 	}
 
@@ -256,7 +256,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			CommonTools.showShortToast(getBaseContext(), CommonTools.isZh(MainActivity.this) ? "再按一次退出程序" : "Click again to exit the program");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
-			shareFlag = 0;
+			//			shareFlag = 0;
 			try {
 				//				AppManager.getInstance().AppExit(getApplicationContext());
 				Intent startMain = new Intent(Intent.ACTION_MAIN);
@@ -322,7 +322,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
-	
 	/**
 	 * 显示所在地对话框
 	 */
@@ -342,7 +341,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		newFragment.show(ft, "mode_dialog");
 	}
 
-	
 	/**
 	 * 显示声源辨析对话框
 	 */
@@ -400,22 +398,22 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		newFragment.show(ft, "personal_info_dialog");
 	}
 
-	/**
-	* 显示分享对话框
-	*/
-	void showShareDialog() {
-
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("share_dialog");
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
-		// Create and show the dialog.
-		ShareDialogFragment newFragment = new ShareDialogFragment();
-		newFragment.show(ft, "share_dialog");
-	}
+	//	/**
+	//	* 显示分享对话框
+	//	*/
+	//	void showShareDialog() {
+	//
+	//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	//		Fragment prev = getFragmentManager().findFragmentByTag("share_dialog");
+	//		if (prev != null) {
+	//			ft.remove(prev);
+	//		}
+	//		ft.addToBackStack(null);
+	//
+	//		// Create and show the dialog.
+	//		ShareDialogFragment newFragment = new ShareDialogFragment();
+	//		newFragment.show(ft, "share_dialog");
+	//	}
 
 	/**
 	 * 获取实时值
@@ -472,8 +470,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				saveFlag = 0;
 				onFlag = 1;
 				startOrEva = 1;
-				shareFlag = 0;
-				shareBtn.setEnabled(false);
+				//				shareFlag = 0;
+				resultBtn.setEnabled(false);
 				timeList.clear();
 				MainActivity.resultParams = new RequestParams();
 				maxLpa = 0;
@@ -491,8 +489,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 
 			break;
-		case R.id.share_btn:
-			showShareDialog();
+		case R.id.result_btn:
+			//			showShareDialog();
+			Intent resultIntent = new Intent(MainActivity.this, ResultActivity.class);
+			startActivity(resultIntent);
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 
 		default:
