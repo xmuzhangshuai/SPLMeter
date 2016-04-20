@@ -17,14 +17,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import cn.citisense.splmeter.R;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:设置页面
@@ -35,13 +31,9 @@ import android.widget.Spinner;
 public class SettingActivity extends BaseActivity implements OnClickListener {
 	private Button cancelBtn;
 	private Button confirmBtn;
-	private Spinner modeSpinner;
 	private View helpView;
-	//	private View checkUpdateView;
 	private View aboutView;
-	//	private TextView versionTextView;
 	private SharePreferenceUtil sharePreferenceUtil;
-	private int in_out_door;
 	private CheckBox shareCheckBox;
 	private EditText clbEditText;
 
@@ -59,11 +51,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		cancelBtn = (Button) findViewById(R.id.cancel_btn);
 		confirmBtn = (Button) findViewById(R.id.confirm_btn);
-		modeSpinner = (Spinner) findViewById(R.id.modeSpinner);
 		helpView = findViewById(R.id.help);
-		//		checkUpdateView = findViewById(R.id.check_update);
 		aboutView = findViewById(R.id.about);
-		//		versionTextView = (TextView) findViewById(R.id.version);
 		shareCheckBox = (CheckBox) findViewById(R.id.share_checkbox);
 		clbEditText = (EditText) findViewById(R.id.clbTxt);
 	}
@@ -74,30 +63,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		cancelBtn.setOnClickListener(this);
 		confirmBtn.setOnClickListener(this);
 		helpView.setOnClickListener(this);
-		//		checkUpdateView.setOnClickListener(this);
 		aboutView.setOnClickListener(this);
-		//		versionTextView.setText(getVersion());
-		in_out_door = sharePreferenceUtil.getInOutDoor();
-
-		/************设置户内户外**********/
-		ArrayAdapter<CharSequence> modeAadapter = ArrayAdapter.createFromResource(this, R.array.modeGroup, android.R.layout.simple_spinner_item);
-		modeAadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		modeSpinner.setAdapter(modeAadapter);
-		modeSpinner.setSelection(sharePreferenceUtil.getInOutDoor(), true);
-		modeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				in_out_door = position;
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		shareCheckBox.setChecked(sharePreferenceUtil.getAutoShare());
 		clbEditText.setText("" + sharePreferenceUtil.getCalibration());
@@ -149,7 +115,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void validateSetting() {
-		sharePreferenceUtil.setInOutDoor(in_out_door);
 		sharePreferenceUtil.setAutoShare(shareCheckBox.isChecked());
 		try {
 			sharePreferenceUtil.setCalibration(Float.parseFloat(clbEditText.getText().toString()));

@@ -15,36 +15,6 @@
         android:padding="10dp" >
 
         <TextView
-            android:id="@+id/mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/modeCaption"
-            android:textColor="@color/white"
-            android:textSize="16sp" >
-        </TextView>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <Spinner
-                android:id="@+id/modeSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:drawSelectorOnTop="true"
-                android:padding="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="15dp"
-                android:layout_gravity="right|center_vertical"
-                android:paddingTop="5dp"
-                android:src="@drawable/arrow_down" />
-        </FrameLayout>
-
-        <TextView
             android:id="@+id/clbCaption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
