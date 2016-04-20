@@ -25,5 +25,12 @@ public class Generator {
 		equipMentEntity.addStringProperty("ssi_type");
 		equipMentEntity.addStringProperty("ssi_item_cn");
 		equipMentEntity.addStringProperty("ssi_item_en");
+
+		/****ห๙ิฺตุ*******/
+		Entity modeEntity = schema.addEntity("Mode");
+		modeEntity.addIntProperty("mode_id").unique();
+		modeEntity.addStringProperty("mode_code");
+		modeEntity.addStringProperty("mode_name_cn");
+		modeEntity.addStringProperty("mode_name_en");
 	}
 }
