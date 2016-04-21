@@ -543,7 +543,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startOrEva = 0;
 		startBtn.setBackgroundResource(R.drawable.sel_btn);
 		startBtn.setText(R.string.on);
-
+		
 		JSONArray timeArray = new JSONArray(timeList);
 		resultParams.put("time", timeArray.toString());
 		JSONArray longtitudeArray = new JSONArray(longtitudeList);
@@ -596,8 +596,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			MainActivity.asmtValue.setL50(L50);
 			MainActivity.asmtValue.setL90(L90);
 			MainActivity.asmtValue.setLaeq(Laeq);
-			LogTool.e("" + splList);
-			LogTool.e("" + Laeq);
 			asmtValueDbService.asmtValueDao.update(asmtValue);
 		}
 

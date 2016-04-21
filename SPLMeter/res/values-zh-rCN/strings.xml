@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">噪声计</string>
-    <string name="current_value">声压级</string>
+    <string name="current_value">等效声压级</string>
     <string name="indoor">室内</string>
     <string name="outdoor">室外</string>
     <string name="dBCaption">分贝</string>
@@ -56,7 +56,7 @@
     <string name="share_detail1">我正在参与公众声景感知项目。目前身边噪声值为</string>
     <string name="share_detail2">参与工具下载地址</string>
     <string name="already_copy">已复制到剪贴板，启动应用分享吧</string>
-    <string name="shareing">结果分享中. . .</string>
+    <string name="shareing">结果保存中. . .</string>
     <string name="share_fail">分享失败！请保障网络畅通或稍后再试</string>
     <string name="sound_level">大小:</string>
     <string name="acoustic_comfort_level">舒适度:</string>
@@ -65,6 +65,11 @@
     <string name="giveup">放弃</string>
     <string name="where">你现在在哪</string>
     <string name="clear">清除</string>
+    <string name="queitRate">安静达标率</string>
+    <string name="unknown">未知</string>
+    <string name="place">地点：</string>
+    <string name="soundesource">声源：</string>
+    <string name="sound_level2">声音大小:</string>
 
     <array name="sound_levelGroup">
         <item>非常小</item>

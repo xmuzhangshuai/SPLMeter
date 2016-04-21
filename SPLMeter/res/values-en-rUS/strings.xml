@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">SPL Meter</string>
-    <string name="current_value">SPL</string>
+    <string name="current_value">LAeq</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
     <string name="dBCaption">dBA</string>
@@ -56,16 +56,20 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="share_detail1">I am involving participatory soundscape sensing program. Current noise level is </string>
     <string name="share_detail2">The tool can be downloaded from </string>
     <string name="already_copy">Saved to the clipboard, open your social applications to share with friends</string>
-    <string name="shareing">Sharing. . .</string>
+    <string name="shareing">Results are saving. . .</string>
     <string name="share_fail">Failed! Make sure Internet connected or try again later.</string>
     <string name="sound_level">Sound level:</string>
     <string name="acoustic_comfort_level">Acoustic comfort level:</string>
     <string name="coordinated_level">Harmonious level(sound&amp;environment):</string>
     <string name="network_fail">Network failure, please check the network connection</string>
     <string name="giveup">Give up</string>
-    
     <string name="where">Whrer are you now</string>
     <string name="clear">Clear</string>
+    <string name="queitRate">安静达标率</string>
+    <string name="unknown">未知</string>
+    <string name="place">地点：</string>
+    <string name="soundesource">声源：</string>
+    <string name="sound_level2">Sound level:</string>
 
     <array name="sound_levelGroup">
         <item>very low</item>

@@ -24,65 +24,66 @@
         android:layout_height="wrap_content"
         android:padding="10dp" >
 
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/mul_choice"
-        android:textSize="14sp" />
-	<ScrollView
-    	android:layout_width="match_parent"
-    	android:layout_height="200dp"
-    	android:layout_marginTop="5dp"
-    	android:layout_below="@+id/label"
-    	android:fillViewport="true"  >
-    	
-        <LinearLayout
-            android:id="@+id/datalist"
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/mul_choice"
+            android:textSize="14sp" />
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal" >
+            android:layout_below="@+id/label"
+            android:layout_marginTop="5dp"
+            android:fillViewport="true" >
 
-            <ListView
-                android:id="@+id/listView1"
-                android:layout_width="0dp"
-                android:layout_height="600dp"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+            <LinearLayout
+                android:id="@+id/datalist"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
 
-            <ListView
-                android:id="@+id/listView2"
-                android:layout_width="0dp"
-                android:layout_height="600dp"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
+                <ListView
+                    android:id="@+id/listView1"
+                    android:layout_width="0dp"
+                    android:layout_height="600dp"
+                    android:layout_weight="1"
+                    android:choiceMode="multipleChoice"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="0dp"
+                    android:listSelector="@color/transparent"
+                    android:scrollbars="none" >
+                </ListView>
 
-            <ListView
-                android:id="@+id/listView3"
-                android:layout_width="0dp"
-                android:layout_height="600dp"
-                android:layout_weight="1"
-                android:choiceMode="multipleChoice"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
-                android:listSelector="@color/transparent"
-                android:scrollbars="none" >
-            </ListView>
-        </LinearLayout>
-       </ScrollView>
+                <ListView
+                    android:id="@+id/listView2"
+                    android:layout_width="0dp"
+                    android:layout_height="600dp"
+                    android:layout_weight="1"
+                    android:choiceMode="multipleChoice"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="0dp"
+                    android:listSelector="@color/transparent"
+                    android:scrollbars="none" >
+                </ListView>
+
+                <ListView
+                    android:id="@+id/listView3"
+                    android:layout_width="0dp"
+                    android:layout_height="600dp"
+                    android:layout_weight="1"
+                    android:choiceMode="multipleChoice"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="0dp"
+                    android:listSelector="@color/transparent"
+                    android:scrollbars="none" >
+                </ListView>
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <LinearLayout

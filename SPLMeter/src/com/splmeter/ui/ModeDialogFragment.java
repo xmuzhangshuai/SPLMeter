@@ -93,7 +93,7 @@ public class ModeDialogFragment extends DialogFragment implements OnClickListene
 	}
 
 	private void initView() {
-		modeListView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, modeNameList));
+		modeListView.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_single_choice, modeNameList));
 		lastBtn.setOnClickListener(this);
 		nextBtn.setOnClickListener(this);
 		nextBtn.setEnabled(false);

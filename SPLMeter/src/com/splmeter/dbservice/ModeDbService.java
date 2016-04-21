@@ -5,7 +5,9 @@ import java.util.List;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.dao.DaoSession;
 import com.splmeter.dao.ModeDao;
+import com.splmeter.dao.ModeDao.Properties;
 import com.splmeter.entities.Mode;
+import com.splmeter.utils.CommonTools;
 
 import android.content.Context;
 
@@ -43,5 +45,13 @@ public class ModeDbService {
 
 	public void addMode(Mode mode) {
 		modeDao.insertOrReplace(mode);
+	}
+
+	public String getModeENNameByCode(String code) {
+		return modeDao.queryBuilder().where(Properties.Mode_code.eq(code)).unique().getMode_name_en();
+	}
+
+	public String getModeCNNameByCode(String code) {
+		return modeDao.queryBuilder().where(Properties.Mode_code.eq(code)).unique().getMode_name_cn();
 	}
 }

@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/timeTextView"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/laeqTextView"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/placeTextView"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/timeTextView"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/soundsourceTextView"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/placeTextView"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/evaluateTextView"
@@ -50,6 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/soundsourceTextView"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
 </RelativeLayout>

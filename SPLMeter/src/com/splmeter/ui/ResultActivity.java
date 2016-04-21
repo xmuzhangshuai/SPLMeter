@@ -7,8 +7,12 @@ import java.util.List;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.dbservice.AsmtValueDbService;
+import com.splmeter.dbservice.ModeDbService;
+import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.entities.AsmtValue;
+import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.LogTool;
 import com.splmeter.utils.SharePreferenceUtil;
 
 import android.os.Bundle;
@@ -33,22 +37,31 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 	private Button confirmBtn;
 	private TextView queitRateTextView;
 	private TextView countTextView;
-
+	private String[] levels;
 	private SharePreferenceUtil sharePreferenceUtil;
 	private ListView resultListView;
 	private List<AsmtValue> asmtValueList;
 	private AsmtValueDbService asmtValueDbService;
+	private ModeDbService modeDbService;
+	private SoundSourceDbService soundSourceDbService;
 	private ResultlAdapter resultAdapter;
+	private String[] soundLevles, comfortLevels, coordiantedLevels;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
 		asmtValueDbService = AsmtValueDbService.getInstance(ResultActivity.this);
+		modeDbService = ModeDbService.getInstance(ResultActivity.this);
+		soundSourceDbService = SoundSourceDbService.getInstance(ResultActivity.this);
 		asmtValueList = new ArrayList<>();
+		soundLevles = getResources().getStringArray(R.array.sound_levelGroup);
+		comfortLevels = getResources().getStringArray(R.array.acoustic_comfort_levelGroup);
+		coordiantedLevels = getResources().getStringArray(R.array.coordinated_levelGroup);
 		asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
 		Collections.reverse(asmtValueList);
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
+		levels = getResources().getStringArray(R.array.levelGroup);
 		findViewById();
 		initView();
 	}
@@ -70,8 +83,20 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		confirmBtn.setOnClickListener(this);
 		resultAdapter = new ResultlAdapter();
 		resultListView.setAdapter(resultAdapter);
-		queitRateTextView.setText("安静达标率50%");
+
 		countTextView.setText("共" + asmtValueList.size() + "条记录");
+		int count = 0;
+		for (AsmtValue as : asmtValueList) {
+			if (as.getLaeq() != null && as.getLaeq() < 55) {
+				count++;
+			}
+		}
+		if (asmtValueList.size() > 0) {
+			queitRateTextView.setText(getResources().getString(R.string.queitRate) + count * 100 / asmtValueList.size() + "%");
+		} else {
+			queitRateTextView.setText(getResources().getString(R.string.queitRate) + 0 + "%");
+		}
+
 	}
 
 	private void validateSetting() {
@@ -183,12 +208,82 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
-			holder.laeqTextView.setText("" + asmtValue.getLaeq() + "dBA");
-			holder.quietTextView.setText("非常安静");
-			holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
-			holder.placeTextView.setText("地点：	" + asmtValue.getMode());
-			holder.soundsourceTextView.setText("声源：" + asmtValue.getSource());
-			holder.evaluateTextView.setText("评价：" + asmtValue.getAsmt());
+			if (asmtValue.getLaeq() != null) {
+				holder.laeqTextView.setText("" + asmtValue.getLaeq() + "dBA");
+				float laeq = asmtValue.getLaeq().floatValue();
+				if (laeq < 50) {
+					holder.quietTextView.setText(levels[0]);
+				} else if (laeq < 55) {
+					holder.quietTextView.setText(levels[1]);
+				} else if (laeq < 60) {
+					holder.quietTextView.setText(levels[2]);
+				} else if (laeq < 65) {
+					holder.quietTextView.setText(levels[3]);
+				} else {
+					holder.quietTextView.setText(levels[4]);
+				}
+			} else {
+				LogTool.e("AsmtValue.getLaeq()为null");
+			}
+
+			try {
+				holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
+
+				//位置
+				if (asmtValue.getMode() != null) {
+					if (CommonTools.isZh(ResultActivity.this)) {
+						holder.placeTextView
+								.setText(getResources().getString(R.string.place) + modeDbService.getModeCNNameByCode(asmtValue.getMode()));
+					} else {
+						holder.placeTextView
+								.setText(getResources().getString(R.string.place) + modeDbService.getModeENNameByCode(asmtValue.getMode()));
+					}
+
+				} else {
+					holder.placeTextView.setText(getResources().getString(R.string.place) + getResources().getString(R.string.unknown));
+				}
+
+				//声源
+				if (asmtValue.getSource() != null) {
+					String[] sources = asmtValue.getSource().split(",");
+					String s = "";
+
+					for (int i = 0; i < sources.length; i++) {
+						if (i != sources.length - 1) {
+							if (CommonTools.isZh(ResultActivity.this)) {
+								s = s + soundSourceDbService.getSourceCNNameByCode(sources[i]) + "，";
+							} else {
+								s = s + soundSourceDbService.getSourceENNameByCode(sources[i]) + ",";
+							}
+						} else {
+							if (CommonTools.isZh(ResultActivity.this)) {
+								s = s + soundSourceDbService.getSourceCNNameByCode(sources[i]);
+							} else {
+								s = s + soundSourceDbService.getSourceENNameByCode(sources[i]);
+							}
+						}
+					}
+					holder.soundsourceTextView.setText(getResources().getString(R.string.soundesource) + s);
+				} else {
+					holder.soundsourceTextView.setText(getResources().getString(R.string.soundesource) + getResources().getString(R.string.unknown));
+				}
+
+				//评价
+				if (asmtValue.getAsmt() != null) {
+					String[] asmts = asmtValue.getAsmt().split(",");
+					String a = "";
+					a = getResources().getString(R.string.sound_level2) + soundLevles[Integer.parseInt(asmts[0]) + 2] + ", "
+							+ getResources().getString(R.string.acoustic_comfort_level) + soundLevles[Integer.parseInt(asmts[1]) + 2] + ", "
+							+ getResources().getString(R.string.coordinated_level) + soundLevles[Integer.parseInt(asmts[2]) + 2];
+					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + a);
+				} else {
+					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + getResources().getString(R.string.unknown));
+				}
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
 			return view;
 		}
 	}

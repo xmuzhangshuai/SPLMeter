@@ -53,4 +53,12 @@ public class SoundSourceDbService {
 	public void addSoundSource(SoundSource soundSource) {
 		soundSourceDao.insertOrReplace(soundSource);
 	}
+
+	public String getSourceENNameByCode(String code) {
+		return soundSourceDao.queryBuilder().where(Properties.Ssi_code.eq(code)).unique().getSsi_item_en();
+	}
+
+	public String getSourceCNNameByCode(String code) {
+		return soundSourceDao.queryBuilder().where(Properties.Ssi_code.eq(code)).unique().getSsi_item_cn();
+	}
 }
