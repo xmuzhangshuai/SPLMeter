@@ -24,14 +24,6 @@
         android:layout_height="wrap_content"
         android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/mul_choice"
-            android:textSize="14sp" />
-
         <LinearLayout
             android:id="@+id/datalist"
             android:layout_width="wrap_content"
@@ -43,14 +35,14 @@
             <ListView
                 android:id="@+id/modeListview"
                 android:layout_width="match_parent"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 android:layout_height="600dp"
                 android:layout_gravity="center_horizontal"
-                android:choiceMode="multipleChoice"
+                android:choiceMode="singleChoice"
                 android:divider="@color/transparent"
                 android:dividerHeight="0dp"
                 android:listSelector="@color/transparent"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:scrollbars="none" >
             </ListView>
         </LinearLayout>

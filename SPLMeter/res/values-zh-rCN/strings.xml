@@ -63,8 +63,8 @@
     <string name="coordinated_level">协调度:</string>
     <string name="network_fail">网络故障，请先检查网络连接</string>
     <string name="giveup">放弃</string>
-    
     <string name="where">你现在在哪</string>
+    <string name="clear">清除</string>
 
     <array name="sound_levelGroup">
         <item>非常小</item>

@@ -65,6 +65,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="giveup">Give up</string>
     
     <string name="where">Whrer are you now</string>
+    <string name="clear">Clear</string>
 
     <array name="sound_levelGroup">
         <item>very low</item>

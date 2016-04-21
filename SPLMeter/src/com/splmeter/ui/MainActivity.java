@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private AsmtValueDbService asmtValueDbService;
 	private SplValueService splValueService;
-	public AsmtValue asmtValue;
+	public static AsmtValue asmtValue;
 	public SPLValue splValue;
 
 	private BroadcastReceiver mHomeKeyEventReceiver = new BroadcastReceiver() {
@@ -236,12 +236,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		} else {
 			doorLabel.setText(getResources().getString(R.string.indoor));
 		}
-
-		//		if (shareFlag == 0) {
-		//			shareBtn.setEnabled(false);
-		//		} else {
-		//			shareBtn.setEnabled(true);
-		//		}
 		currentPage = 1;
 	}
 
@@ -264,17 +258,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			CommonTools.showShortToast(getBaseContext(), CommonTools.isZh(MainActivity.this) ? "再按一次退出程序" : "Click again to exit the program");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
-			//			shareFlag = 0;
 			try {
-				//				AppManager.getInstance().AppExit(getApplicationContext());
 				Intent startMain = new Intent(Intent.ACTION_MAIN);
-
 				startMain.addCategory(Intent.CATEGORY_HOME);
-
 				startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 				startActivity(startMain);
-
 				android.os.Process.killProcess(android.os.Process.myPid());
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -455,7 +443,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.start_btn:
 			if (startOrEva == 1) {// 评价
-				saveFlag = 1;
+				//				saveFlag = 1;
 				next_last(1);
 			} else {// 开始
 				asmtValue = new AsmtValue();
@@ -465,10 +453,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				asmtValue.setPost(0);
 				asmtValue.setId(asmtValueDbService.asmtValueDao.insert(asmtValue));
 
-				saveFlag = 0;
+				saveFlag = 1;
 				onFlag = 1;
 				startOrEva = 1;
-				resultBtn.setEnabled(false);
+				//				resultBtn.setEnabled(false);
 				timeList.clear();
 				MainActivity.resultParams = new RequestParams();
 				mLpa = 0;
@@ -500,17 +488,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 停止记录数据
 	 */
-	public void stopSave() {
-		saveFlag = 0;
-		timeList.clear();
-		earPhoneList.clear();
-		latitudeList.clear();
-		longtitudeList.clear();
-		accuracyList.clear();
-		altitudeList.clear();
-		splList.clear();
-	}
-
 	public void stopRecord() {
 		saveFlag = 0;
 		onFlag = 0;
@@ -519,7 +496,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 开始记录数据
 	 */
-	public void startSave(float maxLpa, float mainFrequence, float spl) {
+	public void saveSPLValue(float maxLpa, float mainFrequence, float spl) {
 		if (DateTimeTools.getIntervalForSecond(lastTime) < 1) {
 		} else {
 			splValue = new SPLValue();
@@ -614,6 +591,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			resultParams.put("L50", L50);
 			resultParams.put("L90", L90);
 			resultParams.put("Laeq", Laeq);
+
+			MainActivity.asmtValue.setL10(L10);
+			MainActivity.asmtValue.setL50(L50);
+			MainActivity.asmtValue.setL90(L90);
+			MainActivity.asmtValue.setLaeq(Laeq);
+			LogTool.e("" + splList);
+			LogTool.e("" + Laeq);
+			asmtValueDbService.asmtValueDao.update(asmtValue);
 		}
 
 		resultParams.put("mainF", mF);
@@ -688,7 +673,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 				// 记录数据
 				if (saveFlag == 1) {
-					startSave(fftCal.getMaxSudBADouble(maxSPL), fftCal.getMaxSudHzDouble(maxFrequency), calibrateSPLValue);
+					saveSPLValue(fftCal.getMaxSudBADouble(maxSPL), fftCal.getMaxSudHzDouble(maxFrequency), calibrateSPLValue);
 				}
 
 				if (onFlag == 1) {

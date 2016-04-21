@@ -1,6 +1,6 @@
 package com.splmeter.ui;
 
-import com.splmeter.utils.LogTool;
+import com.splmeter.dbservice.AsmtValueDbService;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,8 +15,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import cn.citisense.splmeter.R;
 import android.widget.TextView;
+import cn.citisense.splmeter.R;
 
 /**
  * @description:主观评价对话框
@@ -35,6 +35,7 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private SeekBar seekBarHarmony;
 	private TextView sound_levelText, comfort_levelText, coordinated_levelText;
 	private String[] soundLevles, comfortLevels, coordiantedLevels;
+	private AsmtValueDbService asmtValueDbService;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
-
+		asmtValueDbService = AsmtValueDbService.getInstance(getActivity());
 	}
 
 	@Override
@@ -93,7 +94,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private void saveResult() {
 		MainActivity.resultParams.put("asmt",
 				"" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
-		LogTool.e("-----" + "" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
+		MainActivity.asmtValue
+				.setAsmt("" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
+		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:padding="2dp" >
 
     <TextView
         android:id="@+id/laeqTextView"
@@ -8,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/quietTextView"
@@ -16,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/timeTextView"
@@ -24,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/laeqTextView"
-        android:text="TextView" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/placeTextView"
@@ -32,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/timeTextView"
-        android:text="TextView" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/soundsourceTextView"
@@ -40,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/placeTextView"
-        android:text="TextView" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/evaluateTextView"
@@ -48,6 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/soundsourceTextView"
-        android:text="TextView" />
+        android:textSize="14sp" />
 
 </RelativeLayout>

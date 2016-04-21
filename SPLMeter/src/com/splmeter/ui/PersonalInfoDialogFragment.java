@@ -4,6 +4,7 @@ import org.apache.http.Header;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.splmeter.base.BaseApplication;
+import com.splmeter.dbservice.AsmtValueDbService;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LocationTool;
@@ -45,11 +46,13 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	private RadioButton radioFemale;
 	private SharePreferenceUtil sharePreferenceUtil;
 	LocationTool locationTool;
+	private AsmtValueDbService asmtValueDbService;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mainActivity = (MainActivity) getActivity();
+		asmtValueDbService = AsmtValueDbService.getInstance(getActivity());
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		locationTool = new LocationTool(mainActivity);
 		return super.onCreateDialog(savedInstanceState);
@@ -104,47 +107,22 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		int age = ageSpinner.getSelectedItemPosition() + 1;
 		sharePreferenceUtil.setAgeGroup(age - 1);
 		sharePreferenceUtil.setGender(gender);
+
+		MainActivity.asmtValue.setAge(age);
+		MainActivity.asmtValue.setGender(gender);
+		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
+
 		MainActivity.resultParams.put("gender", gender);
 		MainActivity.resultParams.put("age", age);
+
 		mainActivity.saveData();
 		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
 		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
 		MainActivity.resultParams.put("calb", sharePreferenceUtil.getCalibration());
 		MainActivity.resultParams.put("mode", sharePreferenceUtil.getInOutDoor() == 1 ? 0 : 1);
 
-//		MainActivity.shareFlag = 2;
-		MainActivity.startOrEva = 0;
 		mainActivity.refresh();
-
 	}
-
-	/**
-	 * 提示对话框
-	 */
-	//	private void showSuccessDialog() {
-	//		final MyAlertDialog myAlertDialog = new MyAlertDialog(mainActivity);
-	//		myAlertDialog.setTitle(mainActivity.getResources().getString(R.string.infoTitle));
-	//		myAlertDialog.setMessage(mainActivity.getResources().getString(R.string.share_success));
-	//		View.OnClickListener comfirm = new OnClickListener() {
-	//
-	//			@Override
-	//			public void onClick(View v) {
-	//				// TODO Auto-generated method stub
-	//				myAlertDialog.dismiss();
-	//			}
-	//		};
-	//		View.OnClickListener cancle = new OnClickListener() {
-	//
-	//			@Override
-	//			public void onClick(View v) {
-	//				// TODO Auto-generated method stub
-	//				myAlertDialog.dismiss();
-	//			}
-	//		};
-	//		myAlertDialog.setPositiveButton(mainActivity.getResources().getString(R.string.confirm), comfirm);
-	//		myAlertDialog.setNegativeButton(mainActivity.getResources().getString(R.string.cancel), cancle);
-	//		myAlertDialog.show();
-	//	}
 
 	/**
 	 * 上传数据
@@ -168,8 +146,6 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 					public void onSuccess(int statusCode, Header[] headers, String response) {
 						// TODO Auto-generated method stub
 						LogTool.i(statusCode + "===" + response);
-
-						//						showSuccessDialog();
 					}
 
 					@Override
@@ -185,14 +161,12 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 						dialog.dismiss();
 					}
 				};
-				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
+//				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
 
 			} else {
 				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
 			}
 
-		} else {
-//			MainActivity.shareFlag = 1;
 		}
 	}
 

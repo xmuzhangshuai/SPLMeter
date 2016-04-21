@@ -1,6 +1,7 @@
 package com.splmeter.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.splmeter.base.BaseActivity;
@@ -37,6 +38,7 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 	private ListView resultListView;
 	private List<AsmtValue> asmtValueList;
 	private AsmtValueDbService asmtValueDbService;
+	private ResultlAdapter resultAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		asmtValueDbService = AsmtValueDbService.getInstance(ResultActivity.this);
 		asmtValueList = new ArrayList<>();
 		asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
+		Collections.reverse(asmtValueList);
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		findViewById();
 		initView();
@@ -65,8 +68,10 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		cancelBtn.setOnClickListener(this);
 		confirmBtn.setOnClickListener(this);
-
-		resultListView.setAdapter(new ResultlAdapter());
+		resultAdapter = new ResultlAdapter();
+		resultListView.setAdapter(resultAdapter);
+		queitRateTextView.setText("安静达标率50%");
+		countTextView.setText("共" + asmtValueList.size() + "条记录");
 	}
 
 	private void validateSetting() {
@@ -105,7 +110,9 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.cancel_btn:
-			finish();
+			asmtValueDbService.asmtValueDao.deleteAll();
+			asmtValueList.clear();
+			resultAdapter.notifyDataSetChanged();
 			break;
 		case R.id.confirm_btn:
 			validateSetting();
@@ -176,15 +183,12 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
-			if (asmtValue.getLaeq() != null) {
-				holder.laeqTextView.setText(asmtValue.getLaeq().toString());
-				holder.quietTextView.setText(asmtValue.getLaeq().toString());
-				holder.soundsourceTextView.setText(asmtValue.getLaeq().toString());
-				holder.evaluateTextView.setText(asmtValue.getLaeq().toString());
-			}
+			holder.laeqTextView.setText("" + asmtValue.getLaeq() + "dBA");
+			holder.quietTextView.setText("非常安静");
 			holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
-			holder.placeTextView.setText("记录条数：	" + asmtValue.getSplValueList().size());
-
+			holder.placeTextView.setText("地点：	" + asmtValue.getMode());
+			holder.soundsourceTextView.setText("声源：" + asmtValue.getSource());
+			holder.evaluateTextView.setText("评价：" + asmtValue.getAsmt());
 			return view;
 		}
 	}

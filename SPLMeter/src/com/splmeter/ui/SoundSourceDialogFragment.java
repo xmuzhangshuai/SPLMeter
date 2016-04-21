@@ -3,6 +3,7 @@ package com.splmeter.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.splmeter.dbservice.AsmtValueDbService;
 import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.entities.SoundSource;
 import com.splmeter.utils.CommonTools;
@@ -39,6 +40,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 	private List<String> soundSourceNameList1, soundSourceNameList2, soundSourceNameList3;
 
 	private SoundSourceDbService soundSourceDbService;
+	private AsmtValueDbService asmtValueDbService;
 	private StringBuffer soundSourceSelected;//选中的数据
 
 	@Override
@@ -55,6 +57,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
 		soundSourceDbService = SoundSourceDbService.getInstance(getActivity());
+		asmtValueDbService = AsmtValueDbService.getInstance(getActivity());
 		soundSourcesList1 = soundSourceDbService.getSoundSourceType01();
 		soundSourcesList2 = soundSourceDbService.getSoundSourceType02();
 		soundSourcesList3 = soundSourceDbService.getSoundSourceType03();
@@ -129,6 +132,9 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		if (soundSourceSelected.length() > 1) {
 			soundSourceSelected.deleteCharAt(soundSourceSelected.length() - 1);
 		}
+
+		MainActivity.asmtValue.setSource(soundSourceSelected.toString());
+		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 
 		MainActivity.resultParams.put("source", soundSourceSelected);
 	}

@@ -3,10 +3,9 @@ package com.splmeter.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.splmeter.dbservice.AsmtValueDbService;
 import com.splmeter.dbservice.ModeDbService;
-import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.entities.Mode;
-import com.splmeter.entities.SoundSource;
 import com.splmeter.utils.CommonTools;
 
 import android.app.Dialog;
@@ -16,9 +15,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,6 +41,7 @@ public class ModeDialogFragment extends DialogFragment implements OnClickListene
 
 	private ListView modeListView;
 	private ModeDbService modeDbService;
+	private AsmtValueDbService asmtValueDbService;
 	private List<String> modeNameList;
 	private List<Mode> modeList;
 
@@ -55,6 +58,7 @@ public class ModeDialogFragment extends DialogFragment implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NORMAL, 0);
 		modeDbService = ModeDbService.getInstance(getActivity());
+		asmtValueDbService = AsmtValueDbService.getInstance(getActivity());
 		modeNameList = new ArrayList<>();
 		modeList = new ArrayList<>();
 		modeList = modeDbService.getModeList();
@@ -89,13 +93,24 @@ public class ModeDialogFragment extends DialogFragment implements OnClickListene
 	}
 
 	private void initView() {
-		modeListView.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.list_item_multiple_choice, modeNameList));
+		modeListView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, modeNameList));
 		lastBtn.setOnClickListener(this);
 		nextBtn.setOnClickListener(this);
+		nextBtn.setEnabled(false);
+		modeListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				nextBtn.setEnabled(true);
+				MainActivity.asmtValue.setMode(modeList.get(position).getMode_code());
+			}
+		});
 	}
 
 	private void saveData() {
 
+		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 	}
 
 	@Override
@@ -104,7 +119,8 @@ public class ModeDialogFragment extends DialogFragment implements OnClickListene
 		switch (v.getId()) {
 		case R.id.last_btn:
 			this.dismiss();
-			mainActivity.stopSave();
+			mainActivity.stopRecord();
+			mainActivity.saveData();
 			break;
 		case R.id.next_btn:
 			saveData();
