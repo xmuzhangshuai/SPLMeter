@@ -24,7 +24,7 @@ public class SPLValue {
     private Float acc;
     private Float spl;
     private Float mainF;
-    private Float mainLpa;
+    private Float maxLpa;
     private long asmt_id;
 
     /** Used to resolve relations */
@@ -47,7 +47,7 @@ public class SPLValue {
         this.id = id;
     }
 
-    public SPLValue(Long id, java.util.Date time, Integer earphone, Float lng, Float lat, Float alt, Float acc, Float spl, Float mainF, Float mainLpa, long asmt_id) {
+    public SPLValue(Long id, java.util.Date time, Integer earphone, Float lng, Float lat, Float alt, Float acc, Float spl, Float mainF, Float maxLpa, long asmt_id) {
         this.id = id;
         this.time = time;
         this.earphone = earphone;
@@ -57,7 +57,7 @@ public class SPLValue {
         this.acc = acc;
         this.spl = spl;
         this.mainF = mainF;
-        this.mainLpa = mainLpa;
+        this.maxLpa = maxLpa;
         this.asmt_id = asmt_id;
     }
 
@@ -139,12 +139,12 @@ public class SPLValue {
         this.mainF = mainF;
     }
 
-    public Float getMainLpa() {
-        return mainLpa;
+    public Float getMaxLpa() {
+        return maxLpa;
     }
 
-    public void setMainLpa(Float mainLpa) {
-        this.mainLpa = mainLpa;
+    public void setMaxLpa(Float maxLpa) {
+        this.maxLpa = maxLpa;
     }
 
     public long getAsmt_id() {

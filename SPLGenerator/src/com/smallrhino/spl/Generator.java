@@ -65,7 +65,7 @@ public class Generator {
 		splValueEntity.addFloatProperty("acc");
 		splValueEntity.addFloatProperty("spl");
 		splValueEntity.addFloatProperty("mainF");
-		splValueEntity.addFloatProperty("mainLpa");
+		splValueEntity.addFloatProperty("maxLpa");
 		Property splvalue_asmt_id = splValueEntity.addLongProperty("asmt_id").notNull().getProperty();
 		splValueEntity.addToOne(asmtValueEntity, splvalue_asmt_id);
 		ToMany asmtSplValue = asmtValueEntity.addToMany(splValueEntity, splvalue_asmt_id);

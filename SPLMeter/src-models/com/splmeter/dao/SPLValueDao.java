@@ -39,7 +39,7 @@ public class SPLValueDao extends AbstractDao<SPLValue, Long> {
         public final static Property Acc = new Property(6, Float.class, "acc", false, "ACC");
         public final static Property Spl = new Property(7, Float.class, "spl", false, "SPL");
         public final static Property MainF = new Property(8, Float.class, "mainF", false, "MAIN_F");
-        public final static Property MainLpa = new Property(9, Float.class, "mainLpa", false, "MAIN_LPA");
+        public final static Property MaxLpa = new Property(9, Float.class, "maxLpa", false, "MAX_LPA");
         public final static Property Asmt_id = new Property(10, long.class, "asmt_id", false, "ASMT_ID");
     };
 
@@ -69,7 +69,7 @@ public class SPLValueDao extends AbstractDao<SPLValue, Long> {
                 "\"ACC\" REAL," + // 6: acc
                 "\"SPL\" REAL," + // 7: spl
                 "\"MAIN_F\" REAL," + // 8: mainF
-                "\"MAIN_LPA\" REAL," + // 9: mainLpa
+                "\"MAX_LPA\" REAL," + // 9: maxLpa
                 "\"ASMT_ID\" INTEGER NOT NULL );"); // 10: asmt_id
     }
 
@@ -129,9 +129,9 @@ public class SPLValueDao extends AbstractDao<SPLValue, Long> {
             stmt.bindDouble(9, mainF);
         }
  
-        Float mainLpa = entity.getMainLpa();
-        if (mainLpa != null) {
-            stmt.bindDouble(10, mainLpa);
+        Float maxLpa = entity.getMaxLpa();
+        if (maxLpa != null) {
+            stmt.bindDouble(10, maxLpa);
         }
         stmt.bindLong(11, entity.getAsmt_id());
     }
@@ -161,7 +161,7 @@ public class SPLValueDao extends AbstractDao<SPLValue, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // acc
             cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7), // spl
             cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8), // mainF
-            cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // mainLpa
+            cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // maxLpa
             cursor.getLong(offset + 10) // asmt_id
         );
         return entity;
@@ -179,7 +179,7 @@ public class SPLValueDao extends AbstractDao<SPLValue, Long> {
         entity.setAcc(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
         entity.setSpl(cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7));
         entity.setMainF(cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8));
-        entity.setMainLpa(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
+        entity.setMaxLpa(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
         entity.setAsmt_id(cursor.getLong(offset + 10));
      }
     

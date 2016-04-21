@@ -19,6 +19,10 @@ import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
+import com.splmeter.dbservice.AsmtValueDbService;
+import com.splmeter.dbservice.SplValueService;
+import com.splmeter.entities.AsmtValue;
+import com.splmeter.entities.SPLValue;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
@@ -68,7 +72,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Button settingBtn;
 	private Button startBtn;
 	private Button resultBtn;
-	//	private int flag = 0;
 	private TextView currentValue;
 	private FFTSplCal fftCal;
 	private RecordAudio recordTask;
@@ -92,7 +95,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private String[] ordinateArray = new String[] { "120", "100", "80", "60", "40", "20" };
 
 	public static RequestParams resultParams;// 最终上传的结果
-	//	public static int shareFlag = 0;// 0为未测试，1为测试过，2为已经分享成功
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
 	public static int currentPage = 1;//是否为当前页面
@@ -102,13 +104,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	SurfaceView sfv; // 绘图所用
 	DrawProcess drawProcess;// 处理
-	//	private int uploadMaxsize = 100;// 上传主频对的最大数
 	private Date lastTime;
 	private LocationTool locationTool;
-	private float maxLpa, mainFrenquency;
+	private float mLpa, mF;
 	private List<String> timeList;
 	private List<Integer> earPhoneList;
 	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
+
+	private AsmtValueDbService asmtValueDbService;
+	private SplValueService splValueService;
+	public AsmtValue asmtValue;
+	public SPLValue splValue;
 
 	private BroadcastReceiver mHomeKeyEventReceiver = new BroadcastReceiver() {
 		String SYSTEM_REASON = "reason";
@@ -145,6 +151,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		splList = new ArrayList<>();
 		earPhoneList = new ArrayList<>();
 		locationTool = new LocationTool(MainActivity.this);
+		asmtValueDbService = AsmtValueDbService.getInstance(MainActivity.this);
+		splValueService = SplValueService.getInstance(MainActivity.this);
 
 		// 友盟更新
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
@@ -398,23 +406,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		newFragment.show(ft, "personal_info_dialog");
 	}
 
-	//	/**
-	//	* 显示分享对话框
-	//	*/
-	//	void showShareDialog() {
-	//
-	//		FragmentTransaction ft = getFragmentManager().beginTransaction();
-	//		Fragment prev = getFragmentManager().findFragmentByTag("share_dialog");
-	//		if (prev != null) {
-	//			ft.remove(prev);
-	//		}
-	//		ft.addToBackStack(null);
-	//
-	//		// Create and show the dialog.
-	//		ShareDialogFragment newFragment = new ShareDialogFragment();
-	//		newFragment.show(ft, "share_dialog");
-	//	}
-
 	/**
 	 * 获取实时值
 	 * @return
@@ -467,15 +458,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				saveFlag = 1;
 				next_last(1);
 			} else {// 开始
+				asmtValue = new AsmtValue();
+				asmtValue.setImei(CommonTools.getIMEI(MainActivity.this));
+				asmtValue.setModeltype(CommonTools.getPhoneType());
+				asmtValue.setCalb(sharePreferenceUtil.getCalibration());
+				asmtValue.setPost(0);
+				asmtValue.setId(asmtValueDbService.asmtValueDao.insert(asmtValue));
+
 				saveFlag = 0;
 				onFlag = 1;
 				startOrEva = 1;
-				//				shareFlag = 0;
 				resultBtn.setEnabled(false);
 				timeList.clear();
 				MainActivity.resultParams = new RequestParams();
-				maxLpa = 0;
-				mainFrenquency = 0;
+				mLpa = 0;
+				mF = 0;
 				longtitudeList.clear();
 				latitudeList.clear();
 				altitudeList.clear();
@@ -490,7 +487,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 			break;
 		case R.id.result_btn:
-			//			showShareDialog();
 			Intent resultIntent = new Intent(MainActivity.this, ResultActivity.class);
 			startActivity(resultIntent);
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -526,52 +522,43 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void startSave(float maxLpa, float mainFrequence, float spl) {
 		if (DateTimeTools.getIntervalForSecond(lastTime) < 1) {
 		} else {
-			lastTime = DateTimeTools.getCurrentDate();
-			if (maxLpa > this.maxLpa) {
-				this.maxLpa = maxLpa;
-				this.mainFrenquency = mainFrequence;
-			}
+			splValue = new SPLValue();
+			splValue.setAsmt_id(asmtValue.getId());
 
 			// 记录时间
-			//		if (timeList.size() < uploadMaxsize) {
 			timeList.add(DateTimeTools.getCurrentDateTimeForString());
-			//		} else {
-			//			timeList.remove(0);
-			//			timeList.add(DateTimeTools.getCurrentDateTimeForString());
-			//		}
+			lastTime = DateTimeTools.getCurrentDate();
+			splValue.setTime(lastTime);
+
+			// 记录耳机状态
+			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
+			splValue.setEarphone(CommonTools.getEarPhone(this) ? 1 : 0);
 
 			// 记录位置
-			//		if (longtitudeList.size() < uploadMaxsize) {
 			longtitudeList.add((float) locationTool.getLongitude());
 			latitudeList.add((float) locationTool.getLatitude());
 			altitudeList.add((float) locationTool.getAltitude());
 			accuracyList.add((float) locationTool.getAccuracy());
-			//		} else {
-			//			longtitudeList.remove(0);
-			//			latitudeList.remove(0);
-			//			altitudeList.remove(0);
-			//			accuracyList.remove(0);
-			//			longtitudeList.add((float) locationTool.getLongitude());
-			//			latitudeList.add((float) locationTool.getLatitude());
-			//			altitudeList.add((float) locationTool.getAltitude());
-			//			accuracyList.add((float) locationTool.getAccuracy());
-			//		}
-
-			// 记录耳机状态
-			//		if (earPhoneList.size() < uploadMaxsize) {
-			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
-			//		} else {
-			//			earPhoneList.remove(0);
-			//			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
-			//		}
+			splValue.setLng((float) locationTool.getLongitude());
+			splValue.setLat((float) locationTool.getLatitude());
+			splValue.setAlt((float) locationTool.getAltitude());
+			splValue.setAcc((float) locationTool.getAccuracy());
 
 			// 记录声压级
-			//		if (splList.size() < uploadMaxsize) {
 			splList.add(spl);
-			//		} else {
-			//			splList.remove(0);
-			//			splList.add(spl);
-			//		}
+			splValue.setSpl(spl);
+
+			//记录mainF、maxLpa
+			splValue.setMainF(mainFrequence);
+			splValue.setMaxLpa(maxLpa);
+			if (maxLpa > this.mLpa) {
+				this.mLpa = maxLpa;
+				this.mF = mainFrequence;
+			}
+			asmtValue.setMF(mF);
+			asmtValue.setMLpa(mLpa);
+
+			splValueService.splValueDao.insert(splValue);
 		}
 	}
 
@@ -629,8 +616,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			resultParams.put("Laeq", Laeq);
 		}
 
-		resultParams.put("mainF", mainFrenquency);
-		resultParams.put("maxLpa", maxLpa);
+		resultParams.put("mainF", mF);
+		resultParams.put("maxLpa", mLpa);
 	}
 
 	/**
