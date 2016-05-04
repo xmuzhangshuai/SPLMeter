@@ -76,6 +76,14 @@ public class DateTimeTools {
 			return "";
 		}
 	}
+	
+	public static String DateToStringForSecond(Date date) {
+		if (date != null) {
+			return formatter.format(date);
+		} else {
+			return "";
+		}
+	}
 
 	public static String getMonAndDay(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm");

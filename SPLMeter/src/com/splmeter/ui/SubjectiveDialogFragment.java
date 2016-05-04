@@ -92,8 +92,8 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	}
 
 	private void saveResult() {
-		MainActivity.resultParams.put("asmt",
-				"" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
+//		MainActivity.resultParams.put("asmt",
+//				"" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
 		MainActivity.asmtValue
 				.setAsmt("" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
 		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);

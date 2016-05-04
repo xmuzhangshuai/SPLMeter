@@ -112,14 +112,14 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		MainActivity.asmtValue.setGender(gender);
 		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 
-		MainActivity.resultParams.put("gender", gender);
-		MainActivity.resultParams.put("age", age);
+//		MainActivity.resultParams.put("gender", gender);
+//		MainActivity.resultParams.put("age", age);
 
 		mainActivity.saveData();
-		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
-		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
-		MainActivity.resultParams.put("calb", sharePreferenceUtil.getCalibration());
-		MainActivity.resultParams.put("mode", sharePreferenceUtil.getInOutDoor() == 1 ? 0 : 1);
+//		MainActivity.resultParams.put("IMEI", CommonTools.getIMEI(mainActivity));
+//		MainActivity.resultParams.put("modelType", CommonTools.getPhoneType());
+//		MainActivity.resultParams.put("calb", sharePreferenceUtil.getCalibration());
+//		MainActivity.resultParams.put("mode", sharePreferenceUtil.getInOutDoor() == 1 ? 0 : 1);
 
 		mainActivity.refresh();
 	}
@@ -129,43 +129,43 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	 */
 	private void uploadData() {
 		if (sharePreferenceUtil.getAutoShare()) {
-			LogTool.i(MainActivity.resultParams.toString());
-			if (NetworkUtils.isNetworkAvailable(getActivity())) {
-				final ProgressDialog dialog = new ProgressDialog(getActivity());
-				dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
-
-				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-					@Override
-					public void onStart() {
-						// TODO Auto-generated method stub
-						super.onStart();
-						dialog.show();
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers, String response) {
-						// TODO Auto-generated method stub
-						LogTool.i(statusCode + "===" + response);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-						// TODO Auto-generated method stub
-						LogTool.e("ReportSPLValue服务器错误" + errorResponse);
-					}
-
-					@Override
-					public void onFinish() {
-						// TODO Auto-generated method stub
-						super.onFinish();
-						dialog.dismiss();
-					}
-				};
-//				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
-
-			} else {
-				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
-			}
+//			LogTool.i(MainActivity.resultParams.toString());
+//			if (NetworkUtils.isNetworkAvailable(getActivity())) {
+//				final ProgressDialog dialog = new ProgressDialog(getActivity());
+//				dialog.setTitle(getActivity().getResources().getString(R.string.shareing));
+//
+//				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+//					@Override
+//					public void onStart() {
+//						// TODO Auto-generated method stub
+//						super.onStart();
+//						dialog.show();
+//					}
+//
+//					@Override
+//					public void onSuccess(int statusCode, Header[] headers, String response) {
+//						// TODO Auto-generated method stub
+//						LogTool.i(statusCode + "===" + response);
+//					}
+//
+//					@Override
+//					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+//						// TODO Auto-generated method stub
+//						LogTool.e("ReportSPLValue服务器错误" + errorResponse);
+//					}
+//
+//					@Override
+//					public void onFinish() {
+//						// TODO Auto-generated method stub
+//						super.onFinish();
+//						dialog.dismiss();
+//					}
+//				};
+////				AsyncHttpClientTool.post("?m=Home&a=ReportSPLValue", MainActivity.resultParams, responseHandler);
+//
+//			} else {
+//				CommonTools.showShortToast(getActivity(), CommonTools.isZh(getActivity()) ? "分享失败！请保障网络畅通或稍后再试" : "Failed! Make sure Internet connected or try again later");
+//			}
 
 		}
 	}

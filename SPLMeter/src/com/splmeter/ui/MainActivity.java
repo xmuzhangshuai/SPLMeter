@@ -20,12 +20,17 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.dbservice.AsmtValueDbService;
+import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.dbservice.SplValueService;
 import com.splmeter.entities.AsmtValue;
 import com.splmeter.entities.SPLValue;
+import com.splmeter.entities.SoundSource;
+import com.splmeter.jsonobject.JsonAsmtValue;
+import com.splmeter.jsonobject.JsonSPLValue;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
+import com.splmeter.utils.FastJsonTool;
 import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
@@ -94,7 +99,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private List<String> abscissaArray = new ArrayList<>();
 	private String[] ordinateArray = new String[] { "120", "100", "80", "60", "40", "20" };
 
-	public static RequestParams resultParams;// 最终上传的结果
+	//	public static RequestParams resultParams;// 最终上传的结果
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
 	public static int currentPage = 1;//是否为当前页面
@@ -107,9 +112,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Date lastTime;
 	private LocationTool locationTool;
 	private float mLpa, mF;
-	private List<String> timeList;
-	private List<Integer> earPhoneList;
-	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
+	//	private List<String> timeList;
+	//	private List<Integer> earPhoneList;
+	//	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
+	private List<Float> splList;
 
 	private AsmtValueDbService asmtValueDbService;
 	private SplValueService splValueService;
@@ -142,16 +148,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		// 从网络获取数据并存储到本地
 		new ServerUtils(MainActivity.this).initData();
-		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
-		timeList = new ArrayList<>();
-		latitudeList = new ArrayList<>();
-		longtitudeList = new ArrayList<>();
-		accuracyList = new ArrayList<>();
-		altitudeList = new ArrayList<>();
-		splList = new ArrayList<>();
-		earPhoneList = new ArrayList<>();
-		locationTool = new LocationTool(MainActivity.this);
 		asmtValueDbService = AsmtValueDbService.getInstance(MainActivity.this);
+		uploadData();//上传数据
+		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
+		//		timeList = new ArrayList<>();
+		//		latitudeList = new ArrayList<>();
+		//		longtitudeList = new ArrayList<>();
+		//		accuracyList = new ArrayList<>();
+		//		altitudeList = new ArrayList<>();
+		splList = new ArrayList<>();
+		//		earPhoneList = new ArrayList<>();
+		locationTool = new LocationTool(MainActivity.this);
+
 		splValueService = SplValueService.getInstance(MainActivity.this);
 
 		// 友盟更新
@@ -159,7 +167,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		UmengUpdateAgent.update(this);
 		registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
-		resultParams = new RequestParams();
+		//		resultParams = new RequestParams();
 
 		findViewById();
 		initView();
@@ -456,16 +464,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				saveFlag = 1;
 				onFlag = 1;
 				startOrEva = 1;
-				//				resultBtn.setEnabled(false);
-				timeList.clear();
-				MainActivity.resultParams = new RequestParams();
 				mLpa = 0;
 				mF = 0;
-				longtitudeList.clear();
-				latitudeList.clear();
-				altitudeList.clear();
-				accuracyList.clear();
-				earPhoneList.clear();
 				splList.clear();
 				startBtn.setBackgroundResource(R.drawable.sel_btn_checked);
 				startBtn.setText(R.string.evaluate);
@@ -503,19 +503,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			splValue.setAsmt_id(asmtValue.getId());
 
 			// 记录时间
-			timeList.add(DateTimeTools.getCurrentDateTimeForString());
 			lastTime = DateTimeTools.getCurrentDate();
 			splValue.setTime(lastTime);
 
 			// 记录耳机状态
-			earPhoneList.add(CommonTools.getEarPhone(this) ? 1 : 0);
 			splValue.setEarphone(CommonTools.getEarPhone(this) ? 1 : 0);
 
 			// 记录位置
-			longtitudeList.add((float) locationTool.getLongitude());
-			latitudeList.add((float) locationTool.getLatitude());
-			altitudeList.add((float) locationTool.getAltitude());
-			accuracyList.add((float) locationTool.getAccuracy());
 			splValue.setLng((float) locationTool.getLongitude());
 			splValue.setLat((float) locationTool.getLatitude());
 			splValue.setAlt((float) locationTool.getAltitude());
@@ -534,6 +528,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 			asmtValue.setMF(mF);
 			asmtValue.setMLpa(mLpa);
+			asmtValueDbService.asmtValueDao.update(asmtValue);
 
 			splValueService.splValueDao.insert(splValue);
 		}
@@ -543,21 +538,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		startOrEva = 0;
 		startBtn.setBackgroundResource(R.drawable.sel_btn);
 		startBtn.setText(R.string.on);
-		
-		JSONArray timeArray = new JSONArray(timeList);
-		resultParams.put("time", timeArray.toString());
-		JSONArray longtitudeArray = new JSONArray(longtitudeList);
-		resultParams.put("lng", longtitudeArray.toString());
-		JSONArray latitudeArray = new JSONArray(latitudeList);
-		resultParams.put("lat", latitudeArray.toString());
-		JSONArray altitudeArray = new JSONArray(altitudeList);
-		resultParams.put("alt", altitudeArray.toString());
-		JSONArray accuracyArray = new JSONArray(accuracyList);
-		resultParams.put("acc", accuracyArray.toString());
-		JSONArray earPhoneArray = new JSONArray(earPhoneList);
-		resultParams.put("earphone", earPhoneArray.toString());
-		JSONArray splArray = new JSONArray(splList);
-		resultParams.put("spl", splArray.toString());
 
 		Collections.sort(splList);
 		Collections.reverse(splList);
@@ -587,20 +567,61 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			// 初始化
 			seekBarLevelThumb.setX(seekBarLevelThumbIntial + ratio * seekBarLevelDrawableWidth);
 
-			resultParams.put("L10", L10);
-			resultParams.put("L50", L50);
-			resultParams.put("L90", L90);
-			resultParams.put("Laeq", Laeq);
-
 			MainActivity.asmtValue.setL10(L10);
 			MainActivity.asmtValue.setL50(L50);
 			MainActivity.asmtValue.setL90(L90);
 			MainActivity.asmtValue.setLaeq(Laeq);
 			asmtValueDbService.asmtValueDao.update(asmtValue);
 		}
+	}
 
-		resultParams.put("mainF", mF);
-		resultParams.put("maxLpa", mLpa);
+	/**
+	 * 上传数据
+	 */
+	public void uploadData() {
+		final List<AsmtValue> asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
+		for (AsmtValue asmtValue : asmtValueList) {
+			if (asmtValue.getPost() == 0) {
+				JsonAsmtValue jsonAsmtValue = new JsonAsmtValue(asmtValue);
+
+				RequestParams params = new RequestParams();
+				params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
+
+				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers, String response) {
+						// TODO Auto-generated method stub
+						LogTool.i(statusCode + "uploadData===" + response);
+						JSONObject j1;
+						try {
+							j1 = new JSONObject(response);
+							String data = j1.getString("data");
+							if (data != null && data.equals("success")) {
+								for (AsmtValue asmtValue2 : asmtValueList) {
+									asmtValue2.setPost(1);
+									asmtValueDbService.asmtValueDao.update(asmtValue2);
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+						// TODO Auto-generated method stub
+						LogTool.e("上传数据服务器错误" + errorResponse);
+
+					}
+				};
+				AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
+
+			}
+		}
+
 	}
 
 	/**
@@ -619,8 +640,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				 * sampleRateInHz采样率，此处根据需求改为44100 channelConfig声道设置 audioFormat
 				 * 编码制式和采样大小 bufferSizeInBytes 采集数据需要的缓冲区的大小
 				 */
-				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION, RecordValue.AUDIOENCODING,
-						bufferSize);
+				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordValue.FREQUENCY, RecordValue.CHANNELCONFIGURATION,
+						RecordValue.AUDIOENCODING, bufferSize);
 				audioRecord.startRecording();
 				drawProcess.baseLine = sfv.getHeight();
 				drawProcess.sfvWidth = sfv.getWidth();
@@ -717,7 +738,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					String t_tiptxt_cn = j2.getString("t_tiptxt_cn");
 					sharePreferenceUtil.setMainLabelTextCN(t_tiptxt_cn);
 					sharePreferenceUtil.setMainLabelTextEN(t_tiptxt_en);
-					tips.setText(CommonTools.isZh(MainActivity.this) ? sharePreferenceUtil.getMainLabelTextCN() : sharePreferenceUtil.getMainLabelTextEN());
+					tips.setText(CommonTools.isZh(MainActivity.this) ? sharePreferenceUtil.getMainLabelTextCN()
+							: sharePreferenceUtil.getMainLabelTextEN());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
