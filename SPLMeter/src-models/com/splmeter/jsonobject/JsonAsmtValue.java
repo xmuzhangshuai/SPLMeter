@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.splmeter.entities.AsmtValue;
 import com.splmeter.entities.SPLValue;
-import com.splmeter.utils.LogTool;
 
 /**
  * Entity mapped to table "ASMT_VALUE".
@@ -126,19 +125,19 @@ public class JsonAsmtValue {
 		this.age = age;
 	}
 
-	public Float getmF() {
+	public Float getMF() {
 		return mF;
 	}
 
-	public void setmF(Float mF) {
+	public void setMF(Float mF) {
 		this.mF = mF;
 	}
 
-	public Float getmLpa() {
+	public Float getMLpa() {
 		return mLpa;
 	}
 
-	public void setmLpa(Float mLpa) {
+	public void setMLpa(Float mLpa) {
 		this.mLpa = mLpa;
 	}
 

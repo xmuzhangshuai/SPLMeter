@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,13 +19,10 @@ import com.splmeter.base.BaseApplication;
 import com.splmeter.config.Constants;
 import com.splmeter.config.Constants.RecordValue;
 import com.splmeter.dbservice.AsmtValueDbService;
-import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.dbservice.SplValueService;
 import com.splmeter.entities.AsmtValue;
 import com.splmeter.entities.SPLValue;
-import com.splmeter.entities.SoundSource;
 import com.splmeter.jsonobject.JsonAsmtValue;
-import com.splmeter.jsonobject.JsonSPLValue;
 import com.splmeter.utils.AsyncHttpClientTool;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
@@ -99,7 +95,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private List<String> abscissaArray = new ArrayList<>();
 	private String[] ordinateArray = new String[] { "120", "100", "80", "60", "40", "20" };
 
-	//	public static RequestParams resultParams;// 最终上传的结果
 	private int saveFlag = 0;// 为1是开始保存数据
 	private int onFlag = 0;//0为停止监控，1为正在监控
 	public static int currentPage = 1;//是否为当前页面
@@ -112,9 +107,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Date lastTime;
 	private LocationTool locationTool;
 	private float mLpa, mF;
-	//	private List<String> timeList;
-	//	private List<Integer> earPhoneList;
-	//	private List<Float> latitudeList, longtitudeList, accuracyList, altitudeList, splList;
 	private List<Float> splList;
 
 	private AsmtValueDbService asmtValueDbService;
@@ -151,13 +143,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		asmtValueDbService = AsmtValueDbService.getInstance(MainActivity.this);
 		uploadData();//上传数据
 		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
-		//		timeList = new ArrayList<>();
-		//		latitudeList = new ArrayList<>();
-		//		longtitudeList = new ArrayList<>();
-		//		accuracyList = new ArrayList<>();
-		//		altitudeList = new ArrayList<>();
 		splList = new ArrayList<>();
-		//		earPhoneList = new ArrayList<>();
 		locationTool = new LocationTool(MainActivity.this);
 
 		splValueService = SplValueService.getInstance(MainActivity.this);
@@ -572,6 +558,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			MainActivity.asmtValue.setL90(L90);
 			MainActivity.asmtValue.setLaeq(Laeq);
 			asmtValueDbService.asmtValueDao.update(asmtValue);
+
+			uploadData();
 		}
 	}
 
@@ -618,10 +606,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					}
 				};
 				AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
-
 			}
 		}
-
 	}
 
 	/**
