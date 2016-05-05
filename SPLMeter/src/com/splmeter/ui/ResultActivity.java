@@ -84,7 +84,11 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		resultAdapter = new ResultlAdapter();
 		resultListView.setAdapter(resultAdapter);
 
-		countTextView.setText("共" + asmtValueList.size() + "条记录");
+		if (CommonTools.isZh(ResultActivity.this)) {
+			countTextView.setText("共" + asmtValueList.size() + "条记录");
+		} else {
+			countTextView.setText(asmtValueList.size() + "  records");
+		}
 		int count = 0;
 		for (AsmtValue as : asmtValueList) {
 			if (as.getLaeq() != null && as.getLaeq() < 55) {
