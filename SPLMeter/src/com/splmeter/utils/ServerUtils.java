@@ -33,34 +33,34 @@ public class ServerUtils {
 	public void initData() {
 		getMode();
 		getSoundSource();
-		uploadUserState();
+//		uploadUserState();
 	}
 
 	/**
 	 * 提交用户状态
 	 */
-	private void uploadUserState() {
-		RequestParams params = new RequestParams();
-		params.put("IMEI", CommonTools.getIMEI(context));
-		params.put("reportTime", DateTimeTools.getCurrentDateTimeForString());
-
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String response) {
-				// TODO Auto-generated method stub
-				LogTool.i(statusCode + "===" + response);
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-				// TODO Auto-generated method stub
-				LogTool.e("uploadUserState服务器错误" + errorResponse);
-
-			}
-		};
-		AsyncHttpClientTool.post("?m=Home&a=ReportUserState", params, responseHandler);
-	}
+//	private void uploadUserState() {
+//		RequestParams params = new RequestParams();
+//		params.put("IMEI", CommonTools.getIMEI(context));
+//		params.put("reportTime", DateTimeTools.getCurrentDateTimeForString());
+//
+//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+//
+//			@Override
+//			public void onSuccess(int statusCode, Header[] headers, String response) {
+//				// TODO Auto-generated method stub
+//				LogTool.i(statusCode + "===" + response);
+//			}
+//
+//			@Override
+//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+//				// TODO Auto-generated method stub
+//				LogTool.e("uploadUserState服务器错误" + errorResponse);
+//
+//			}
+//		};
+//		AsyncHttpClientTool.post("?m=Home&a=ReportUserState", params, responseHandler);
+//	}
 
 	/**
 	 * 获取声源

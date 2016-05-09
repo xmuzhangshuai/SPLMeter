@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">SPL Meter</string>
-    <string name="current_value">LAeq</string>
+    <string name="result_value">LAeq</string>
+    <string name="current_value">SPL</string>
     <string name="indoor">Indoor</string>
     <string name="outdoor">Outdoor</string>
     <string name="dBCaption">dBA</string>

@@ -35,18 +35,20 @@
             android:layout_marginRight="10dp"
             android:text="@string/indoor"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/current_value_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/in_out_door"
+            android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
             <TextView
+                android:id="@+id/cuttent_value_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

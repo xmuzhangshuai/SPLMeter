@@ -3,6 +3,9 @@ package com.splmeter.dbservice;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.dao.AsmtValueDao;
 import com.splmeter.dao.DaoSession;
+import com.splmeter.entities.AsmtValue;
+import com.splmeter.entities.SPLValue;
+import com.splmeter.utils.SharePreferenceUtil;
 
 import android.content.Context;
 
@@ -12,6 +15,7 @@ public class AsmtValueDbService {
 	private static Context appContext;
 	private DaoSession mDaoSession;
 	public AsmtValueDao asmtValueDao;
+	private static SharePreferenceUtil sharePreferenceUtil;
 
 	public AsmtValueDbService() {
 		// TODO Auto-generated constructor stub
@@ -25,6 +29,7 @@ public class AsmtValueDbService {
 	public static AsmtValueDbService getInstance(Context context) {
 		if (instance == null) {
 			instance = new AsmtValueDbService();
+			sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 			if (appContext == null) {
 				appContext = context.getApplicationContext();
 			}
@@ -34,4 +39,16 @@ public class AsmtValueDbService {
 		return instance;
 	}
 
+	public long insert(AsmtValue asmtValue) {
+		if (sharePreferenceUtil.getAutoShare()) {
+			return asmtValueDao.insert(asmtValue);
+		}
+		return 0;
+	}
+
+	public void update(AsmtValue asmtValue) {
+		if (sharePreferenceUtil.getAutoShare()) {
+			asmtValueDao.update(asmtValue);
+		}
+	}
 }

@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView fsLabel;
 	private TextView doorLabel;
 	private TextView tips;
+	private TextView currentValueLabel;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;// 噪音范围最小值
 	private float seekBarLevelBlock = 25;
@@ -137,12 +138,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 
 		// 从网络获取数据并存储到本地
 		new ServerUtils(MainActivity.this).initData();
 		asmtValueDbService = AsmtValueDbService.getInstance(MainActivity.this);
 		uploadData();//上传数据
-		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
+
 		splList = new ArrayList<>();
 		locationTool = new LocationTool(MainActivity.this);
 
@@ -189,6 +191,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		doorLabel = (TextView) findViewById(R.id.in_out_door);
 		tips = (TextView) findViewById(R.id.participants);
 		sfv = (SurfaceView) this.findViewById(R.id.SurfaceView);
+		currentValueLabel = (TextView) findViewById(R.id.cuttent_value_label);
 	}
 
 	@Override
@@ -440,16 +443,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				//				saveFlag = 1;
 				next_last(1);
 			} else {// 开始
+
 				asmtValue = new AsmtValue();
 				asmtValue.setImei(CommonTools.getIMEI(MainActivity.this));
 				asmtValue.setModeltype(CommonTools.getPhoneType());
 				asmtValue.setCalb(sharePreferenceUtil.getCalibration());
 				asmtValue.setPost(0);
-				asmtValue.setId(asmtValueDbService.asmtValueDao.insert(asmtValue));
+
+				asmtValue.setId(asmtValueDbService.insert(asmtValue));
 
 				saveFlag = 1;
 				onFlag = 1;
 				startOrEva = 1;
+				currentValueLabel.setText(getResources().getString(R.string.current_value));
 				mLpa = 0;
 				mF = 0;
 				splList.clear();
@@ -485,38 +491,40 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void saveSPLValue(float maxLpa, float mainFrequence, float spl) {
 		if (DateTimeTools.getIntervalForSecond(lastTime) < 1) {
 		} else {
-			splValue = new SPLValue();
-			splValue.setAsmt_id(asmtValue.getId());
+			if (spl > 0) {
+				splValue = new SPLValue();
+				splValue.setAsmt_id(asmtValue.getId());
 
-			// 记录时间
-			lastTime = DateTimeTools.getCurrentDate();
-			splValue.setTime(lastTime);
+				// 记录时间
+				lastTime = DateTimeTools.getCurrentDate();
+				splValue.setTime(lastTime);
 
-			// 记录耳机状态
-			splValue.setEarphone(CommonTools.getEarPhone(this) ? 1 : 0);
+				// 记录耳机状态
+				splValue.setEarphone(CommonTools.getEarPhone(this) ? 1 : 0);
 
-			// 记录位置
-			splValue.setLng((float) locationTool.getLongitude());
-			splValue.setLat((float) locationTool.getLatitude());
-			splValue.setAlt((float) locationTool.getAltitude());
-			splValue.setAcc((float) locationTool.getAccuracy());
+				// 记录位置
+				splValue.setLng((float) locationTool.getLongitude());
+				splValue.setLat((float) locationTool.getLatitude());
+				splValue.setAlt((float) locationTool.getAltitude());
+				splValue.setAcc((float) locationTool.getAccuracy());
 
-			// 记录声压级
-			splList.add(spl);
-			splValue.setSpl(spl);
+				// 记录声压级
+				splList.add(spl);
+				splValue.setSpl(spl);
 
-			//记录mainF、maxLpa
-			splValue.setMainF(mainFrequence);
-			splValue.setMaxLpa(maxLpa);
-			if (maxLpa > this.mLpa) {
-				this.mLpa = maxLpa;
-				this.mF = mainFrequence;
+				//记录mainF、maxLpa
+				splValue.setMainF(mainFrequence);
+				splValue.setMaxLpa(maxLpa);
+				if (maxLpa > this.mLpa) {
+					this.mLpa = maxLpa;
+					this.mF = mainFrequence;
+				}
+				asmtValue.setMF(mF);
+				asmtValue.setMLpa(mLpa);
+				asmtValueDbService.update(asmtValue);
+
+				splValueService.insert(splValue);
 			}
-			asmtValue.setMF(mF);
-			asmtValue.setMLpa(mLpa);
-			asmtValueDbService.asmtValueDao.update(asmtValue);
-
-			splValueService.splValueDao.insert(splValue);
 		}
 	}
 
@@ -534,6 +542,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			float L90 = splList.get(length * 9 / 10);
 			float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
 			currentValue.setText("" + Laeq);//修改主界面值
+			currentValueLabel.setText(getResources().getString(R.string.result_value));
 
 			currentLevel = (int) ((Laeq - seekBarLevelMinValue) / 5);// 当前层级
 			if (currentLevel > 4) {
@@ -557,7 +566,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			MainActivity.asmtValue.setL50(L50);
 			MainActivity.asmtValue.setL90(L90);
 			MainActivity.asmtValue.setLaeq(Laeq);
-			asmtValueDbService.asmtValueDao.update(asmtValue);
+			asmtValueDbService.update(asmtValue);
 
 			uploadData();
 		}
@@ -567,46 +576,51 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 * 上传数据
 	 */
 	public void uploadData() {
-		final List<AsmtValue> asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
-		for (AsmtValue asmtValue : asmtValueList) {
-			if (asmtValue.getPost() == 0) {
-				JsonAsmtValue jsonAsmtValue = new JsonAsmtValue(asmtValue);
+		if (sharePreferenceUtil.getAutoShare()) {
+			final List<AsmtValue> asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
+			if (asmtValueList != null && asmtValueList.size() > 0) {
+				for (AsmtValue asmtValue : asmtValueList) {
+					if (asmtValue.getPost() == 0) {
+						JsonAsmtValue jsonAsmtValue = new JsonAsmtValue(asmtValue);
 
-				RequestParams params = new RequestParams();
-				params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
+						RequestParams params = new RequestParams();
+						params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
 
-				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers, String response) {
-						// TODO Auto-generated method stub
-						LogTool.i(statusCode + "uploadData===" + response);
-						JSONObject j1;
-						try {
-							j1 = new JSONObject(response);
-							String data = j1.getString("data");
-							if (data != null && data.equals("success")) {
-								for (AsmtValue asmtValue2 : asmtValueList) {
-									asmtValue2.setPost(1);
-									asmtValueDbService.asmtValueDao.update(asmtValue2);
+							@Override
+							public void onSuccess(int statusCode, Header[] headers, String response) {
+								// TODO Auto-generated method stub
+								LogTool.i(statusCode + "uploadData===" + response);
+								JSONObject j1;
+								try {
+									j1 = new JSONObject(response);
+									String data = j1.getString("data");
+									if (data != null && data.equals("success")) {
+										for (AsmtValue asmtValue2 : asmtValueList) {
+											asmtValue2.setPost(1);
+											asmtValueDbService.update(asmtValue2);
+										}
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
+
 							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 
+							@Override
+							public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+								// TODO Auto-generated method stub
+								LogTool.e("上传数据服务器错误" + errorResponse);
+
+							}
+						};
+						AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
 					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-						// TODO Auto-generated method stub
-						LogTool.e("上传数据服务器错误" + errorResponse);
-
-					}
-				};
-				AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
+				}
 			}
+
 		}
 	}
 
