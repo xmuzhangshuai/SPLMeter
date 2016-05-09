@@ -15,7 +15,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="@dimen/personal_timecapsule_padding"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="13sp" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
@@ -47,19 +48,34 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
-            <TextView
-                android:id="@+id/cuttent_value_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/current_value"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/result_value_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/cuttent_value_label"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/cuttent_value_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:text="@string/current_value"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/current_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -69,7 +85,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"

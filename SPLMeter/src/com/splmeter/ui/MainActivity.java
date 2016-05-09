@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView fsLabel;
 	private TextView doorLabel;
 	private TextView tips;
-	private TextView currentValueLabel;
+	private TextView resultValueLabel;
 	private float seekBarLevelDrawableWidth;
 	private float seekBarLevelMinValue = 45;// 噪音范围最小值
 	private float seekBarLevelBlock = 25;
@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		doorLabel = (TextView) findViewById(R.id.in_out_door);
 		tips = (TextView) findViewById(R.id.participants);
 		sfv = (SurfaceView) this.findViewById(R.id.SurfaceView);
-		currentValueLabel = (TextView) findViewById(R.id.cuttent_value_label);
+		resultValueLabel = (TextView) findViewById(R.id.result_value_label);
 	}
 
 	@Override
@@ -455,7 +455,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				saveFlag = 1;
 				onFlag = 1;
 				startOrEva = 1;
-				currentValueLabel.setText(getResources().getString(R.string.current_value));
+				resultValueLabel.setText("");
 				mLpa = 0;
 				mF = 0;
 				splList.clear();
@@ -542,7 +542,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			float L90 = splList.get(length * 9 / 10);
 			float Laeq = (float) Math.round((L50 + (L10 - L90) * (L10 - L90) / 60.0) * 10) / 10;
 			currentValue.setText("" + Laeq);//修改主界面值
-			currentValueLabel.setText(getResources().getString(R.string.result_value));
+			resultValueLabel.setText(getResources().getString(R.string.result_value));
 
 			currentLevel = (int) ((Laeq - seekBarLevelMinValue) / 5);// 当前层级
 			if (currentLevel > 4) {

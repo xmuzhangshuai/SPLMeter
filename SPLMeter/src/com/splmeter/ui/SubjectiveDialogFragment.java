@@ -119,7 +119,7 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		// TODO Auto-generated method stub
 		int p = progress / 10;
-		nextBtn.setEnabled(true);
+//		nextBtn.setEnabled(true);
 		if (seekBar == seekBarSoundsize) {
 			sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level) + soundLevles[p]);
 		} else if (seekBar == seekBarComfortlevel) {

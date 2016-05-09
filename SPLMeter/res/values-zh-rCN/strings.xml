@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">噪声计</string>
-    <string name="result_value">等效声压级</string>
+    <string name="result_value">等效</string>
     <string name="current_value">声压级</string>
     <string name="indoor">室内</string>
     <string name="outdoor">室外</string>

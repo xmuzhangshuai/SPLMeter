@@ -96,9 +96,10 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 		if (asmtValueList.size() > 0) {
-			queitRateTextView.setText(getResources().getString(R.string.queitRate) + count * 100 / asmtValueList.size() + "%");
+			float value = (float) (Math.round((float) count * 100 / asmtValueList.size() * 10) / 10.0);
+			queitRateTextView.setText(getResources().getString(R.string.queitRate) + " " + value + "%");
 		} else {
-			queitRateTextView.setText(getResources().getString(R.string.queitRate) + 0 + "%");
+			queitRateTextView.setText(getResources().getString(R.string.queitRate) + " " + 0 + "%");
 		}
 
 	}
