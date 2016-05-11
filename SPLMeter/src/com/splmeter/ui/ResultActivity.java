@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.splmeter.base.BaseActivity;
-import com.splmeter.base.BaseApplication;
 import com.splmeter.dbservice.AsmtValueDbService;
 import com.splmeter.dbservice.ModeDbService;
 import com.splmeter.dbservice.SoundSourceDbService;
@@ -13,7 +12,6 @@ import com.splmeter.entities.AsmtValue;
 import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LogTool;
-import com.splmeter.utils.SharePreferenceUtil;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,14 +36,13 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 	private TextView queitRateTextView;
 	private TextView countTextView;
 	private String[] levels;
-	private SharePreferenceUtil sharePreferenceUtil;
 	private ListView resultListView;
 	private List<AsmtValue> asmtValueList;
 	private AsmtValueDbService asmtValueDbService;
 	private ModeDbService modeDbService;
 	private SoundSourceDbService soundSourceDbService;
 	private ResultlAdapter resultAdapter;
-	private String[] soundLevles, comfortLevels, coordiantedLevels;
+	private String[] soundLevles;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +53,8 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		soundSourceDbService = SoundSourceDbService.getInstance(ResultActivity.this);
 		asmtValueList = new ArrayList<>();
 		soundLevles = getResources().getStringArray(R.array.sound_levelGroup);
-		comfortLevels = getResources().getStringArray(R.array.acoustic_comfort_levelGroup);
-		coordiantedLevels = getResources().getStringArray(R.array.coordinated_levelGroup);
 		asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
 		Collections.reverse(asmtValueList);
-		sharePreferenceUtil = BaseApplication.getInstance().getsharePreferenceUtil();
 		levels = getResources().getStringArray(R.array.levelGroup);
 		findViewById();
 		initView();
@@ -212,26 +206,26 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
-
-			if (asmtValue.getLaeq() != null) {
-				holder.laeqTextView.setText("" + asmtValue.getLaeq() + "dBA");
-				float laeq = asmtValue.getLaeq().floatValue();
-				if (laeq < 50) {
-					holder.quietTextView.setText(levels[0]);
-				} else if (laeq < 55) {
-					holder.quietTextView.setText(levels[1]);
-				} else if (laeq < 60) {
-					holder.quietTextView.setText(levels[2]);
-				} else if (laeq < 65) {
-					holder.quietTextView.setText(levels[3]);
-				} else {
-					holder.quietTextView.setText(levels[4]);
-				}
-			} else {
-				LogTool.e("AsmtValue.getLaeq()为null");
-			}
-
 			try {
+
+				if (asmtValue.getLaeq() != null) {
+					holder.laeqTextView.setText("" + asmtValue.getLaeq() + "dBA");
+					float laeq = asmtValue.getLaeq().floatValue();
+					if (laeq < 50) {
+						holder.quietTextView.setText(levels[0]);
+					} else if (laeq < 55) {
+						holder.quietTextView.setText(levels[1]);
+					} else if (laeq < 60) {
+						holder.quietTextView.setText(levels[2]);
+					} else if (laeq < 65) {
+						holder.quietTextView.setText(levels[3]);
+					} else {
+						holder.quietTextView.setText(levels[4]);
+					}
+				} else {
+					LogTool.e("AsmtValue.getLaeq()为null");
+				}
+
 				holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
 
 				//位置
@@ -249,7 +243,8 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 				}
 
 				//声源
-				if (asmtValue.getSource() != null) {
+				if (asmtValue.getSource() != null && asmtValue.getSource().length() > 0) {
+
 					String[] sources = asmtValue.getSource().split(",");
 					String s = "";
 
@@ -284,11 +279,9 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 				} else {
 					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + getResources().getString(R.string.unknown));
 				}
-
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-
 			return view;
 		}
 	}

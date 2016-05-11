@@ -134,6 +134,7 @@ public class SoundSourceDialogFragment extends DialogFragment implements OnClick
 		}
 
 		MainActivity.asmtValue.setSource(soundSourceSelected.toString());
+
 		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 	}
 

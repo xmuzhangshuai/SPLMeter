@@ -1,20 +1,12 @@
 package com.splmeter.ui;
 
-import org.apache.http.Header;
-
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.dbservice.AsmtValueDbService;
-import com.splmeter.utils.AsyncHttpClientTool;
-import com.splmeter.utils.CommonTools;
 import com.splmeter.utils.LocationTool;
-import com.splmeter.utils.LogTool;
-import com.splmeter.utils.NetworkUtils;
 import com.splmeter.utils.SharePreferenceUtil;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
