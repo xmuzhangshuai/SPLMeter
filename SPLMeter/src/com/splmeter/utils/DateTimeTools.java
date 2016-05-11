@@ -52,7 +52,7 @@ public class DateTimeTools {
 	 */
 	public static String DateToString(Date date) {
 		if (date != null) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return format.format(date);
 		} else {
 			return "";
