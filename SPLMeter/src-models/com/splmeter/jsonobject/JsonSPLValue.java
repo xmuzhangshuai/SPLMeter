@@ -31,7 +31,7 @@ public class JsonSPLValue {
 
 	public JsonSPLValue(SPLValue splValue) {
 		try {
-			this.time = DateTimeTools.DateToStringForSecond(splValue.getTime());
+			this.time = DateTimeTools.getUTCTime(splValue.getTime());
 			this.earphone = splValue.getEarphone();
 			this.lng = splValue.getLng();
 			this.lat = splValue.getLat();

@@ -26,6 +26,7 @@ public class JsonAsmtValue {
 	private Float l90;
 	private Float laeq;
 	private Float calb;
+	private String lstUTC;
 	private List<JsonSPLValue> splValueList;
 	private String token;
 
@@ -49,6 +50,7 @@ public class JsonAsmtValue {
 			this.l90 = asmtValue.getL90();
 			this.laeq = asmtValue.getLaeq();
 			this.calb = asmtValue.getCalb();
+			this.lstUTC = asmtValue.getLstUTC();
 			this.token = "dq3421bswikwb52jp0sa34hmdltwq1fb";
 			List<SPLValue> sList = asmtValue.getSplValueList();
 			this.splValueList = new ArrayList<>();
@@ -195,6 +197,14 @@ public class JsonAsmtValue {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getLstUTC() {
+		return lstUTC;
+	}
+
+	public void setLstUTC(String lstUTC) {
+		this.lstUTC = lstUTC;
 	}
 
 }

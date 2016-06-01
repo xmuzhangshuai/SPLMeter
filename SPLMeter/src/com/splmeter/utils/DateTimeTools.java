@@ -1,7 +1,5 @@
 package com.splmeter.utils;
 
-import android.annotation.SuppressLint;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import android.annotation.SuppressLint;
 
 /**   
 *    
@@ -31,6 +31,19 @@ public class DateTimeTools {
 	public DateTimeTools() {
 		// TODO Auto-generated constructor stub
 
+	}
+
+	public static String getUTCTime(Date time) {
+		// 1、取得本地时间：
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		// 2、取得时间偏移量：
+		int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+		// 3、取得夏令时差：
+		int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+		// 4、从本地时间里扣除这些差量，即可以取得UTC时间：
+		cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+		return DateToString(cal.getTime());
 	}
 
 	public static Date StringToDate(String dateString) {
@@ -76,7 +89,7 @@ public class DateTimeTools {
 			return "";
 		}
 	}
-	
+
 	public static String DateToStringForSecond(Date date) {
 		if (date != null) {
 			return formatter.format(date);

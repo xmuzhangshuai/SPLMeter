@@ -38,7 +38,8 @@ public class AsmtValueDao extends AbstractDao<AsmtValue, Long> {
         public final static Property L90 = new Property(12, Float.class, "l90", false, "L90");
         public final static Property Laeq = new Property(13, Float.class, "laeq", false, "LAEQ");
         public final static Property Calb = new Property(14, Float.class, "calb", false, "CALB");
-        public final static Property Post = new Property(15, Integer.class, "post", false, "POST");
+        public final static Property LstUTC = new Property(15, String.class, "lstUTC", false, "LST_UTC");
+        public final static Property Post = new Property(16, Integer.class, "post", false, "POST");
     };
 
     private DaoSession daoSession;
@@ -72,7 +73,8 @@ public class AsmtValueDao extends AbstractDao<AsmtValue, Long> {
                 "\"L90\" REAL," + // 12: l90
                 "\"LAEQ\" REAL," + // 13: laeq
                 "\"CALB\" REAL," + // 14: calb
-                "\"POST\" INTEGER);"); // 15: post
+                "\"LST_UTC\" TEXT," + // 15: lstUTC
+                "\"POST\" INTEGER);"); // 16: post
     }
 
     /** Drops the underlying database table. */
@@ -161,9 +163,14 @@ public class AsmtValueDao extends AbstractDao<AsmtValue, Long> {
             stmt.bindDouble(15, calb);
         }
  
+        String lstUTC = entity.getLstUTC();
+        if (lstUTC != null) {
+            stmt.bindString(16, lstUTC);
+        }
+ 
         Integer post = entity.getPost();
         if (post != null) {
-            stmt.bindLong(16, post);
+            stmt.bindLong(17, post);
         }
     }
 
@@ -198,7 +205,8 @@ public class AsmtValueDao extends AbstractDao<AsmtValue, Long> {
             cursor.isNull(offset + 12) ? null : cursor.getFloat(offset + 12), // l90
             cursor.isNull(offset + 13) ? null : cursor.getFloat(offset + 13), // laeq
             cursor.isNull(offset + 14) ? null : cursor.getFloat(offset + 14), // calb
-            cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15) // post
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // lstUTC
+            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16) // post
         );
         return entity;
     }
@@ -221,7 +229,8 @@ public class AsmtValueDao extends AbstractDao<AsmtValue, Long> {
         entity.setL90(cursor.isNull(offset + 12) ? null : cursor.getFloat(offset + 12));
         entity.setLaeq(cursor.isNull(offset + 13) ? null : cursor.getFloat(offset + 13));
         entity.setCalb(cursor.isNull(offset + 14) ? null : cursor.getFloat(offset + 14));
-        entity.setPost(cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15));
+        entity.setLstUTC(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setPost(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
      }
     
     /** @inheritdoc */

@@ -521,6 +521,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				}
 				asmtValue.setMF(mF);
 				asmtValue.setMLpa(mLpa);
+				LogTool.e(DateTimeTools.getUTCTime(lastTime));
+				asmtValue.setLstUTC(DateTimeTools.getUTCTime(lastTime));
 				asmtValueDbService.update(asmtValue);
 
 				splValueService.insert(splValue);
@@ -585,6 +587,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 						RequestParams params = new RequestParams();
 						params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
+						LogTool.e(FastJsonTool.createJsonString(jsonAsmtValue));
 
 						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 

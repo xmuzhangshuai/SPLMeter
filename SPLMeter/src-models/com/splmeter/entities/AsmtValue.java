@@ -31,6 +31,7 @@ public class AsmtValue {
     private Float l90;
     private Float laeq;
     private Float calb;
+    private String lstUTC;
     private Integer post;
 
     /** Used to resolve relations */
@@ -51,7 +52,7 @@ public class AsmtValue {
         this.id = id;
     }
 
-    public AsmtValue(Long id, String imei, String modeltype, String mode, String source, String asmt, Integer gender, Integer age, Float mF, Float mLpa, Float l10, Float l50, Float l90, Float laeq, Float calb, Integer post) {
+    public AsmtValue(Long id, String imei, String modeltype, String mode, String source, String asmt, Integer gender, Integer age, Float mF, Float mLpa, Float l10, Float l50, Float l90, Float laeq, Float calb, String lstUTC, Integer post) {
         this.id = id;
         this.imei = imei;
         this.modeltype = modeltype;
@@ -67,6 +68,7 @@ public class AsmtValue {
         this.l90 = l90;
         this.laeq = laeq;
         this.calb = calb;
+        this.lstUTC = lstUTC;
         this.post = post;
     }
 
@@ -194,6 +196,14 @@ public class AsmtValue {
 
     public void setCalb(Float calb) {
         this.calb = calb;
+    }
+
+    public String getLstUTC() {
+        return lstUTC;
+    }
+
+    public void setLstUTC(String lstUTC) {
+        this.lstUTC = lstUTC;
     }
 
     public Integer getPost() {
