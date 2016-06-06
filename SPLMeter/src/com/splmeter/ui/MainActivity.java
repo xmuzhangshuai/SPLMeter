@@ -522,7 +522,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				asmtValue.setMLpa(mLpa);
 				asmtValue.setLstTime(DateTimeTools.DateToString(lastTime));
 				asmtValue.setUtc(DateTimeTools.getUTCTime(lastTime));
-				asmtValue.setTimeZone(TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT));
+				String timeZoneString = TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT);
+				asmtValue.setTimeZone(timeZoneString.substring(3, timeZoneString.length()));
 				asmtValueDbService.update(asmtValue);
 
 				splValueService.insert(splValue);
