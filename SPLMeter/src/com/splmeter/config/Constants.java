@@ -8,7 +8,7 @@ public class Constants {
 	public static final boolean DEVELOPER_MODE = true;
 	//域名或者是IP
 	//	public static String AppliactionServerDomain = "http://soundscape.citi-sense.cn/";
-	public static String AppliactionServerDomain = "http://www.szlcgkj.com/ZAOYIN/";
+	public static String AppliactionServerDomain = "http://www.szlcgkj.com/Noise/";
 
 	//下载地址
 	public static String DownLoadPath = "http://www.citi-sense.cn/download/";
