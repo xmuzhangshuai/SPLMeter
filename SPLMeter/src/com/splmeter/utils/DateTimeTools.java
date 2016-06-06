@@ -46,6 +46,18 @@ public class DateTimeTools {
 		return DateToString(cal.getTime());
 	}
 
+	public static int getTimeZone() {
+		// 1、取得本地时间：
+		Calendar cal = Calendar.getInstance();
+//		cal.setTime(time);
+		// 2、取得时间偏移量：
+		int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+		// 3、取得夏令时差：
+		int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+		cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+		return -(zoneOffset + dstOffset);
+	}
+
 	public static Date StringToDate(String dateString) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = null;

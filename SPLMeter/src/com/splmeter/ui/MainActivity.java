@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -154,8 +155,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 		registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-		//		resultParams = new RequestParams();
 
 		findViewById();
 		initView();
@@ -521,8 +520,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				}
 				asmtValue.setMF(mF);
 				asmtValue.setMLpa(mLpa);
-				LogTool.e(DateTimeTools.getUTCTime(lastTime));
-				asmtValue.setLstUTC(DateTimeTools.getUTCTime(lastTime));
+				asmtValue.setLstTime(DateTimeTools.DateToString(lastTime));
+				asmtValue.setUtc(DateTimeTools.getUTCTime(lastTime));
+				asmtValue.setTimeZone(TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT));
 				asmtValueDbService.update(asmtValue);
 
 				splValueService.insert(splValue);

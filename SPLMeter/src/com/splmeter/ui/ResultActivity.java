@@ -226,6 +226,7 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 					LogTool.e("AsmtValue.getLaeq()为null");
 				}
 
+				//时间
 				holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
 
 				//位置

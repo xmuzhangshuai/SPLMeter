@@ -26,7 +26,9 @@ public class JsonAsmtValue {
 	private Float l90;
 	private Float laeq;
 	private Float calb;
-	private String lstUTC;
+	private String lstTime;
+	private String timeZone;
+	private String utc;
 	private List<JsonSPLValue> splValueList;
 	private String token;
 
@@ -50,7 +52,9 @@ public class JsonAsmtValue {
 			this.l90 = asmtValue.getL90();
 			this.laeq = asmtValue.getLaeq();
 			this.calb = asmtValue.getCalb();
-			this.lstUTC = asmtValue.getLstUTC();
+			this.lstTime = asmtValue.getLstTime();
+			this.timeZone = asmtValue.getTimeZone();
+			this.utc = asmtValue.getUtc();
 			this.token = "dq3421bswikwb52jp0sa34hmdltwq1fb";
 			List<SPLValue> sList = asmtValue.getSplValueList();
 			this.splValueList = new ArrayList<>();
@@ -199,12 +203,28 @@ public class JsonAsmtValue {
 		this.token = token;
 	}
 
-	public String getLstUTC() {
-		return lstUTC;
+	public String getLstTime() {
+		return lstTime;
 	}
 
-	public void setLstUTC(String lstUTC) {
-		this.lstUTC = lstUTC;
+	public void setLstTime(String lstTime) {
+		this.lstTime = lstTime;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public String getUtc() {
+		return utc;
+	}
+
+	public void setUtc(String utc) {
+		this.utc = utc;
 	}
 
 }
