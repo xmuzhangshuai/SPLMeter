@@ -52,6 +52,9 @@ public class Generator {
 		asmtValueEntity.addFloatProperty("l90");
 		asmtValueEntity.addFloatProperty("laeq");
 		asmtValueEntity.addFloatProperty("calb");
+		asmtValueEntity.addStringProperty("lstTime");
+		asmtValueEntity.addStringProperty("timeZone");
+		asmtValueEntity.addStringProperty("utc");
 		asmtValueEntity.addIntProperty("post");
 
 		/****SPLValue*******/
