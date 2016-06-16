@@ -5,10 +5,10 @@ import android.media.AudioFormat;
 public class Constants {
 
 	// 是否处于开发模式
-	public static final boolean DEVELOPER_MODE = true;
+	public static final boolean DEVELOPER_MODE = false;
 	//域名或者是IP
-	//	public static String AppliactionServerDomain = "http://soundscape.citi-sense.cn/";
-	public static String AppliactionServerDomain = "http://www.szlcgkj.com/Noise/";
+	public static String AppliactionServerDomain = "http://soundscape.citi-sense.cn/";
+	//	public static String AppliactionServerDomain = "http://www.szlcgkj.com/Noise/";
 
 	//下载地址
 	public static String DownLoadPath = "http://www.citi-sense.cn/download/";

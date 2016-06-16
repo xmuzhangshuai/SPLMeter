@@ -10,7 +10,6 @@ import com.splmeter.dbservice.ModeDbService;
 import com.splmeter.dbservice.SoundSourceDbService;
 import com.splmeter.entities.AsmtValue;
 import com.splmeter.utils.CommonTools;
-import com.splmeter.utils.DateTimeTools;
 import com.splmeter.utils.LogTool;
 
 import android.os.Bundle;
@@ -43,6 +42,8 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 	private SoundSourceDbService soundSourceDbService;
 	private ResultlAdapter resultAdapter;
 	private String[] soundLevles;
+	private String[] comfortLevles;
+	private String[] coordinatedLevles;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 		soundSourceDbService = SoundSourceDbService.getInstance(ResultActivity.this);
 		asmtValueList = new ArrayList<>();
 		soundLevles = getResources().getStringArray(R.array.sound_levelGroup);
+		comfortLevles = getResources().getStringArray(R.array.acoustic_comfort_levelGroup);
+		coordinatedLevles = getResources().getStringArray(R.array.coordinated_levelGroup);
 		asmtValueList = asmtValueDbService.asmtValueDao.loadAll();
 		Collections.reverse(asmtValueList);
 		levels = getResources().getStringArray(R.array.levelGroup);
@@ -227,7 +230,7 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 				}
 
 				//时间
-				holder.timeTextView.setText(DateTimeTools.DateToString(asmtValue.getSplValueList().get(0).getTime()));
+				holder.timeTextView.setText(asmtValue.getLstTime());
 
 				//位置
 				if (asmtValue.getMode() != null) {
@@ -274,8 +277,8 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 					String[] asmts = asmtValue.getAsmt().split(",");
 					String a = "";
 					a = getResources().getString(R.string.sound_level2) + soundLevles[Integer.parseInt(asmts[0]) + 2] + ", "
-							+ getResources().getString(R.string.acoustic_comfort_level) + soundLevles[Integer.parseInt(asmts[1]) + 2] + ", "
-							+ getResources().getString(R.string.coordinated_level) + soundLevles[Integer.parseInt(asmts[2]) + 2];
+							+ getResources().getString(R.string.acoustic_comfort_level) + comfortLevles[Integer.parseInt(asmts[1]) + 2] + ", "
+							+ getResources().getString(R.string.coordinated_level) + coordinatedLevles[Integer.parseInt(asmts[2]) + 2];
 					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + a);
 				} else {
 					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + getResources().getString(R.string.unknown));
