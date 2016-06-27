@@ -32,7 +32,6 @@ import com.splmeter.utils.LocationTool;
 import com.splmeter.utils.LogTool;
 import com.splmeter.utils.ServerUtils;
 import com.splmeter.utils.SharePreferenceUtil;
-import com.umeng.update.UmengUpdateAgent;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -151,9 +150,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		splValueService = SplValueService.getInstance(MainActivity.this);
 
-		// 友盟更新
-		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		UmengUpdateAgent.update(this);
 		registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 		findViewById();
@@ -727,6 +723,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	 */
 	public void getTips() {
 		RequestParams params = new RequestParams();
+		try {
+			params.put("version_code", new ServerUtils(MainActivity.this).getVersionName());
+//			params.put("version_name", new ServerUtils(MainActivity.this).getVersionName());
+			LogTool.e("版本号：" + new ServerUtils(MainActivity.this).getVersionCode() + "名字：" + new ServerUtils(MainActivity.this).getVersionName());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 

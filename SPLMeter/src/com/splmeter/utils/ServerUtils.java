@@ -13,6 +13,8 @@ import com.splmeter.entities.Mode;
 import com.splmeter.entities.SoundSource;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 /**
  * @description:网络操作的通用方法
@@ -33,34 +35,51 @@ public class ServerUtils {
 	public void initData() {
 		getMode();
 		getSoundSource();
-//		uploadUserState();
+		//		uploadUserState();
 	}
 
+	public int getVersionCode() throws Exception {
+		// 获取packagemanager的实例  
+		PackageManager packageManager = context.getPackageManager();
+		// getPackageName()是你当前类的包名，0代表是获取版本信息  
+		PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+		int version = packInfo.versionCode;
+		return version;
+	}
+
+	public String getVersionName() throws Exception {
+		// 获取packagemanager的实例  
+		PackageManager packageManager = context.getPackageManager();
+		// getPackageName()是你当前类的包名，0代表是获取版本信息  
+		PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+		String version = packInfo.versionName;
+		return version;
+	}
 	/**
 	 * 提交用户状态
 	 */
-//	private void uploadUserState() {
-//		RequestParams params = new RequestParams();
-//		params.put("IMEI", CommonTools.getIMEI(context));
-//		params.put("reportTime", DateTimeTools.getCurrentDateTimeForString());
-//
-//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(int statusCode, Header[] headers, String response) {
-//				// TODO Auto-generated method stub
-//				LogTool.i(statusCode + "===" + response);
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-//				// TODO Auto-generated method stub
-//				LogTool.e("uploadUserState服务器错误" + errorResponse);
-//
-//			}
-//		};
-//		AsyncHttpClientTool.post("?m=Home&a=ReportUserState", params, responseHandler);
-//	}
+	//	private void uploadUserState() {
+	//		RequestParams params = new RequestParams();
+	//		params.put("IMEI", CommonTools.getIMEI(context));
+	//		params.put("reportTime", DateTimeTools.getCurrentDateTimeForString());
+	//
+	//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+	//
+	//			@Override
+	//			public void onSuccess(int statusCode, Header[] headers, String response) {
+	//				// TODO Auto-generated method stub
+	//				LogTool.i(statusCode + "===" + response);
+	//			}
+	//
+	//			@Override
+	//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+	//				// TODO Auto-generated method stub
+	//				LogTool.e("uploadUserState服务器错误" + errorResponse);
+	//
+	//			}
+	//		};
+	//		AsyncHttpClientTool.post("?m=Home&a=ReportUserState", params, responseHandler);
+	//	}
 
 	/**
 	 * 获取声源

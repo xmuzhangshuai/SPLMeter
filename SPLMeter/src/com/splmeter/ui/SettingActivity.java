@@ -3,11 +3,6 @@ package com.splmeter.ui;
 import com.splmeter.base.BaseActivity;
 import com.splmeter.base.BaseApplication;
 import com.splmeter.utils.SharePreferenceUtil;
-import com.splmeter.utils.ToastTool;
-import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UmengUpdateListener;
-import com.umeng.update.UpdateResponse;
-import com.umeng.update.UpdateStatus;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -185,29 +180,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		case R.id.help:
 			startActivity(new Intent(SettingActivity.this, WebActivity.class).putExtra("url", "http://www.citi-sense.cn/splmeter_help.html").putExtra("title", ""));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			break;
-		case R.id.check_update:
-			/**********友盟自动更新组件**************/
-			UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-				@Override
-				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-					switch (updateStatus) {
-					case UpdateStatus.Yes: // has update
-						UmengUpdateAgent.showUpdateDialog(SettingActivity.this, updateInfo);
-						break;
-					case UpdateStatus.No: // has no update
-						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.newest));
-						break;
-					case UpdateStatus.NoneWifi: // none wifi
-						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.no_wifi));
-						break;
-					case UpdateStatus.Timeout: // time out
-						ToastTool.showShort(SettingActivity.this, getResources().getString(R.string.timeout));
-						break;
-					}
-				}
-			});
-			UmengUpdateAgent.forceUpdate(SettingActivity.this);
 			break;
 		default:
 			break;
