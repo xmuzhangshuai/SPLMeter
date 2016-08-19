@@ -580,43 +580,46 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			if (asmtValueList != null && asmtValueList.size() > 0) {
 				for (AsmtValue asmtValue : asmtValueList) {
 					if (asmtValue.getPost() == 0) {
-						JsonAsmtValue jsonAsmtValue = new JsonAsmtValue(asmtValue);
+						if (asmtValue.getL10() != null && asmtValue.getL10() > 0) {
 
-						RequestParams params = new RequestParams();
-						params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
-						LogTool.e(FastJsonTool.createJsonString(jsonAsmtValue));
+							JsonAsmtValue jsonAsmtValue = new JsonAsmtValue(asmtValue);
 
-						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+							RequestParams params = new RequestParams();
+							params.put("data", FastJsonTool.createJsonString(jsonAsmtValue));
+							LogTool.e(FastJsonTool.createJsonString(jsonAsmtValue));
 
-							@Override
-							public void onSuccess(int statusCode, Header[] headers, String response) {
-								// TODO Auto-generated method stub
-								LogTool.i(statusCode + "uploadData===" + response);
-								JSONObject j1;
-								try {
-									j1 = new JSONObject(response);
-									String data = j1.getString("data");
-									if (data != null && data.equals("success")) {
-										for (AsmtValue asmtValue2 : asmtValueList) {
-											asmtValue2.setPost(1);
-											asmtValueDbService.update(asmtValue2);
+							TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode, Header[] headers, String response) {
+									// TODO Auto-generated method stub
+									LogTool.i(statusCode + "uploadData===" + response);
+									JSONObject j1;
+									try {
+										j1 = new JSONObject(response);
+										String data = j1.getString("data");
+										if (data != null && data.equals("success")) {
+											for (AsmtValue asmtValue2 : asmtValueList) {
+												asmtValue2.setPost(1);
+												asmtValueDbService.update(asmtValue2);
+											}
 										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
 									}
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+
 								}
 
-							}
+								@Override
+								public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+									// TODO Auto-generated method stub
+									LogTool.e("上传数据服务器错误" + errorResponse);
 
-							@Override
-							public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-								// TODO Auto-generated method stub
-								LogTool.e("上传数据服务器错误" + errorResponse);
-
-							}
-						};
-						AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
+								}
+							};
+							AsyncHttpClientTool.post("?m=Home&a=ReportResultValue", params, responseHandler);
+						}
 					}
 				}
 			}
@@ -725,7 +728,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		RequestParams params = new RequestParams();
 		try {
 			params.put("version_code", new ServerUtils(MainActivity.this).getVersionName());
-//			params.put("version_name", new ServerUtils(MainActivity.this).getVersionName());
+			//			params.put("version_name", new ServerUtils(MainActivity.this).getVersionName());
 			LogTool.e("版本号：" + new ServerUtils(MainActivity.this).getVersionCode() + "名字：" + new ServerUtils(MainActivity.this).getVersionName());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
