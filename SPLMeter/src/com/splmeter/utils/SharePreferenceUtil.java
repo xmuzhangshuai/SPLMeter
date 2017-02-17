@@ -33,7 +33,7 @@ public class SharePreferenceUtil {
 
 	// 性别
 	public int getGender() {
-		return sp.getInt("gender", 1);
+		return sp.getInt("gender", -1);
 	}
 
 	public void setGender(int u_gender) {
@@ -43,7 +43,7 @@ public class SharePreferenceUtil {
 
 	// 年龄段
 	public int getAgeGroup() {
-		return sp.getInt("ageGroup", 2);
+		return sp.getInt("ageGroup", 0);
 	}
 
 	public void setAgeGroup(int ageGroup) {

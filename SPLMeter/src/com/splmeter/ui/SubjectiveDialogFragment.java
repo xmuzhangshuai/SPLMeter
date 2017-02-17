@@ -1,6 +1,7 @@
 package com.splmeter.ui;
 
 import com.splmeter.dbservice.AsmtValueDbService;
+import com.splmeter.utils.LogTool;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,9 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import cn.citisense.splmeter.R;
 
@@ -24,26 +25,22 @@ import cn.citisense.splmeter.R;
  * @author：张帅
  * @date 2015年11月19日 下午9:16:11
  */
-public class SubjectiveDialogFragment extends DialogFragment implements OnClickListener, OnSeekBarChangeListener {
+public class SubjectiveDialogFragment extends DialogFragment implements OnClickListener {
 	private View rootView;
 
 	private MainActivity mainActivity;
 	private Button lastBtn;
 	private Button nextBtn;
-	private SeekBar seekBarSoundsize;
-	private SeekBar seekBarComfortlevel;
-	private SeekBar seekBarHarmony;
+	private Spinner soundSizeSpinner;
+	private Spinner comfortlevelSpinner;
+	private Spinner harmonySpinner;
 	private TextView sound_levelText, comfort_levelText, coordinated_levelText;
-	private String[] soundLevles, comfortLevels, coordiantedLevels;
 	private AsmtValueDbService asmtValueDbService;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mainActivity = (MainActivity) getActivity();
-		soundLevles = mainActivity.getResources().getStringArray(R.array.sound_levelGroup);
-		comfortLevels = mainActivity.getResources().getStringArray(R.array.acoustic_comfort_levelGroup);
-		coordiantedLevels = mainActivity.getResources().getStringArray(R.array.coordinated_levelGroup);
 		return super.onCreateDialog(savedInstanceState);
 	}
 
@@ -71,9 +68,9 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private void findViewById() {
 		lastBtn = (Button) rootView.findViewById(R.id.last_btn);
 		nextBtn = (Button) rootView.findViewById(R.id.next_btn);
-		seekBarSoundsize = (SeekBar) rootView.findViewById(R.id.seekBar_soundsize);
-		seekBarComfortlevel = (SeekBar) rootView.findViewById(R.id.seekBar_comfortlevel);
-		seekBarHarmony = (SeekBar) rootView.findViewById(R.id.seekBar_harmony);
+		soundSizeSpinner = (Spinner) rootView.findViewById(R.id.seekBar_soundsize);
+		comfortlevelSpinner = (Spinner) rootView.findViewById(R.id.seekBar_comfortlevel);
+		harmonySpinner = (Spinner) rootView.findViewById(R.id.seekBar_harmony);
 		sound_levelText = (TextView) rootView.findViewById(R.id.sound_level);
 		comfort_levelText = (TextView) rootView.findViewById(R.id.comfort_level);
 		coordinated_levelText = (TextView) rootView.findViewById(R.id.coordinated_level);
@@ -82,19 +79,53 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 	private void initView() {
 		lastBtn.setOnClickListener(this);
 		nextBtn.setOnClickListener(this);
-		seekBarSoundsize.setOnSeekBarChangeListener(this);
-		seekBarComfortlevel.setOnSeekBarChangeListener(this);
-		seekBarHarmony.setOnSeekBarChangeListener(this);
 
-		sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level) + soundLevles[2]);
-		comfort_levelText.setText(mainActivity.getResources().getString(R.string.acoustic_comfort_level) + comfortLevels[2]);
-		coordinated_levelText.setText(mainActivity.getResources().getString(R.string.coordinated_level) + coordiantedLevels[2]);
+		ArrayAdapter<CharSequence> soundsizeAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sound_levelGroup,
+				android.R.layout.simple_spinner_item);
+		soundsizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		soundSizeSpinner.setAdapter(soundsizeAdapter);
+		soundSizeSpinner.setSelection(0, true);
+
+		ArrayAdapter<CharSequence> comfortAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.acoustic_comfort_levelGroup,
+				android.R.layout.simple_spinner_item);
+		comfortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		comfortlevelSpinner.setAdapter(comfortAdapter);
+		comfortlevelSpinner.setSelection(0, true);
+
+		ArrayAdapter<CharSequence> harmonyAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.coordinated_levelGroup,
+				android.R.layout.simple_spinner_item);
+		harmonyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		harmonySpinner.setAdapter(harmonyAdapter);
+		harmonySpinner.setSelection(0, true);
+
+		sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level));
+		comfort_levelText.setText(mainActivity.getResources().getString(R.string.acoustic_comfort_level));
+		coordinated_levelText.setText(mainActivity.getResources().getString(R.string.coordinated_level));
 	}
 
 	private void saveResult() {
-		MainActivity.asmtValue
-				.setAsmt("" + (seekBarSoundsize.getProgress() / 10 - 2) + "," + (seekBarComfortlevel.getProgress() / 10 - 2) + "," + (seekBarHarmony.getProgress() / 10 - 2));
-		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
+		if (soundSizeSpinner.getSelectedItemPosition() == 0 && comfortlevelSpinner.getSelectedItemPosition() == 0
+				&& harmonySpinner.getSelectedItemPosition() == 0) {
+			MainActivity.asmtValue.setAsmt(null);
+		} else {
+			int s1 = soundSizeSpinner.getSelectedItemPosition() - 3;
+			int s2 = comfortlevelSpinner.getSelectedItemPosition() - 3;
+			int s3 = harmonySpinner.getSelectedItemPosition() - 3;
+			String ss1 = "";
+			String ss2 = "";
+			String ss3 = "";
+			if (s1 != -3) {
+				ss1 = ss1 + s1;
+			}
+			if (s2 != -3) {
+				ss2 = ss2 + s2;
+			}
+			if (s3 != -3) {
+				ss3 = ss3 + s3;
+			}
+			MainActivity.asmtValue.setAsmt("" + ss1 + "," + ss2 + "," + ss3);
+			asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
+		}
 	}
 
 	@Override
@@ -113,31 +144,5 @@ public class SubjectiveDialogFragment extends DialogFragment implements OnClickL
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		// TODO Auto-generated method stub
-		int p = progress / 10;
-//		nextBtn.setEnabled(true);
-		if (seekBar == seekBarSoundsize) {
-			sound_levelText.setText(mainActivity.getResources().getString(R.string.sound_level) + soundLevles[p]);
-		} else if (seekBar == seekBarComfortlevel) {
-			comfort_levelText.setText(mainActivity.getResources().getString(R.string.acoustic_comfort_level) + comfortLevels[p]);
-		} else if (seekBar == seekBarHarmony) {
-			coordinated_levelText.setText(mainActivity.getResources().getString(R.string.coordinated_level) + coordiantedLevels[p]);
-		}
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
 	}
 }

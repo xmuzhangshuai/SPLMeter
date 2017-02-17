@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import cn.citisense.splmeter.R;
 
@@ -35,6 +36,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 	private Button nextBtn;
 	private Spinner ageSpinner;
 	private RadioButton radioMale;
+	private RadioGroup genderRadiogroup;
 	private RadioButton radioFemale;
 	private SharePreferenceUtil sharePreferenceUtil;
 	LocationTool locationTool;
@@ -76,6 +78,7 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 		ageSpinner = (Spinner) rootView.findViewById(R.id.ageSpinner);
 		radioMale = (RadioButton) rootView.findViewById(R.id.radio_male);
 		radioFemale = (RadioButton) rootView.findViewById(R.id.radio_female);
+		genderRadiogroup = (RadioGroup) rootView.findViewById(R.id.gender_radiogroup);
 	}
 
 	private void initView() {
@@ -90,19 +93,31 @@ public class PersonalInfoDialogFragment extends DialogFragment implements OnClic
 
 		if (sharePreferenceUtil.getGender() == 1) {
 			radioMale.setChecked(true);
-		} else {
+		} else if (sharePreferenceUtil.getGender() == 0) {
 			radioFemale.setChecked(true);
+		} else {
+			genderRadiogroup.clearCheck();
 		}
 	}
 
 	private void saveData() {
-		int gender = radioMale.isChecked() ? 1 : 0;
-		int age = ageSpinner.getSelectedItemPosition() + 1;
-		sharePreferenceUtil.setAgeGroup(age - 1);
+		int gender = -1;
+		if (radioMale.isChecked()) {
+			gender = 1;
+		}
+		if (radioFemale.isChecked()) {
+			gender = 0;
+		}
+		int age = ageSpinner.getSelectedItemPosition();
+		sharePreferenceUtil.setAgeGroup(age);
 		sharePreferenceUtil.setGender(gender);
 
-		MainActivity.asmtValue.setAge(age);
-		MainActivity.asmtValue.setGender(gender);
+		if (age != 0) {
+			MainActivity.asmtValue.setAge(age);
+		}
+		if (gender != -1) {
+			MainActivity.asmtValue.setGender(gender);
+		}
 		asmtValueDbService.asmtValueDao.update(MainActivity.asmtValue);
 
 		mainActivity.saveData();

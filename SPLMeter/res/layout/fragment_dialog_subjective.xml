@@ -46,7 +46,7 @@
                 android:gravity="center_horizontal"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
+  <!--
             <SeekBar
                 android:id="@+id/seekBar_soundsize"
                 android:layout_width="match_parent"
@@ -55,7 +55,13 @@
                 android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
-
+-->
+      <Spinner
+                    android:id="@+id/seekBar_soundsize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawSelectorOnTop="true"
+                    android:padding="3dp" />
             <TextView
                 android:id="@+id/comfort_level"
                 android:layout_width="match_parent"
@@ -64,7 +70,7 @@
                 android:gravity="center_horizontal"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
+  <!--
             <SeekBar
                 android:id="@+id/seekBar_comfortlevel"
                 android:layout_width="match_parent"
@@ -73,7 +79,13 @@
                 android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
-
+-->
+      <Spinner
+                    android:id="@+id/seekBar_comfortlevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawSelectorOnTop="true"
+                    android:padding="3dp" />
             <TextView
                 android:id="@+id/coordinated_level"
                 android:layout_width="match_parent"
@@ -83,7 +95,14 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <SeekBar
+            <Spinner
+                    android:id="@+id/seekBar_harmony"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawSelectorOnTop="true"
+                    android:padding="3dp" />
+            
+            <!--  <SeekBar
                 android:id="@+id/seekBar_harmony"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,6 +110,7 @@
                 android:progress="25"
                 android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seekbar_thumb" />
+            -->
         </LinearLayout>
     </RelativeLayout>
 

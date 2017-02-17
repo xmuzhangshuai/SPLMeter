@@ -274,11 +274,25 @@ public class ResultActivity extends BaseActivity implements OnClickListener {
 
 				//评价
 				if (asmtValue.getAsmt() != null) {
-					String[] asmts = asmtValue.getAsmt().split(",");
+					//					String[] asmts = asmtValue.getAsmt().split(",");
+					String s1 = "";
+					String s2 = "";
+					String s3 = "";
+//					if (asmtValue.getAsmt1().length() > 0)
+//						s1 = soundLevles[Integer.parseInt(asmtValue.getAsmt1()) + 3];
+//					else
+//						s1 = "未知";
+//					if (asmtValue.getAsmt2().length() > 0)
+//						s2 = soundLevles[Integer.parseInt(asmtValue.getAsmt2()) + 3];
+//					else
+//						s2 = "未知";
+//					if (asmtValue.getAsmt3().length() > 0)
+//						s3 = soundLevles[Integer.parseInt(asmtValue.getAsmt3()) + 3];
+//					else
+//						s3 = "未知";
 					String a = "";
-					a = getResources().getString(R.string.sound_level2) + soundLevles[Integer.parseInt(asmts[0]) + 2] + ", "
-							+ getResources().getString(R.string.acoustic_comfort_level) + comfortLevles[Integer.parseInt(asmts[1]) + 2] + ", "
-							+ getResources().getString(R.string.coordinated_level) + coordinatedLevles[Integer.parseInt(asmts[2]) + 2];
+					a = getResources().getString(R.string.sound_level2) + s1 + ", " + getResources().getString(R.string.acoustic_comfort_level) + s2
+							+ ", " + getResources().getString(R.string.coordinated_level) + s3;
 					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + a);
 				} else {
 					holder.evaluateTextView.setText(getResources().getString(R.string.evaluate) + "：" + getResources().getString(R.string.unknown));

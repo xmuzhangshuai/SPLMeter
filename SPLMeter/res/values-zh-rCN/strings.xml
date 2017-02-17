@@ -29,7 +29,7 @@
     <string name="sound">您目前听到了哪些声音</string>
     <string name="mul_choice">(可多选)</string>
     <string name="assessment">请对听到的声音进行评价</string>
-    <string name="drag_to_ass">（拖动滑块评价）</string>
+    <string name="drag_to_ass">（请选择指标评价）</string>
     <string name="person_info">简单地描述一下自己</string>
     <string name="age">年龄段：</string>
     <string name="done">完成</string>
@@ -73,6 +73,7 @@
     <string name="sound_level2">声音大小:</string>
 
     <array name="sound_levelGroup">
+        <item>请选择</item>
         <item>非常小</item>
         <item>小</item>
         <item>适中</item>
@@ -80,6 +81,7 @@
         <item>非常大</item>
     </array>
     <array name="acoustic_comfort_levelGroup">
+        <item>请选择</item>
         <item>极不舒适</item>
         <item>不舒适</item>
         <item>适中</item>
@@ -87,6 +89,7 @@
         <item>极舒适</item>
     </array>
     <array name="coordinated_levelGroup">
+        <item>请选择</item>
         <item>极不协调</item>
         <item>不协调</item>
         <item>适中</item>
@@ -101,6 +104,7 @@
         <item>非常吵闹</item>
     </array>
     <array name="ageGroup">
+        <item>请选择</item>
         <item>小于12岁</item>
         <item>12岁-18岁</item>
         <item>19岁-30岁</item>

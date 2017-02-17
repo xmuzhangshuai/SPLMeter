@@ -28,7 +28,7 @@
     <string name="sound">What do you hear</string>
     <string name="mul_choice">(Multiple Choices)</string>
     <string name="assessment">Please evaluate your hearing sound</string>
-    <string name="drag_to_ass">（Drag slider to evaluate）</string>
+    <string name="drag_to_ass">（Please select item to evaluate）</string>
     <string name="person_info">Briefly describe yourself</string>
     <string name="age">Age Group：</string>
     <string name="done">Confirm</string>
@@ -73,6 +73,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
     <string name="sound_level2">Sound level:</string>
 
     <array name="sound_levelGroup">
+        <item>Please select</item>
         <item>very low</item>
         <item>low</item>
         <item>moderate</item>
@@ -80,6 +81,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
         <item>very high</item>
     </array>
     <array name="acoustic_comfort_levelGroup">
+        <item>Please select</item>
         <item>very uncomfortable</item>
         <item>uncomfortable</item>
         <item>moderate</item>
@@ -87,6 +89,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
         <item>very comfortable</item>
     </array>
     <array name="coordinated_levelGroup">
+        <item>Please select</item>
         <item>very unharmonious</item>
         <item>unharmonious</item>
         <item>moderate</item>
@@ -101,6 +104,7 @@ The shared results will help us to study more thoroughly on the urban sound envi
         <item>Very noisy</item>
     </array>
     <array name="ageGroup">
+        <item>Please select</item>
         <item>younger than 12</item>
         <item>12-18</item>
         <item>19-30</item>
